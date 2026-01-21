@@ -1,9 +1,29 @@
 import './globals.css'
 import { DarkModeProvider } from './context/DarkModeContext'
+import { Inter } from 'next/font/google'
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const metadata = {
-  title: 'Ashutosh Joshi - Software Developer',
-  description: 'Personal website of Ashutosh Joshi, a software engineer based in Maryland, United States of America.',
+  metadataBase: new URL('https://ashutoshjoshi1.github.io'),
+  title: 'Ashutosh Joshi | Software Engineer',
+  description: 'Software Engineer specializing in full-stack development, cloud architecture, and AI. Building the future with elegant code.',
+  keywords: ['Software Engineer', 'Full Stack Developer', 'Python', 'React', 'Cloud Computing', 'AI', 'Machine Learning'],
+  authors: [{ name: 'Ashutosh Joshi' }],
+  openGraph: {
+    title: 'Ashutosh Joshi | Software Engineer',
+    description: 'Software Engineer specializing in full-stack development, cloud architecture, and AI.',
+    type: 'website',
+    images: ['/images/ashu.jpeg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Ashutosh Joshi | Software Engineer',
+    description: 'Software Engineer specializing in full-stack development, cloud architecture, and AI.',
+  },
   icons: {
     icon: '/images/favicon.jpeg',
     apple: '/images/favicon.jpeg',
@@ -12,22 +32,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.className} scroll-smooth`}>
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="16x16" type="image/x-icon" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="manifest" href="/site.webmanifest" />
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-        <meta name="msapplication-TileColor" content="#ffffff" />
-        <meta name="theme-color" content="#ffffff" />
+        <link rel="icon" href="/images/favicon.jpeg" type="image/jpeg" />
+        <meta name="theme-color" content="#030712" />
       </head>
-      <body>
+      <body className="antialiased">
         <DarkModeProvider>
           {children}
         </DarkModeProvider>
       </body>
     </html>
   )
-} 
+}

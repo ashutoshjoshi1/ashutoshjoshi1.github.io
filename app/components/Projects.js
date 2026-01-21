@@ -2,7 +2,7 @@
 
 import { useDarkMode } from '../context/DarkModeContext'
 import Image from 'next/image'
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa'
+import { FaGithub, FaExternalLinkAlt, FaArrowRight } from 'react-icons/fa'
 
 export default function Projects() {
   const { isDarkMode } = useDarkMode()
@@ -10,105 +10,217 @@ export default function Projects() {
   const projects = [
     {
       name: 'Sciglob Portal',
-      description: 'A software portal for Sciglob to manage the hardware and communication between the hardware and the cloud.',
-      image: '/Portfolio/images/sci.jpg',
-      tags: ['Python', 'Embedded C', 'C++', 'Cloud Computing', 'API Development'],
-      link: 'https://github.com/ashutoshjoshi1/Sciglob-Polarizer'
+      description: 'Enterprise software portal managing hardware-cloud communication for NASA\'s PANDORA atmospheric research project.',
+      image: '/images/sciglob.jpg',
+      tags: ['Python', 'C++', 'Cloud', 'APIs'],
+      link: 'https://github.com/ashutoshjoshi1/Sciglob-Polarizer',
+      featured: true
     },
     {
-      name: 'Anomaly Detection in Atmospheric Data',
-      description: 'A custom web application to check for anomalies in atmospheric data using a combination of machine learning and statistical methods.',
-      image: '/Portfolio/images/sci.jpg',
-      tags: ['Streamlit', 'Python', 'Statistics', 'Web Development'],
+      name: 'Anomaly Detection System',
+      description: 'ML-powered web application detecting anomalies in atmospheric data using statistical methods and deep learning.',
+      image: '/images/sciglob.jpg',
+      tags: ['Streamlit', 'ML', 'Python'],
       link: 'https://github.com/ashutoshjoshi1/deep-learning-anomaly'
     },
     {
-      name: 'Alignment of Pandora Data',
-      description: 'Application to see the data from Pandora in a better way. It checks the good and bad scans and shows the results in a dashboard.',
-      image: '/Portfolio/images/sci.jpg',
-      tags: ['Streamlit', 'Python', 'Statistics', 'Web Development'],
-      link: 'https://alignment.streamlit.app'
+      name: 'Pandora Data Alignment',
+      description: 'Interactive dashboard for analyzing Pandora scan data, featuring real-time visualization and quality metrics.',
+      image: '/images/sciglob.jpg',
+      tags: ['Streamlit', 'Data Viz', 'Python'],
+      link: 'https://github.com/ashutoshjoshi1',
+      demo: 'https://alignment.streamlit.app'
     },
     {
-      name: 'Pose Estimation for Shopping Mall',
-      description: 'A Web app to estimate the pose of a person in a shopping mall from a video.',
-      image: '/Portfolio/images/pose.jpg',
-      tags: ['Python', 'Deep Learning', 'Math', 'Web Development', 'Computer Vision'],
+      name: 'Pose Estimation',
+      description: 'Computer vision system for human pose estimation using deep learning and TensorFlow.',
+      image: '/images/umbc.jpg',
+      tags: ['TensorFlow', 'CV', 'Python'],
       link: 'https://github.com/ashutoshjoshi1/pose-tensorflow'
     },
     {
-      name: 'Sarcasm Detection in Twitter',
-      description: 'Python script to detect sarcasm in Twitter data using a custom LSTM model.',
-      image: '/Portfolio/images/twitter.jpg',
-      tags: ['Python', 'Deep Learning', 'LSTM', 'NLP'],
+      name: 'Sarcasm Detection',
+      description: 'NLP model using custom LSTM architecture to detect sarcasm in social media text with 87% accuracy.',
+      image: '/images/tcs.jpg',
+      tags: ['LSTM', 'NLP', 'Deep Learning'],
       link: 'https://github.com/ashutoshjoshi1/Twitter-Sarcasm-Analysis'
     },
     {
-      name: 'Graduate Admission Neural Network',
-      description: 'A Neural Network to predict the chance of admission of a student to a graduate program based on their GRE, TOEFL, University Rating, Statement of Purpose, Letter of Recommendation, and CGPA scores.',
-      image: '/Portfolio/images/umbc.jpg',
-      tags: ['Python', 'Deep Learning', 'Machine Learning', 'Neural Network'],
+      name: 'Admission Predictor',
+      description: 'Neural network predicting graduate admission chances based on academic metrics with interpretable results.',
+      image: '/images/umbc.jpg',
+      tags: ['Neural Networks', 'ML', 'Python'],
       link: 'https://github.com/ashutoshjoshi1/Graduate-Admission-Neural-Network-'
     }
   ]
 
+  const featuredProject = projects.find(p => p.featured)
+  const otherProjects = projects.filter(p => !p.featured)
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-      {projects.map((project, index) => (
-        <div
-          key={index}
-          className="flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
-        >
-          <div className="relative h-48 md:h-56">
-            <Image
-              src={project.image}
-              alt={project.name}
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div className="p-4 md:p-6 flex flex-col flex-grow">
-            <h3 className="text-xl md:text-2xl font-bold mb-2 dark:text-white text-gray-800">
-              {project.name}
-            </h3>
-            <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-4 flex-grow">
-              {project.description}
-            </p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {project.tags.map((tag, tagIndex) => (
-                <span
-                  key={tagIndex}
-                  className="px-3 py-1 text-xs md:text-sm rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
-                >
-                  {tag}
-                </span>
-              ))}
+    <div className="space-y-8">
+      {/* Featured Project */}
+      {featuredProject && (
+        <div className={`relative group glass rounded-2xl overflow-hidden border transition-all duration-500 hover:scale-[1.01] ${
+          isDarkMode 
+            ? 'border-green-500/20 hover:border-green-500/50 hover:shadow-[0_0_60px_rgba(34,197,94,0.15)]' 
+            : 'border-cyan-500/20 hover:border-cyan-500/50 hover:shadow-[0_0_60px_rgba(6,182,212,0.15)]'
+        }`}>
+          <div className="flex flex-col lg:flex-row">
+            {/* Image */}
+            <div className="relative lg:w-1/2 h-64 lg:h-auto overflow-hidden">
+              <Image
+                src={featuredProject.image}
+                alt={featuredProject.name}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-[#030712]/80 to-transparent" />
+              
+              {/* Featured Badge */}
+              <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-medium ${
+                isDarkMode ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
+              }`}>
+                Featured Project
+              </div>
             </div>
-            <div className="flex gap-4">
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm md:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
-              >
-                <FaGithub className="text-lg md:text-xl" />
-                <span>View on GitHub</span>
-              </a>
-              {project.demo && (
+            
+            {/* Content */}
+            <div className="flex-1 p-8 flex flex-col justify-center">
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                {featuredProject.name}
+              </h3>
+              <p className="text-gray-400 text-lg mb-6 leading-relaxed">
+                {featuredProject.description}
+              </p>
+              
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {featuredProject.tags.map((tag, i) => (
+                  <span
+                    key={i}
+                    className={`px-3 py-1 rounded-lg text-sm font-medium border ${
+                      isDarkMode 
+                        ? 'border-green-500/30 text-green-400 bg-green-500/5' 
+                        : 'border-cyan-500/30 text-cyan-400 bg-cyan-500/5'
+                    }`}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              
+              {/* Links */}
+              <div className="flex gap-4">
                 <a
-                  href={project.demo}
+                  href={featuredProject.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm md:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+                  className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all duration-300 ${
+                    isDarkMode 
+                      ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20 border border-green-500/30' 
+                      : 'bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 border border-cyan-500/30'
+                  }`}
                 >
-                  <FaExternalLinkAlt className="text-lg md:text-xl" />
-                  <span>Live Demo</span>
+                  <FaGithub className="text-lg" />
+                  View Code
+                  <FaArrowRight className="text-sm" />
                 </a>
-              )}
+              </div>
             </div>
           </div>
         </div>
-      ))}
+      )}
+
+      {/* Project Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {otherProjects.map((project, index) => (
+          <div
+            key={index}
+            className={`group relative glass rounded-xl overflow-hidden border transition-all duration-300 hover:scale-[1.02] ${
+              isDarkMode 
+                ? 'border-green-500/10 hover:border-green-500/40 hover:shadow-[0_0_40px_rgba(34,197,94,0.1)]' 
+                : 'border-cyan-500/10 hover:border-cyan-500/40 hover:shadow-[0_0_40px_rgba(6,182,212,0.1)]'
+            }`}
+          >
+            {/* Image */}
+            <div className="relative h-40 overflow-hidden">
+              <Image
+                src={project.image}
+                alt={project.name}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-[#030712]/50 to-transparent" />
+              
+              {/* Project Number */}
+              <div className={`absolute top-3 right-3 w-8 h-8 rounded-lg flex items-center justify-center text-sm font-mono ${
+                isDarkMode ? 'bg-green-500/10 text-green-400/50 border border-green-500/20' : 'bg-cyan-500/10 text-cyan-400/50 border border-cyan-500/20'
+              }`}>
+                {String(index + 2).padStart(2, '0')}
+              </div>
+            </div>
+            
+            {/* Content */}
+            <div className="p-5">
+              <h3 className="text-lg font-bold text-white mb-2 group-hover:text-white transition-colors">
+                {project.name}
+              </h3>
+              <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                {project.description}
+              </p>
+              
+              {/* Tags */}
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {project.tags.slice(0, 3).map((tag, i) => (
+                  <span
+                    key={i}
+                    className={`px-2 py-0.5 rounded text-xs font-medium ${
+                      isDarkMode 
+                        ? 'bg-green-500/10 text-green-400/70' 
+                        : 'bg-cyan-500/10 text-cyan-400/70'
+                    }`}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              
+              {/* Links */}
+              <div className={`flex items-center gap-4 pt-4 border-t ${isDarkMode ? 'border-white/5' : 'border-white/5'}`}>
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
+                    isDarkMode 
+                      ? 'text-gray-400 hover:text-green-400' 
+                      : 'text-gray-400 hover:text-cyan-400'
+                  }`}
+                >
+                  <FaGithub />
+                  Code
+                </a>
+                {project.demo && (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
+                      isDarkMode 
+                        ? 'text-gray-400 hover:text-green-400' 
+                        : 'text-gray-400 hover:text-cyan-400'
+                    }`}
+                  >
+                    <FaExternalLinkAlt className="text-xs" />
+                    Demo
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   )
-} 
+}
