@@ -10,7 +10,7 @@ export default function Projects() {
   const projects = [
     {
       name: 'Sciglob Portal',
-      description: 'Enterprise software portal managing hardware-cloud communication for NASA\'s PANDORA atmospheric research project.',
+      description: 'Enterprise portal orchestrating hardware–cloud communication for NASA\'s PANDORA project, so instruments and humans stay in sync.',
       image: '/images/sciglob.jpg',
       tags: ['Python', 'C++', 'Cloud', 'APIs'],
       link: 'https://github.com/ashutoshjoshi1/Sciglob-Polarizer',
@@ -18,14 +18,14 @@ export default function Projects() {
     },
     {
       name: 'Anomaly Detection System',
-      description: 'ML-powered web application detecting anomalies in atmospheric data using statistical methods and deep learning.',
+      description: 'ML-powered app that spots weird behaviour in atmospheric data before humans (or plots) do.',
       image: '/images/sciglob.jpg',
       tags: ['Streamlit', 'ML', 'Python'],
       link: 'https://github.com/ashutoshjoshi1/deep-learning-anomaly'
     },
     {
       name: 'Pandora Data Alignment',
-      description: 'Interactive dashboard for analyzing Pandora scan data, featuring real-time visualization and quality metrics.',
+      description: 'Interactive dashboard for obsessively comparing "good" and "bad" Pandora scans with real-time visuals.',
       image: '/images/sciglob.jpg',
       tags: ['Streamlit', 'Data Viz', 'Python'],
       link: 'https://github.com/ashutoshjoshi1',
@@ -33,21 +33,21 @@ export default function Projects() {
     },
     {
       name: 'Pose Estimation',
-      description: 'Computer vision system for human pose estimation using deep learning and TensorFlow.',
+      description: 'Computer vision system that estimates human pose from video—because stick figures deserve neural nets too.',
       image: '/images/umbc.jpg',
       tags: ['TensorFlow', 'CV', 'Python'],
       link: 'https://github.com/ashutoshjoshi1/pose-tensorflow'
     },
     {
       name: 'Sarcasm Detection',
-      description: 'NLP model using custom LSTM architecture to detect sarcasm in social media text with 87% accuracy.',
+      description: 'NLP model that tries to understand when the internet is being sarcastic (which is… often).',
       image: '/images/tcs.jpg',
       tags: ['LSTM', 'NLP', 'Deep Learning'],
       link: 'https://github.com/ashutoshjoshi1/Twitter-Sarcasm-Analysis'
     },
     {
       name: 'Admission Predictor',
-      description: 'Neural network predicting graduate admission chances based on academic metrics with interpretable results.',
+      description: 'Neural network that predicts grad-school admission odds while still letting you inspect the ingredients.',
       image: '/images/umbc.jpg',
       tags: ['Neural Networks', 'ML', 'Python'],
       link: 'https://github.com/ashutoshjoshi1/Graduate-Admission-Neural-Network-'
@@ -162,11 +162,11 @@ export default function Projects() {
             </div>
             
             {/* Content */}
-            <div className="p-5">
+            <div className="p-5 flex flex-col">
               <h3 className="text-lg font-bold text-white mb-2 group-hover:text-white transition-colors">
                 {project.name}
               </h3>
-              <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+              <p className="text-gray-400 text-sm mb-4 leading-relaxed flex-grow">
                 {project.description}
               </p>
               

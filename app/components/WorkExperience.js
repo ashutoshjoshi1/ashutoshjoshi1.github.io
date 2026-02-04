@@ -11,7 +11,7 @@ const experiences = [
     position: 'Software Engineer',
     location: 'Columbia, Maryland',
     period: 'Nov 2024 - Present',
-    description: 'Building data acquisition, processing, and storage pipelines for the PANDORA atmospheric research project. Developing robust systems for real-time data processing.',
+    description: 'Designing data acquisition, processing, and storage pipelines for the PANDORA atmospheric research project—turning raw sensor noise into something scientists (and dashboards) can actually use.',
     logo: '/images/sciglob.jpg',
     link: 'https://sciglob.com',
     highlights: ['Python', 'Cloud', 'APIs']
@@ -21,7 +21,7 @@ const experiences = [
     position: 'Data Analyst & Developer',
     location: 'Laurel, Maryland',
     period: 'Apr 2024 - Nov 2024',
-    description: 'Built custom web applications for resource management. Implemented data analytics solutions improving operational efficiency by 40%.',
+    description: 'Built internal web tools so spreadsheets could finally retire, layering in analytics that made "gut feeling" decisions measurable.',
     logo: '/images/407.jpg',
     link: 'https://407associates.com',
     highlights: ['React', 'Analytics', 'Web Dev']
@@ -31,7 +31,7 @@ const experiences = [
     position: 'Graduate Student Assistant',
     location: 'Baltimore, Maryland',
     period: 'Jan 2023 - Dec 2023',
-    description: 'Teaching Assistant for computer science courses. Developed web applications for grade management and student assignment tracking.',
+    description: 'Helped students debug everything from off-by-one errors to existential dread, while building web apps that kept grading and assignments sane.',
     logo: '/images/umbc.jpg',
     link: 'https://umbc.edu',
     highlights: ['Teaching', 'Web Apps', 'Python']
@@ -41,7 +41,7 @@ const experiences = [
     position: 'Systems Engineer',
     location: 'Bangalore, India',
     period: 'Jun 2020 - Aug 2022',
-    description: 'Developed data pipelines for Albertsons Co. inventory management. Built scalable ETL processes handling millions of daily transactions.',
+    description: 'Engineered large-scale data pipelines for Albertsons Co., making sure inventory, orders, and reality all mostly agreed with each other.',
     logo: '/images/tcs.jpg',
     link: 'https://tcs.com',
     highlights: ['ETL', 'SQL', 'Python']

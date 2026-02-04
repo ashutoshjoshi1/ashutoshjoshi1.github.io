@@ -95,7 +95,7 @@ export default function Home() {
         </nav>
 
         {/* Hero Section */}
-        <section className="min-h-screen flex items-center justify-center pt-20 px-4">
+        <section className="min-h-[90vh] md:min-h-screen flex items-center justify-center pt-20 px-4">
           <div className="max-w-4xl mx-auto text-center">
             {/* Status Badge */}
             <a 
@@ -121,13 +121,13 @@ export default function Home() {
             <div className={`text-2xl sm:text-3xl md:text-4xl font-light mb-8 h-12 ${isDarkMode ? 'text-green-400' : 'text-cyan-400'}`}>
               <TypeAnimation
                 sequence={[
-                  'Software Engineer',
+                  'Software Engineer who reads docs first',
                   2000,
-                  'Full Stack Developer',
+                  'Full-stack problem solver',
                   2000,
-                  'Cloud Architect',
+                  'Cloud & data wrangler',
                   2000,
-                  'AI Enthusiast',
+                  'AI enthusiast (not building Skynet)',
                   2000,
                 ]}
                 wrapper="span"
@@ -138,10 +138,26 @@ export default function Home() {
             </div>
 
             {/* Description */}
-            <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
-              Building the future with elegant code. Specialized in scalable systems, 
-              cloud architecture, and cutting-edge AI solutions.
+            <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-6 leading-relaxed">
+              I like building systems that are fast, understandable, and just a little over-engineered in the right places.
+              I work across the stack—from APIs and data pipelines to interfaces and AI models.
             </p>
+
+            {/* Fun micro-copy */}
+            <div className="flex flex-wrap justify-center gap-3 mb-10 text-sm text-gray-400">
+              {[
+                'Current status: refactoring past-Ashutosh\'s "temporary" hacks.',
+                'Preferred answer to most questions: "it depends".',
+                'Firm believer that good code reviews are free mentorship sessions.',
+              ].map((line, index) => (
+                <span
+                  key={index}
+                  className="glass rounded-full px-4 py-2 border border-white/5 hover:border-white/20 transition-colors"
+                >
+                  {line}
+                </span>
+              ))}
+            </div>
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap justify-center gap-4">
@@ -172,6 +188,19 @@ export default function Home() {
                   </svg>
                 </span>
               </a>
+              <a
+                href="https://github.com/ashutoshjoshi1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group px-8 py-4 rounded-xl font-medium text-white glass border border-white/10 hover:border-white/30 transition-all duration-300 hover:scale-105"
+              >
+                <span className="flex items-center gap-2">
+                  GitHub Profile
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.8-.26.8-.58v-2.24c-3.34.73-4.03-1.42-4.03-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.74.08-.74 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.82 1.1.82 2.23v3.3c0 .32.2.7.81.58C20.57 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z" />
+                  </svg>
+                </span>
+              </a>
             </div>
 
             {/* Scroll Indicator */}
@@ -184,7 +213,7 @@ export default function Home() {
         </section>
 
         {/* About Section */}
-        <section id="about" className="py-32 px-4">
+        <section id="about" className="pt-20 md:pt-24 pb-28 md:pb-32 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="flex flex-col lg:flex-row items-center gap-16">
               {/* Image */}
@@ -221,14 +250,12 @@ export default function Home() {
                   <span className="gradient-text"> Digital Reality</span>
                 </h2>
                 <p className="text-gray-400 text-lg leading-relaxed mb-6">
-                  I'm a software engineer passionate about building elegant solutions to complex problems. 
-                  With expertise in full-stack development, cloud computing, and data science, I focus on 
-                  creating performant and maintainable software that makes a real impact.
+                  I'm a curious engineer who enjoys turning vague ideas and messy datasets into well-behaved systems.
+                  I care a lot about naming things, deleting code, and leaving projects in a state future teammates will thank us for.
                 </p>
                 <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                  Currently at <span className={`font-semibold ${isDarkMode ? 'text-green-400' : 'text-cyan-400'}`}>NASA GSFC</span>, 
-                  developing data pipelines for the PANDORA project, building systems that help us understand 
-                  our atmosphere better.
+                  During the day I work with the folks at <span className={`font-semibold ${isDarkMode ? 'text-green-400' : 'text-cyan-400'}`}>NASA GSFC</span>,
+                  building data pipelines for the PANDORA project—helping scientists understand the atmosphere while I quietly nerd out about clean abstractions.
                 </p>
                 
                 {/* Stats */}
