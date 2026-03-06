@@ -1,0 +1,202 @@
+.wrap {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.card {
+  --hover: 0;
+  --mx: 50%;
+  --my: 50%;
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --shift-x: 0px;
+  --shift-y: 0px;
+  --reveal-main: 0px;
+  --reveal-soft: 0px;
+  --reveal-l1: 0px;
+  --reveal-l2: 0px;
+  --l1x: 0px;
+  --l1y: 0px;
+  --l2x: 0px;
+  --l2y: 0px;
+  --accent: 6, 182, 212;
+  position: relative;
+  width: min(92vw, 460px);
+  aspect-ratio: 4 / 5;
+  border-radius: 28px;
+  overflow: hidden;
+  isolation: isolate;
+  transform-style: preserve-3d;
+  transform: perspective(1300px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translate3d(var(--shift-x), var(--shift-y), 0);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: #030303;
+  box-shadow:
+    0 42px 90px rgba(0, 0, 0, 0.62),
+    0 2px 0 rgba(255, 255, 255, 0.16) inset;
+  transition: border-color 420ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: crosshair;
+}
+
+.modeDark {
+  --accent: 34, 197, 94;
+}
+
+.modeLight {
+  --accent: 6, 182, 212;
+}
+
+.image {
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+}
+
+.baseLayer,
+.frontLayer,
+.revealLayer,
+.spotlight,
+.noise,
+.frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.baseLayer {
+  z-index: 1;
+}
+
+.frontLayer {
+  z-index: 2;
+  transform: translate3d(calc(var(--shift-x) * 0.09), calc(var(--shift-y) * 0.07), 0) scale(calc(1.02 + var(--hover) * 0.03));
+  opacity: calc(1 - var(--hover) * 0.34);
+  filter: saturate(calc(1.08 - var(--hover) * 0.1)) contrast(calc(1.05 + var(--hover) * 0.08)) blur(calc(var(--hover) * 0.8px));
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms cubic-bezier(0.22, 1, 0.36, 1), filter 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.revealLayer {
+  z-index: 3;
+  transform: translate3d(calc(var(--shift-x) * -0.07), calc(var(--shift-y) * -0.06), 0) scale(calc(1.015 + var(--hover) * 0.02));
+  filter: saturate(calc(0.96 + var(--hover) * 0.24)) contrast(calc(1.03 + var(--hover) * 0.12));
+  transition: transform 340ms cubic-bezier(0.22, 1, 0.36, 1), opacity 340ms cubic-bezier(0.22, 1, 0.36, 1), filter 340ms cubic-bezier(0.22, 1, 0.36, 1), clip-path 300ms linear;
+}
+
+.revealSoft {
+  opacity: calc(0.1 + var(--hover) * 0.34);
+  clip-path: circle(var(--reveal-soft) at var(--mx) var(--my));
+  filter: blur(7px) saturate(1.18);
+}
+
+.revealMain {
+  opacity: calc(var(--hover) * 0.95);
+  clip-path: circle(var(--reveal-main) at var(--mx) var(--my));
+}
+
+.revealL1 {
+  opacity: calc(var(--hover) * 0.9);
+  clip-path: circle(var(--reveal-l1) at calc(var(--mx) + var(--l1x)) calc(var(--my) + var(--l1y)));
+}
+
+.revealL2 {
+  opacity: calc(var(--hover) * 0.88);
+  clip-path: circle(var(--reveal-l2) at calc(var(--mx) + var(--l2x)) calc(var(--my) + var(--l2y)));
+}
+
+.spotlight {
+  z-index: 4;
+  background:
+    radial-gradient(260px circle at var(--mx) var(--my), rgba(255, 255, 255, calc(0.1 + var(--hover) * 0.2)), rgba(255, 255, 255, 0) 72%),
+    radial-gradient(380px circle at var(--mx) var(--my), rgba(var(--accent), calc(var(--hover) * 0.22)), rgba(var(--accent), 0) 76%);
+  mix-blend-mode: screen;
+  opacity: calc(0.14 + var(--hover) * 0.84);
+}
+
+.noise {
+  z-index: 5;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.18) 0.55px, transparent 0.55px);
+  background-size: 3px 3px;
+  mix-blend-mode: soft-light;
+  opacity: calc(0.05 + var(--hover) * 0.06);
+}
+
+.frame {
+  z-index: 6;
+  inset: 9px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, calc(0.2 + var(--hover) * 0.18));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 -25px 38px rgba(0, 0, 0, 0.46),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.card::before,
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.card::before {
+  z-index: 7;
+  background:
+    radial-gradient(circle at 0% 0%, #000 0%, transparent 45%),
+    radial-gradient(circle at 100% 0%, #000 0%, transparent 45%),
+    radial-gradient(circle at 0% 100%, #000 0%, transparent 47%),
+    radial-gradient(circle at 100% 100%, #000 0%, transparent 47%);
+  opacity: 0.9;
+}
+
+.card::after {
+  z-index: 8;
+  background: radial-gradient(circle at 50% 42%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.56) 74%, #000 100%);
+}
+
+.card:hover {
+  border-color: rgba(var(--accent), 0.52);
+  box-shadow:
+    0 56px 110px rgba(0, 0, 0, 0.68),
+    0 0 58px rgba(var(--accent), 0.22),
+    0 2px 0 rgba(255, 255, 255, 0.16) inset;
+}
+
+@media (max-width: 1024px) {
+  .card {
+    width: min(90vw, 420px);
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    width: 92vw;
+    border-radius: 24px;
+  }
+
+  .frame {
+    inset: 8px;
+    border-radius: 16px;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .card {
+    cursor: default;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .frontLayer,
+  .revealLayer {
+    transition-duration: 0.001ms;
+    animation: none;
+  }
+
+  .spotlight,
+  .noise {
+    display: none;
+  }
+}

@@ -8,6 +8,7 @@ import Technologies from './components/Technologies'
 import Projects from './components/Projects'
 import Footer from './components/Footer'
 import AboutMeAnimation from './components/AboutMeAnimation'
+import PremiumPortraitReveal from './components/PremiumPortraitReveal'
 import { useDarkMode } from './context/DarkModeContext'
 import { TypeAnimation } from 'react-type-animation'
 
@@ -95,10 +96,10 @@ export default function Home() {
         </nav>
 
         {/* Hero Section */}
-        <section className="min-h-[90vh] md:min-h-screen flex items-center justify-center pt-20 px-4">
-          <div className="max-w-4xl mx-auto text-center">
+        <section className="min-h-[92vh] md:min-h-screen flex items-center justify-center pt-24 pb-16 px-4">
+          <div className="max-w-5xl mx-auto text-center">
             {/* Status Badge */}
-            <a 
+            <a
               href="https://calendly.com/ashutxsh-jxshi/new-meeting"
               target="_blank"
               rel="noopener noreferrer"
@@ -111,9 +112,23 @@ export default function Home() {
               </svg>
             </a>
 
+            {/* Interactive Portrait */}
+            <div className="mb-10 flex justify-center">
+              <PremiumPortraitReveal
+                // Front/top portrait (replace this path if needed)
+                warriorSrc="/images/warrior.jpg"
+                // Back/reveal portrait (replace this path if needed)
+                revealSrc="/images/ashu_warrior.jpg"
+                warriorAlt="Warrior portrait"
+                revealAlt="Ashutosh portrait revealed on hover"
+                isDarkMode={isDarkMode}
+                imagePosition="50% 50%"
+              />
+            </div>
+
             {/* Main Title */}
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6">
-              <span className="text-white">Hi, I'm </span>
+              <span className="text-white">Hi, I&apos;m </span>
               <span className="gradient-text">Ashutosh</span>
             </h1>
 
@@ -138,26 +153,10 @@ export default function Home() {
             </div>
 
             {/* Description */}
-            <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-6 leading-relaxed">
+            <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto mb-6 leading-relaxed">
               I like building systems that are fast, understandable, and just a little over-engineered in the right places.
-              I work across the stack—from APIs and data pipelines to interfaces and AI models.
+              I work across the stack, from APIs and data pipelines to interfaces and AI models.
             </p>
-
-            {/* Fun micro-copy */}
-            <div className="flex flex-wrap justify-center gap-3 mb-10 text-sm text-gray-400">
-              {[
-                'Current status: refactoring past-Ashutosh\'s "temporary" hacks.',
-                'Preferred answer to most questions: "it depends".',
-                'Firm believer that good code reviews are free mentorship sessions.',
-              ].map((line, index) => (
-                <span
-                  key={index}
-                  className="glass rounded-full px-4 py-2 border border-white/5 hover:border-white/20 transition-colors"
-                >
-                  {line}
-                </span>
-              ))}
-            </div>
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap justify-center gap-4">
@@ -202,13 +201,6 @@ export default function Home() {
                 </span>
               </a>
             </div>
-
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-              <div className={`w-6 h-10 rounded-full border-2 flex justify-center pt-2 ${isDarkMode ? 'border-green-500/50' : 'border-cyan-500/50'}`}>
-                <div className={`w-1 h-2 rounded-full animate-pulse ${isDarkMode ? 'bg-green-500' : 'bg-cyan-500'}`} />
-              </div>
-            </div>
           </div>
         </section>
 
@@ -250,7 +242,7 @@ export default function Home() {
                   <span className="gradient-text"> Digital Reality</span>
                 </h2>
                 <p className="text-gray-400 text-lg leading-relaxed mb-6">
-                  I'm a curious engineer who enjoys turning vague ideas and messy datasets into well-behaved systems.
+                  I&apos;m a curious engineer who enjoys turning vague ideas and messy datasets into well-behaved systems.
                   I care a lot about naming things, deleting code, and leaving projects in a state future teammates will thank us for.
                 </p>
                 <p className="text-gray-400 text-lg leading-relaxed mb-8">
@@ -330,11 +322,11 @@ export default function Home() {
               <span className={`text-sm font-medium ${isDarkMode ? 'text-green-400' : 'text-cyan-400'}`}>Get in Touch</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Let's Build Something
+              Let&apos;s Build Something
               <span className="gradient-text"> Amazing</span>
             </h2>
             <p className="text-gray-400 text-lg mb-12 max-w-2xl mx-auto">
-              I'm always interested in hearing about new projects and opportunities. 
+              I&apos;m always interested in hearing about new projects and opportunities. 
               Whether you have a question or just want to say hi, feel free to reach out!
             </p>
             

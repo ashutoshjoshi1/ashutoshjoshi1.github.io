@@ -1,11 +1,5 @@
 import './globals.css'
 import { DarkModeProvider } from './context/DarkModeContext'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ 
-  subsets: ['latin'],
-  display: 'swap',
-})
 
 export const metadata = {
   metadataBase: new URL('https://ashutoshjoshi1.github.io'),
@@ -32,7 +26,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.className} scroll-smooth`}>
+    <html lang="en" className="scroll-smooth">
       <head>
         <link rel="icon" href="/images/favicon.jpeg" type="image/jpeg" />
         <meta name="theme-color" content="#030712" />
