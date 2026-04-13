@@ -20,6 +20,15 @@ export const metadata: Metadata = {
   authors: [{ name: "Ashutosh Joshi" }],
   creator: "Ashutosh Joshi",
   publisher: "Ashutosh Joshi",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    shortcut: ["/favicon.ico"],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   formatDetection: {
     email: false,
     address: false,
@@ -42,11 +51,20 @@ export const metadata: Metadata = {
     siteName: "Ashutosh Joshi Portfolio",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/images/og-aj.png",
+        width: 1200,
+        height: 630,
+        alt: "Ashutosh Joshi portfolio preview",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Ashutosh Joshi | Software Engineer",
     description: "Full-stack, cloud, and AI engineer with a 3D portfolio experience.",
+    images: ["/images/og-aj.png"],
   },
 };
 
