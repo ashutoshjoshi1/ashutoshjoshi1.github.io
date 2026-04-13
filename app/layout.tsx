@@ -1,4 +1,3 @@
-import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata, Viewport } from "next";
 import localFont from 'next/font/local';
 import "./globals.css";
@@ -14,12 +13,13 @@ const vercettiFont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Mohit Virli ✌️",
-  description: "A frontend developer by profession, a creative at heart.",
-  keywords: "Mohit Virli, Frontend Engineer, React Developer, Three.js, Creative Developer, Web Development, Angular, JavaScript, TypeScript, Portfolio",
-  authors: [{ name: "Mohit Virli" }],
-  creator: "Mohit Virli",
-  publisher: "Mohit Virli",
+  metadataBase: new URL("https://ashutoshjoshi1.github.io"),
+  title: "Ashutosh Joshi | Software Engineer",
+  description: "Software engineer building full-stack, cloud, and AI systems with immersive 3D web experiences.",
+  keywords: "Ashutosh Joshi, Software Engineer, Full Stack Developer, React, Next.js, Three.js, Python, Cloud, AI, Portfolio",
+  authors: [{ name: "Ashutosh Joshi" }],
+  creator: "Ashutosh Joshi",
+  publisher: "Ashutosh Joshi",
   formatDetection: {
     email: false,
     address: false,
@@ -36,20 +36,17 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Mohit Virli - Frontend Engineer",
-    description: "Frontend engineer by profession, creative at heart.",
-    url: "https://mohitvirli.github.io",
-    siteName: "Mohit Virli's Portfolio",
+    title: "Ashutosh Joshi | Software Engineer",
+    description: "Full-stack, cloud, and AI engineer with a 3D portfolio experience.",
+    url: "https://ashutoshjoshi1.github.io",
+    siteName: "Ashutosh Joshi Portfolio",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mohit Virli - Frontend Engineer",
-    description: "Frontend engineer by profession, creative at heart.",
-  },
-  verification: {
-    google: "GsRYY-ivL0F_VKkfs5KAeToliqz0gCrRAJKKmFkAxBA",
+    title: "Ashutosh Joshi | Software Engineer",
+    description: "Full-stack, cloud, and AI engineer with a 3D portfolio experience.",
   },
 };
 
@@ -72,7 +69,6 @@ export default function RootLayout({
       >
         {children}
       </body>
-      <GoogleAnalytics gaId={'G-7WD4HM3XRE'}/>
     </html>
   );
 }
