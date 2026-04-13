@@ -1,77 +1,26 @@
-# Personal Portfolio Website
+# mohitvirli.github.io
+Hello there! I'm Mohit Virli, frontend engineer by profession, a creative at heart.
 
-This is a personal portfolio website built with Next.js, React, and Tailwind CSS. It features a modern design with dark mode support and a beautiful starry background animation.
+This the updated version of my personal website which is now in 3D. LFG!
 
-## Features
+Checkout the live version at [mohitvirli.github.io](https://mohitvirli.github.io/)
 
-- Modern and responsive design
-- Dark mode support
-- Beautiful starry background animation
-- Work experience timeline
-- Technologies showcase
-- Projects showcase
-- HR/IT mode toggle
+## Tech Stack
 
-## Prerequisites
+- Next.js
+- React
+- React-three-fiber
+- DREI
+- GSAP
+- Zustand
+- Tailwind
 
-- Node.js 18.x or later
-- npm or yarn
+## Preview
+Some of the sample images from the app. Better to check it out live!
 
-## Getting Started
+<img width="1242" alt="image" src="https://github.com/user-attachments/assets/877b0685-8d86-4f8b-b123-f3cc17d46fc7" />
+<img width="1241" alt="image" src="https://github.com/user-attachments/assets/09a92647-1781-4124-ba3f-1d6fb66f6974" />
+<img width="1241" alt="image" src="https://github.com/user-attachments/assets/a15017f4-f1f2-459e-b895-b3c14703635b" />
+<img width="1428" height="830" alt="image" src="https://github.com/user-attachments/assets/9f78c2e8-991c-4507-8ffb-72e61513c031" />
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/portfolio.git
-cd portfolio
-```
 
-2. Install dependencies:
-```bash
-npm install
-# or
-yarn install
-```
-
-3. Create a `public/images` directory and add the following images:
-- profile.jpg (your profile picture)
-- Company logos (sciglob.jpg, 407.jpg, umbc.jpg, tcs.jpg)
-- Project images (pandora.jpg, 407-portal.jpg, umbc-grading.jpg)
-- Technology icons (python.svg, ml.svg, ai.svg, agent.svg, cloud.svg, data.svg, sdlc.svg, web.svg)
-
-4. Run the development server:
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Building for Production
-
-To create a production build:
-
-```bash
-npm run build
-# or
-yarn build
-```
-
-To start the production server:
-
-```bash
-npm run start
-# or
-yarn start
-```
-
-## Customization
-
-- Update the content in the components to match your information
-- Modify the styling in `globals.css` and Tailwind classes
-- Add or remove sections as needed
-- Update the images in the `public/images` directory
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE). 
