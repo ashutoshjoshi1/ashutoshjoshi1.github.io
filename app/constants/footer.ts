@@ -30,5 +30,11 @@ export const FOOTER_LINKS: FooterLink[] = [
     hoverText: 'Download',
     icon: 'icons/file.svg',
     url: '/resume.pdf',
-  }
+  },
+  {
+    name: 'Music',
+    hoverText: "Gangsta's Paradise - Coolio ft. L.V.",
+    icon: 'icons/file.svg',
+    url: '/audio/gangstas-paradise-coolio-feat-lv.mp3',
+  },
 ];
