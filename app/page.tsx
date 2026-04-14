@@ -1,6 +1,7 @@
 'use client';
 
 import CanvasLoader from "./components/common/CanvasLoader";
+import ScrollMusicPlayer from "./components/common/ScrollMusicPlayer";
 import ScrollWrapper from "./components/common/ScrollWrapper";
 import Experience from "./components/experience";
 import Footer from "./components/footer";
@@ -14,6 +15,7 @@ const Home = () => {
         <Experience/>
         <Footer/>
       </ScrollWrapper>
+      <ScrollMusicPlayer />
     </CanvasLoader>
   );
 };
