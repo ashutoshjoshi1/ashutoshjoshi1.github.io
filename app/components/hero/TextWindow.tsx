@@ -26,7 +26,7 @@ const TextWindow = () => {
   return (
     <group position={[0, -0.3, 0]} ref={windowRef}>
 
-      <Text color="white" anchorX="left" anchorY="middle"
+      <Text color="#00f0ff" anchorX="left" anchorY="middle"
         fontSize={1.3}
         position={[0.12, 0, 0]}
         {...fontProps}
@@ -35,7 +35,7 @@ const TextWindow = () => {
         SOFTWARE ENGINEER
       </Text>
 
-      <Text color="white" anchorX="right" anchorY="middle"
+      <Text color="#ff00aa" anchorX="right" anchorY="middle"
         {...fontProps}
         scale={[-1, -1, 1]}
         fontSize={1.3}
@@ -45,7 +45,7 @@ const TextWindow = () => {
       </Text>
 
       <group position={[-0.45, 0, -0.3]}>
-        <Text color="white" anchorX="left" anchorY="middle"
+        <Text color="#e0e0ff" anchorX="left" anchorY="middle"
           {...fontProps}
           scale={[1, -1, 1]}
           fontSize={0.8}
@@ -53,7 +53,7 @@ const TextWindow = () => {
           CLOUD. DATA PIPELINES
         </Text>
 
-        <Text color="white" anchorX="left" anchorY="middle"
+        <Text color="#e0e0ff" anchorX="left" anchorY="middle"
           {...fontProps}
           scale={[1, -1, 1]}
           fontSize={0.8}
@@ -64,14 +64,14 @@ const TextWindow = () => {
       </group>
 
       <group position={[0.45, 0, -0.3]}>
-        <Text color="white" anchorX="right" anchorY="middle"
+        <Text color="#e0e0ff" anchorX="right" anchorY="middle"
           {...fontProps}
           scale={[-1, -1, 1]}
           fontSize={0.8}
           rotation={[0, -Math.PI / 2,  -Math.PI / 2]}>
           PYTHON. TYPESCRIPT
         </Text>
-        <Text color="white" anchorX="right" anchorY="middle"
+        <Text color="#e0e0ff" anchorX="right" anchorY="middle"
           {...fontProps}
           scale={[-1, -1, 1]}
           fontSize={0.8}

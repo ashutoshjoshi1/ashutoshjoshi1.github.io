@@ -37,7 +37,7 @@ const GridTile = (props: GridTileProps) => {
       gsap.to(titleRef.current, {
         fontSize: 0.13,
         maxWidth: 4,
-        color: isWork ? '#FFF' : '#888',
+        color: isWork ? '#00f0ff' : '#ff00aa',
         letterSpacing: 0.4,
       });
       gsap.to(titleRef.current.position, {
@@ -90,7 +90,8 @@ const GridTile = (props: GridTileProps) => {
     document.body.addEventListener('keydown', handleEscape);
     gsap.to(portalRef.current, {
       blend: 1,
-      duration: 0.5,
+      duration: 0.8,
+      ease: 'power2.inOut',
     });
   };
 
@@ -100,18 +101,21 @@ const GridTile = (props: GridTileProps) => {
 
     gsap.to(camera.position, {
       x: 0,
-      duration: 1,
+      duration: 1.2,
+      ease: 'power2.inOut',
     });
 
     gsap.to(camera.rotation, {
       x: -Math.PI / 2,
       y: 0,
-      duration: 1,
+      duration: 1.2,
+      ease: 'power2.inOut',
     });
 
     gsap.to(portalRef.current, {
       blend: 0,
-      duration: 1,
+      duration: 1.2,
+      ease: 'power2.inOut',
     });
 
     // Remove the div from the dom
@@ -133,7 +137,7 @@ const GridTile = (props: GridTileProps) => {
     anchorX: 'center',
     anchorY: 'bottom',
     fontSize: 0.7,
-    color: 'white',
+    color: '#00f0ff',
     textAlign: textAlign,
     fillOpacity: 0,
   };
@@ -145,8 +149,8 @@ const GridTile = (props: GridTileProps) => {
       fillOpacity: 1
     });
     if (gridRef.current && hoverBoxRef.current) {
-      gsap.to(gridRef.current.position, { z: 0.5, duration: 0.4});
-      gsap.to(hoverBoxRef.current.scale, { x: 1, y: 1, z: 1, duration: 0.4 });
+      gsap.to(gridRef.current.position, { z: 0.5, duration: 0.6, ease: 'power2.out' });
+      gsap.to(hoverBoxRef.current.scale, { x: 1, y: 1, z: 1, duration: 0.6, ease: 'power2.out' });
     }
   };
 
@@ -157,8 +161,8 @@ const GridTile = (props: GridTileProps) => {
       fillOpacity: 0
     });
     if (gridRef.current && hoverBoxRef.current) {
-      gsap.to(gridRef.current.position, { z: 0, duration: 0.4});
-      gsap.to(hoverBoxRef.current.scale, { x: 0, y: 0, z: 0, duration: 0.4 });
+      gsap.to(gridRef.current.position, { z: 0, duration: 0.6, ease: 'power2.inOut' });
+      gsap.to(hoverBoxRef.current.scale, { x: 0, y: 0, z: 0, duration: 0.6, ease: 'power2.inOut' });
     }
   };
 
@@ -186,11 +190,11 @@ const GridTile = (props: GridTileProps) => {
         <mesh position={[0, 0, -0.01]} ref={hoverBoxRef} scale={[0, 0, 0]}>
           <boxGeometry args={[4, 4, 0.5]}/>
           <meshPhysicalMaterial
-            color="#444"
+            color="#00f0ff"
             transparent={true}
-            opacity={0.3}
+            opacity={0.15}
           />
-          <Edges color="white" lineWidth={3}/>
+          <Edges color="#00f0ff" lineWidth={3}/>
         </mesh>
         <Text position={[0, -1.8, 0.4]} {...fontProps} ref={titleRef}>
           {title}

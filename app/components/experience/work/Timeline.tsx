@@ -25,7 +25,7 @@ const TimelinePoint = ({ point, diff }: { point: WorkTimelinePoint, diff: number
 
   const textProps: Partial<TextProps> = useMemo(() => ({
     font: "./Vercetti-Regular.woff",
-    color: "white",
+    color: "#e0e0ff",
     anchorX: textAlign,
     fillOpacity: 2 - 2 * diff,
   }), [textAlign, diff]);
@@ -35,24 +35,25 @@ const TimelinePoint = ({ point, diff }: { point: WorkTimelinePoint, diff: number
     font: "./soria-font.ttf",
     fontSize: 0.6,
     maxWidth: 3,
+    color: "#00f0ff",
   }), [textProps]);
 
   return (
     <group position={point.point} scale={isMobile ? 0.35 : 0.6}>
-      <Box args={[0.2, 0.2, 0.2]} position={[0, 0, -0.1]} scale={[1 - diff, 1 - diff, 1 - diff]}>
-        <meshBasicMaterial color="white" wireframe />
-        <Edges color="white" lineWidth={1.5} />
+      <Box args={[0.15, 0.15, 0.15]} position={[0, 0, -0.1]} scale={[1 - diff, 1 - diff, 1 - diff]}>
+        <meshBasicMaterial color="#ff00aa" wireframe />
+        <Edges color="#ff00aa" lineWidth={1.5} />
       </Box>
       <group>
         <group position={getPoint}>
-          <Text {...textProps} fontSize={0.3} position={[-diff / 2, 0, 0]}>
+          <Text {...textProps} fontSize={0.25} position={[-diff / 2, 0.05, 0]} color="#ff00aa" anchorY="bottom">
             {point.year}
           </Text>
-          <group position={[0, -0.5, 0]}>
-            <Text {...titleProps} fontSize={0.6} maxWidth={3} position={[0, -diff / 2, 0]}>
+          <group position={[0, -0.25, 0]}>
+            <Text {...titleProps} fontSize={0.45} maxWidth={2.8} position={[0, -diff / 2, 0]} anchorY="bottom">
               {point.title}
             </Text>
-            <Text {...textProps} fontSize={0.2} position={[0, -0.4 - diff, 0]}>
+            <Text {...textProps} fontSize={0.18} position={[0, -0.2 - diff * 0.3, 0]} maxWidth={2.8} anchorY="top">
               {point.subtitle}
             </Text>
           </group>
@@ -78,9 +79,9 @@ const Timeline = ({ progress }: { progress: number }) => {
   useFrame((_, delta) => {
     if (isActive) {
       const position = curve.getPoint(progress);
-      camera.position.x = THREE.MathUtils.damp(camera.position.x, (isMobile ? -1 : -2) + position.x, 4, delta);
-      camera.position.y = THREE.MathUtils.damp(camera.position.y, -39 + position.z, 4, delta);
-      camera.position.z = THREE.MathUtils.damp(camera.position.z, 13 - position.y, 4, delta);
+      camera.position.x = THREE.MathUtils.damp(camera.position.x, (isMobile ? -1 : -2) + position.x, 3, delta);
+      camera.position.y = THREE.MathUtils.damp(camera.position.y, -39 + position.z, 3, delta);
+      camera.position.z = THREE.MathUtils.damp(camera.position.z, 13 - position.y, 3, delta);
     }
   });
 
@@ -123,11 +124,11 @@ const Timeline = ({ progress }: { progress: number }) => {
 
   return (
     <group position={[0, -0.1, -0.1]}>
-      <Line points={visibleCurvePoints} color="white" lineWidth={3} />
+      <Line points={visibleCurvePoints} color="#00f0ff" lineWidth={3} />
       {visibleDashedCurvePoints.length > 0 && (
         <Line
           points={visibleDashedCurvePoints}
-          color="white"
+          color="#ff00aa"
           lineWidth={0.5}
           dashed
           dashSize={0.25}

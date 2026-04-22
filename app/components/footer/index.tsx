@@ -26,7 +26,7 @@ const FooterLinkItem = ({ link }: { link: FooterLink }) => {
   const fontProps = {
     font: "./Vercetti-Regular.woff",
     fontSize: 0.2,
-    color: 'white',
+    color: '#e0e0ff',
     onPointerOver,
     onPointerMove,
     onPointerOut,
@@ -45,6 +45,8 @@ const FooterLinkItem = ({ link }: { link: FooterLink }) => {
       hoverDiv.style.left = window.innerWidth / 2 + 'px';
       hoverDiv.style.fontSize = '0.8rem';
       hoverDiv.style.pointerEvents = 'none';
+      hoverDiv.style.color = '#00f0ff';
+      hoverDiv.style.textShadow = '0 0 10px rgba(0, 240, 255, 0.5)';
       document.body.appendChild(hoverDiv);
     }
   }, [])
@@ -55,13 +57,14 @@ const FooterLinkItem = ({ link }: { link: FooterLink }) => {
     const hoverDiv = document.getElementById(`footer-link-${link.name}`);
 
     if (hovered) {
-      gsap.fromTo(hoverDiv, { opacity: 0 }, { opacity: 0.5, delay: 0.2 });
+      gsap.fromTo(hoverDiv, { opacity: 0 }, { opacity: 0.8, delay: 0.2 });
     } else {
       gsap.to(hoverDiv, { opacity: 0 });
     }
 
     gsap.to(textRef.current, {
       letterSpacing: hovered ? 0.3 : 0,
+      color: hovered ? '#00f0ff' : '#e0e0ff',
       duration: 0.3,
     });
 

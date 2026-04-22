@@ -55,19 +55,17 @@ const CanvasLoader = (props: { children: React.ReactNode }) => {
     gsap.to(canvasRef.current, {
       backgroundColor: backgroundColor,
       duration: 1,
-      ...noiseOverlayStyle,
     });
   }, [backgroundColor]);
 
-  const noiseOverlayStyle = {
-    backgroundBlendMode: "soft-light",
-    backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E\")",
-    backgroundRepeat: "repeat",
-    backgroundSize: "100px",
-  };
-
   return (
-    <div className="h-[100dvh] wrapper relative">
+    <div className="h-[100dvh] wrapper relative scanlines">
+      {/* HUD corner decorations */}
+      <div className="hud-corner hud-tl" />
+      <div className="hud-corner hud-tr" />
+      <div className="hud-corner hud-bl" />
+      <div className="hud-corner hud-br" />
+
       <div className="h-[100dvh] relative" ref={ref}>
         <Canvas className="base-canvas"
           shadows
@@ -76,9 +74,9 @@ const CanvasLoader = (props: { children: React.ReactNode }) => {
           dpr={[1, 2]}>
           {/* <Perf/> */}
           <Suspense fallback={null}>
-            <ambientLight intensity={0.5} />
+            <ambientLight intensity={0.3} color="#8888ff" />
 
-            <ScrollControls pages={4} damping={0.4} maxSpeed={1} distance={1} style={{ zIndex: 1 }}>
+            <ScrollControls pages={4} damping={0.6} maxSpeed={0.7} distance={1} style={{ zIndex: 1 }}>
               {props.children}
               <Preloader />
             </ScrollControls>

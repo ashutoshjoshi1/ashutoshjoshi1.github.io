@@ -20,16 +20,17 @@ const ScrollWrapper = (props: { children: React.ReactNode | React.ReactNode[]}) 
       const d = data.range(0.85, 0.18);
 
       if (!isActive) {
-        camera.rotation.x = THREE.MathUtils.damp(camera.rotation.x, -0.5 * Math.PI * a, 5, delta);
-        camera.position.y = THREE.MathUtils.damp(camera.position.y, -37 * b, 7, delta);
-        camera.position.z = THREE.MathUtils.damp(camera.position.z, 5 + 10 * d, 7, delta);
+        // Smoother damping values for buttery camera motion
+        camera.rotation.x = THREE.MathUtils.damp(camera.rotation.x, -0.5 * Math.PI * a, 4, delta);
+        camera.position.y = THREE.MathUtils.damp(camera.position.y, -37 * b, 5, delta);
+        camera.position.z = THREE.MathUtils.damp(camera.position.z, 5 + 10 * d, 5, delta);
 
         setScrollProgress(data.range(0, 1));
       }
 
-      // Move camera slightly on mouse movement.
+      // Smoother mouse parallax
       if (!isMobile && !isActive) {
-        camera.rotation.y = THREE.MathUtils.lerp(camera.rotation.y, -(state.pointer.x * Math.PI) / 90, 0.05);
+        camera.rotation.y = THREE.MathUtils.lerp(camera.rotation.y, -(state.pointer.x * Math.PI) / 90, 0.03);
       }
     }
   });

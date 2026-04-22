@@ -3,24 +3,22 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #050510;
+  --foreground: #e0e0ff;
+  --neon-cyan: #00f0ff;
+  --neon-magenta: #ff00aa;
+  --neon-violet: #8844ff;
+  --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.5);
+  --glow-magenta: 0 0 20px rgba(255, 0, 170, 0.5);
 }
 
 * {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-   -khtml-user-select: none; /* Konqueror HTML */
-     -moz-user-select: none; /* Firefox */
-      -ms-user-select: none; /* Internet Explorer/Edge */
-          user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 body {
@@ -31,29 +29,32 @@ body {
 }
 
 :root {
-  --scrollbarColor: #FFF;
+  --scrollbarColor: var(--neon-cyan);
   --scrollbarBackground: rgba(0, 0, 0, 0);
 }
 
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
   background: var(--scrollbarBackground);
 }
 ::-webkit-scrollbar-thumb {
-  border-bottom: 100vh solid var(--scrollbarColor);
+  background: linear-gradient(180deg, var(--neon-cyan), var(--neon-magenta));
+  border-radius: 2px;
 }
 
+/* Close button - futuristic style */
 .close {
   position: absolute;
   left: 32px;
   top: 32px;
   width: 48px;
   height: 48px;
-  opacity: 0.3;
+  opacity: 0.5;
   cursor: pointer;
+  transition: opacity 0.3s, filter 0.3s;
 }
 
 @media screen and (max-width: 768px) {
@@ -65,6 +66,7 @@ body {
 
 .close:hover {
   opacity: 1;
+  filter: drop-shadow(var(--glow-cyan));
 }
 
 .close:before, .close:after {
@@ -73,7 +75,7 @@ body {
   content: ' ';
   height: 48px;
   width: 2px;
-  background-color: #0a0a0a;
+  background: linear-gradient(180deg, var(--neon-cyan), var(--neon-magenta));
 }
 
 .close:before {
@@ -82,4 +84,91 @@ body {
 
 .close:after {
   transform: rotate(-45deg);
+}
+
+/* Futuristic scanline overlay */
+.scanlines::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 240, 255, 0.015) 2px,
+    rgba(0, 240, 255, 0.015) 4px
+  );
+  z-index: 9999;
+}
+
+/* Glitch text animation */
+@keyframes glitch {
+  0%, 100% {
+    text-shadow:
+      2px 0 var(--neon-cyan),
+      -2px 0 var(--neon-magenta);
+  }
+  25% {
+    text-shadow:
+      -2px -1px var(--neon-cyan),
+      2px 1px var(--neon-magenta);
+  }
+  50% {
+    text-shadow:
+      1px 2px var(--neon-cyan),
+      -1px -2px var(--neon-magenta);
+  }
+  75% {
+    text-shadow:
+      -1px 1px var(--neon-cyan),
+      1px -1px var(--neon-magenta);
+  }
+}
+
+/* Neon pulse */
+@keyframes neonPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Float animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* HUD corner decorations */
+.hud-corner {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  z-index: 10;
+}
+.hud-corner::before,
+.hud-corner::after {
+  content: '';
+  position: absolute;
+  background: var(--neon-cyan);
+  opacity: 0.4;
+}
+.hud-tl { top: 1rem; left: 1rem; }
+.hud-tl::before { width: 20px; height: 2px; top: 0; left: 0; }
+.hud-tl::after { width: 2px; height: 20px; top: 0; left: 0; }
+
+.hud-tr { top: 1rem; right: 1rem; }
+.hud-tr::before { width: 20px; height: 2px; top: 0; right: 0; }
+.hud-tr::after { width: 2px; height: 20px; top: 0; right: 0; }
+
+.hud-bl { bottom: 1rem; left: 1rem; }
+.hud-bl::before { width: 20px; height: 2px; bottom: 0; left: 0; }
+.hud-bl::after { width: 2px; height: 20px; bottom: 0; left: 0; }
+
+.hud-br { bottom: 1rem; right: 1rem; }
+.hud-br::before { width: 20px; height: 2px; bottom: 0; right: 0; }
+.hud-br::after { width: 2px; height: 20px; bottom: 0; right: 0; }
+
+@media screen and (max-width: 768px) {
+  .hud-corner { display: none; }
 }

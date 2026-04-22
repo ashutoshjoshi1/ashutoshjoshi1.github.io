@@ -25,12 +25,12 @@ const ProjectTile = ({ project, index, position, rotation, activeId, onClick }: 
 
   const titleProps = useMemo(() => ({
     font: "./soria-font.ttf",
-    color: "black",
+    color: "#00f0ff",
   }), []);
 
   const subtitleProps: Partial<TextProps> = useMemo(() => ({
     font: "./Vercetti-Regular.woff",
-    color: "black",
+    color: "#e0e0ff",
     anchorX: "left",
     anchorY: "top",
   }), []);
@@ -41,23 +41,22 @@ const ProjectTile = ({ project, index, position, rotation, activeId, onClick }: 
 
     const [mesh, title, dateGroup, textBox, button] = projectRef.current.children;
 
-    hoverAnimRef.current = gsap.timeline();
+    hoverAnimRef.current = gsap.timeline({ defaults: { duration: 0.5, ease: 'power2.out' } });
     hoverAnimRef.current
-      .to(projectRef.current.position, { z: hovered ? 1 : 0, duration: 0.2 }, 0)
-      .to(projectRef.current.position, { y: hovered ? 0.4 : 0 }, 0)
+      .to(projectRef.current.position, { z: hovered ? 1 : 0, duration: 0.3 }, 0)
+      .to(projectRef.current.position, { y: hovered ? 0.3 : 0 }, 0)
       .to(projectRef.current.scale, {
-        x: hovered ? 1.3 : 1,
-        y: hovered ? 1.3 : 1,
-        z: hovered ? 1.3 : 1,
+        x: hovered ? 1.2 : 1,
+        y: hovered ? 1.2 : 1,
+        z: hovered ? 1.2 : 1,
       }, 0)
-      .to(title.position, { y: hovered ? 0.7 : -0.8 }, 0)
-      .to(textBox.position, { y: hovered ? 0.7 : 0 }, 0)
-      // .to(textBox.scale, { y: hovered ? 1 : 0, x: hovered ? 1 : 0 }, 0)
-      .to(textBox, { fillOpacity: hovered ? 1 : 0, duration: 0.4 }, 0)
-      .to(dateGroup.position, { y: hovered ? 2.6 : 1.4 }, 0)
-      .to(mesh.scale, { y: hovered ? 2 : 1 }, 0)
-      .to((mesh as THREE.Mesh).material, { opacity: hovered ? 0.95 : 0.3 }, 0)
-      .to(mesh.position, { y: hovered ? 1 : 0 }, 0);
+      .to(title.position, { y: hovered ? 0.5 : -0.55 }, 0)
+      .to(textBox.position, { y: hovered ? 0.5 : 0 }, 0)
+      .to(textBox, { fillOpacity: hovered ? 1 : 0, duration: 0.5 }, 0)
+      .to(dateGroup.position, { y: hovered ? 2 : 1 }, 0)
+      .to(mesh.scale, { y: hovered ? 1.8 : 1 }, 0)
+      .to((mesh as THREE.Mesh).material, { opacity: hovered ? 0.95 : 0.8 }, 0)
+      .to(mesh.position, { y: hovered ? 0.7 : 0 }, 0);
 
     if (project.url) {
       hoverAnimRef.current
@@ -100,58 +99,57 @@ const ProjectTile = ({ project, index, position, rotation, activeId, onClick }: 
       onPointerOut={() => !isMobile && isProjectSectionActive && setHovered(false)}>
       <group ref={projectRef}>
         <mesh>
-          <planeGeometry args={[4.2, 2, 1]} />
-          <meshBasicMaterial color="#FFF" transparent opacity={0.3}/>
-          {/* <meshPhysicalMaterial transmission={1} roughness={0.3} /> */}
-          <Edges color="black" lineWidth={1.5} />
+          <planeGeometry args={[3.2, 1.6, 1]} />
+          <meshBasicMaterial color="#080818" transparent opacity={0.8}/>
+          <Edges color="#00f0ff" lineWidth={1.5} />
         </mesh>
         <Text
           {...titleProps}
-          position={[-1.9, -0.8, 0.101]}
+          position={[-1.4, -0.55, 0.101]}
           anchorX="left"
           anchorY="bottom"
-          maxWidth={4}
-          fontSize={0.8}>
+          maxWidth={3}
+          fontSize={0.5}>
           {project.title}
         </Text>
-        <group position={[-1.25, 1.4, 0.01]}>
+        <group position={[-0.9, 1, 0.01]}>
           <mesh>
-            <planeGeometry args={[1.7, 0.4, 1]} />
-            <meshBasicMaterial color="#777" opacity={0} wireframe />
-            <Edges color="black" lineWidth={1} />
+            <planeGeometry args={[1.2, 0.28, 1]} />
+            <meshBasicMaterial color="#ff00aa" opacity={0} wireframe />
+            <Edges color="#ff00aa" lineWidth={1} />
           </mesh>
           <Text
             {...subtitleProps}
-            position={[-0.7, 0.2, 0]}
-            fontSize={0.3}>
+            color="#ff00aa"
+            position={[-0.5, 0.12, 0]}
+            fontSize={0.18}>
             {project.date.toUpperCase()}
           </Text>
         </group>
         <Text
           {...subtitleProps}
-          maxWidth={3.8}
-          position={[-1.9, 2.3, 0.1]}
-          // scale={[0, 0, 1]}
-          fontSize={0.2}>
+          maxWidth={2.8}
+          position={[-1.4, 1.8, 0.1]}
+          fontSize={0.14}>
           {project.subtext}
         </Text>
         {project.url && (
           <group
-            position={[1.3, -0.6, -1]}
+            position={[0.9, -0.45, -1]}
             scale={[0, 0, 1]}
             onClick={handleClick}
             onPointerOver={() => document.body.style.cursor = 'pointer'}
             onPointerOut={() => document.body.style.cursor = 'auto'}>
             <mesh>
-              <boxGeometry args={[1.1, 0.4, 0.2]} />
-              <meshBasicMaterial color="#222" />
-              <Edges color="white" lineWidth={1} />
+              <boxGeometry args={[0.9, 0.3, 0.15]} />
+              <meshBasicMaterial color="#00f0ff" transparent opacity={0.8} />
+              <Edges color="#00f0ff" lineWidth={1} />
             </mesh>
             <Text
               {...subtitleProps}
-              color="white"
-              position={[-0.4, 0.15, 0.2]}
-              fontSize={0.25}>
+              color="#050510"
+              position={[-0.32, 0.12, 0.15]}
+              fontSize={0.18}>
               VIEW ↗
             </Text>
           </group>

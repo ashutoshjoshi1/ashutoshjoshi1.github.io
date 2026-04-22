@@ -6,7 +6,7 @@ import { isMobile } from 'react-device-detect';
  * Partially AI Generated
  */
 const ProgressLoader = ({ progress }: { progress: number }) => {
-  const strokeWidth = 3;
+  const strokeWidth = 2;
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -60,17 +60,18 @@ const ProgressLoader = ({ progress }: { progress: number }) => {
     return (
       <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none">
         <div className="relative w-[100px] transition-all duration-500 font-sans font-bold"
-          style={{ opacity: progress === 100 ? 0 : 0.7, fontSize: '0.6rem' }}>
-          <div className='absolute w-[100px] bg-black opacity-30 h-[2px]'/>
+          style={{ opacity: progress === 100 ? 0 : 0.9, fontSize: '0.6rem' }}>
+          <div className='absolute w-[100px] h-[2px]' style={{ background: 'rgba(0, 240, 255, 0.2)' }}/>
           <div
-            className="absolute transition-all duration-500 ease-in-out "
+            className="absolute transition-all duration-500 ease-in-out"
             style={{
               height: '2px',
               width: `${progress}%`,
-              backgroundColor: 'white',
+              background: 'linear-gradient(90deg, #00f0ff, #ff00aa)',
+              boxShadow: '0 0 10px rgba(0, 240, 255, 0.5)',
             }}
           />
-          <div className='mt-2 text-white'>
+          <div className='mt-3' style={{ color: '#00f0ff', textShadow: '0 0 10px rgba(0, 240, 255, 0.3)' }}>
             {`${progress.toFixed(2)}%`}
           </div>
         </div>
@@ -97,8 +98,7 @@ const ProgressLoader = ({ progress }: { progress: number }) => {
           height={rectHeight} // Use calculated rectangle height
           fill="none"
           strokeWidth={strokeWidth}
-          stroke="rgba(0, 0, 0, 0.2)"
-          // className={bgColor} // Apply ba ckground color class
+          stroke="rgba(0, 240, 255, 0.1)"
         />
         {/* Progress indicator rectangle */}
         <rect
@@ -108,13 +108,21 @@ const ProgressLoader = ({ progress }: { progress: number }) => {
           height={rectHeight} // Use calculated rectangle height
           fill="none"
           strokeWidth={strokeWidth}
-          stroke="rgba(255, 255, 255, 0.7)"
+          stroke="url(#progressGradient)"
           style={{
             strokeDasharray: perimeter, // Set the total length of dashes (perimeter)
             strokeDashoffset: strokeDashoffset, // Set the offset to show progress
             transition: 'stroke-dashoffset 1s ease-in-out', // Smooth transition effect
+            filter: 'drop-shadow(0 0 6px rgba(0, 240, 255, 0.4))',
           }}
         />
+        <defs>
+          <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#00f0ff" stopOpacity="0.9" />
+            <stop offset="50%" stopColor="#8844ff" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#ff00aa" stopOpacity="0.9" />
+          </linearGradient>
+        </defs>
       </svg>
     </div>
   );
