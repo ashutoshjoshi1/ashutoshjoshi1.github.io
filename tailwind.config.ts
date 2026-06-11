@@ -9,13 +9,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        bg: "var(--bg)",
+        "bg-elev": "var(--bg-elev)",
+        ink: "var(--ink)",
+        "ink-dim": "var(--ink-dim)",
+        accent: "var(--accent)",
+      },
+      borderColor: {
+        line: "var(--line)",
+        "line-soft": "var(--line-soft)",
       },
       fontFamily: {
-        serif: ['var(--font-soria)'],
-        sans: ['var(--font-vercetti)'],
-      }
+        display: ["var(--font-display)", "Georgia", "serif"],
+        sans: ["var(--font-sans)", "Helvetica Neue", "sans-serif"],
+      },
     },
   },
   plugins: [],

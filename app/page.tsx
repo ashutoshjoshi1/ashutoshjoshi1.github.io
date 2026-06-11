@@ -1,22 +1,30 @@
-'use client';
+import SmoothScroll from "./components/SmoothScroll";
+import Preloader from "./components/Preloader";
+import Cursor from "./components/Cursor";
+import Nav from "./components/Nav";
+import Hero from "./components/Hero";
+import Marquee from "./components/Marquee";
+import Manifesto from "./components/Manifesto";
+import Work from "./components/Work";
+import MissionLog from "./components/MissionLog";
+import SpecSheet from "./components/SpecSheet";
+import Footer from "./components/Footer";
 
-import CanvasLoader from "./components/common/CanvasLoader";
-import ScrollMusicPlayer from "./components/common/ScrollMusicPlayer";
-import ScrollWrapper from "./components/common/ScrollWrapper";
-import Experience from "./components/experience";
-import Footer from "./components/footer";
-import Hero from "./components/hero";
-
-const Home = () => {
+export default function Home() {
   return (
-    <CanvasLoader>
-      <ScrollWrapper>
-        <Hero/>
-        <Experience/>
-        <Footer/>
-      </ScrollWrapper>
-      <ScrollMusicPlayer />
-    </CanvasLoader>
+    <SmoothScroll>
+      <Preloader />
+      <Cursor />
+      <Nav />
+      <main>
+        <Hero />
+        <Marquee />
+        <Manifesto />
+        <Work />
+        <MissionLog />
+        <SpecSheet />
+      </main>
+      <Footer />
+    </SmoothScroll>
   );
-};
-export default Home;
+}
