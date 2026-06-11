@@ -1,16 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getLenis } from "../lib/motion";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { getLenis, scrambleTo, prefersReducedMotion } from "../lib/motion";
 
 const LINKS = [
   { label: "Work", target: "#work" },
   { label: "Log", target: "#log" },
+  { label: "Rules", target: "#rules" },
   { label: "Stack", target: "#stack" },
   { label: "Contact", target: "#contact" },
 ];
 
 export default function Nav() {
+  const headerRef = useRef<HTMLElement>(null);
   const [time, setTime] = useState("--:--:--");
 
   useEffect(() => {
@@ -26,6 +30,40 @@ export default function Nav() {
     return () => clearInterval(id);
   }, []);
 
+  /* dock hides on the way down, glides back the moment you reverse */
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const header = headerRef.current;
+    if (!header) return;
+    if (prefersReducedMotion()) return;
+
+    let hidden = false;
+    const st = ScrollTrigger.create({
+      start: 120,
+      end: "max",
+      onUpdate: (self) => {
+        const shouldHide = self.direction === 1;
+        if (shouldHide !== hidden) {
+          hidden = shouldHide;
+          gsap.to(header, {
+            yPercent: shouldHide ? -110 : 0,
+            duration: 0.6,
+            ease: "expo.out",
+            overwrite: "auto",
+          });
+        }
+      },
+      onLeaveBack: () => {
+        if (hidden) {
+          hidden = false;
+          gsap.to(header, { yPercent: 0, duration: 0.6, ease: "expo.out", overwrite: "auto" });
+        }
+      },
+    });
+
+    return () => st.kill();
+  }, []);
+
   const scrollTo = (target: string) => {
     const lenis = getLenis();
     if (lenis) {
@@ -35,8 +73,14 @@ export default function Nav() {
     }
   };
 
+  const onLinkHover = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (prefersReducedMotion()) return;
+    const el = e.currentTarget;
+    scrambleTo(el, el.dataset.label ?? el.textContent ?? "", 380);
+  };
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-[90] mix-blend-difference text-white">
+    <header ref={headerRef} className="fixed top-0 left-0 right-0 z-[90] mix-blend-difference text-white">
       <nav
         aria-label="Main navigation"
         className="gutter flex items-center justify-between py-5"
@@ -56,11 +100,13 @@ export default function Nav() {
           <span className="font-mono-ui opacity-50 ml-4 tabular-nums">{time} LOC</span>
         </div>
 
-        <ul className="flex items-center gap-5 sm:gap-7">
+        <ul className="flex items-center gap-4 sm:gap-7">
           {LINKS.map((link) => (
             <li key={link.label}>
               <button
                 onClick={() => scrollTo(link.target)}
+                onMouseEnter={onLinkHover}
+                data-label={link.label}
                 className="font-mono-ui u-sweep"
                 data-cursor="hover"
               >

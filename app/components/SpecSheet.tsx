@@ -41,7 +41,7 @@ export default function SpecSheet() {
     <section id="stack" ref={sectionRef} aria-labelledby="stack-heading" className="py-[var(--section)]">
       <div className="gutter mb-14">
         <p className="font-mono-ui text-dim mb-6">
-          <span className="text-accent">(03)</span> — Capabilities
+          <span className="text-accent">(04)</span> — Capabilities
         </p>
         <h2 id="stack-heading" className="leading-[0.92] tracking-tight" style={{ fontSize: "var(--text-title)" }}>
           <span className="font-sans font-medium uppercase">Spec</span>{" "}

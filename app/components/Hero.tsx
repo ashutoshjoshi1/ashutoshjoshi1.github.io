@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SignalField from "./SignalField";
-import { splitChars, prefersReducedMotion } from "../lib/motion";
+import Wire3D from "./Wire3D";
+import { splitChars, scrambleTo, attachRepel, prefersReducedMotion } from "../lib/motion";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -12,6 +13,7 @@ export default function Hero() {
   const lastNameRef = useRef<HTMLSpanElement>(null);
   const periodRef = useRef<HTMLSpanElement>(null);
   const metaRef = useRef<HTMLDivElement>(null);
+  const roleRef = useRef<HTMLSpanElement>(null);
   const [scrollPct, setScrollPct] = useState("000");
 
   useEffect(() => {
@@ -21,6 +23,8 @@ export default function Hero() {
     const last = lastNameRef.current;
     const meta = metaRef.current;
     if (!section || !first || !last || !meta) return;
+
+    let detachRepel: (() => void) | undefined;
 
     const ctx = gsap.context(() => {
       const chars = [...splitChars(first), ...splitChars(last)];
@@ -40,6 +44,10 @@ export default function Hero() {
             ease: "expo.out",
             stagger: 0.04,
             delay: 0.1,
+            onComplete: () => {
+              /* once settled, the name becomes touchable — chars dodge the cursor */
+              detachRepel = attachRepel(chars, { radius: 150, strength: 34 });
+            },
           });
           gsap.to(meta.children, {
             opacity: 1,
@@ -49,6 +57,9 @@ export default function Hero() {
             stagger: 0.07,
             delay: 0.75,
           });
+          if (roleRef.current) {
+            scrambleTo(roleRef.current, "Software Engineer — SciGlob / NASA GSFC", 1100);
+          }
         };
 
         if (document.documentElement.dataset.revealed === "true") {
@@ -80,7 +91,10 @@ export default function Hero() {
       });
     }, section);
 
-    return () => ctx.revert();
+    return () => {
+      detachRepel?.();
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -103,10 +117,19 @@ export default function Hero() {
         style={{ background: "linear-gradient(to top, var(--bg) 20%, transparent)" }}
       />
 
+      {/* instrument stamp — a Pandora dish spinning in wireframe */}
+      <div className="pointer-events-none absolute right-[var(--gutter)] top-24 z-10 hidden flex-col items-center md:flex">
+        <Wire3D model="dish" className="block h-32 w-32" zoom={1.15} />
+        <p className="font-mono-ui text-dim mt-1">
+          Pandora net — <span className="text-accent">online</span>
+        </p>
+      </div>
+
       <div className="gutter relative z-10 flex flex-1 flex-col justify-end pb-10 sm:pb-14">
         <div ref={metaRef}>
           <p className="font-mono-ui text-dim mb-4">
-            <span className="text-accent">[</span> Software Engineer — SciGlob / NASA GSFC{" "}
+            <span className="text-accent">[</span>{" "}
+            <span ref={roleRef}>Software Engineer — SciGlob / NASA GSFC</span>{" "}
             <span className="text-accent">]</span>
           </p>
         </div>

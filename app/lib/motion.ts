@@ -1,3 +1,4 @@
+import gsap from "gsap";
 import type Lenis from "lenis";
 
 /* module-level Lenis store so Nav/Footer can drive scrollTo */
@@ -82,6 +83,52 @@ export function scrambleTo(el: HTMLElement, target: string, duration = 600): () 
   };
   raf = requestAnimationFrame(tick);
   return () => cancelAnimationFrame(raf);
+}
+
+/*
+ * Kinetic type: chars push away from the cursor and spring back.
+ * Returns a cleanup function. Call only after intro tweens settle.
+ */
+export function attachRepel(
+  chars: HTMLElement[],
+  { radius = 130, strength = 30 }: { radius?: number; strength?: number } = {},
+): () => void {
+  if (prefersReducedMotion()) return () => undefined;
+  if (window.matchMedia("(pointer: coarse)").matches) return () => undefined;
+
+  const setters = chars.map((ch) => ({
+    x: gsap.quickTo(ch, "x", { duration: 0.5, ease: "power3.out" }),
+    y: gsap.quickTo(ch, "y", { duration: 0.5, ease: "power3.out" }),
+  }));
+
+  let raf = 0;
+  const onMove = (e: MouseEvent) => {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      for (let i = 0; i < chars.length; i++) {
+        const rect = chars[i].getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = cx - e.clientX;
+        const dy = cy - e.clientY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < radius && dist > 0.01) {
+          const force = (1 - dist / radius) * strength;
+          setters[i].x((dx / dist) * force);
+          setters[i].y((dy / dist) * force);
+        } else {
+          setters[i].x(0);
+          setters[i].y(0);
+        }
+      }
+    });
+  };
+
+  window.addEventListener("mousemove", onMove, { passive: true });
+  return () => {
+    cancelAnimationFrame(raf);
+    window.removeEventListener("mousemove", onMove);
+  };
 }
 
 /* Deterministic PRNG so generative visuals are stable across renders. */

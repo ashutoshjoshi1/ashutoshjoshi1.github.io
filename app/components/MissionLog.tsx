@@ -8,11 +8,15 @@ import { prefersReducedMotion } from "../lib/motion";
 
 export default function MissionLog() {
   const sectionRef = useRef<HTMLElement>(null);
+  const spineRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLOListElement>(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const section = sectionRef.current;
-    if (!section) return;
+    const spine = spineRef.current;
+    const list = listRef.current;
+    if (!section || !spine || !list) return;
     if (prefersReducedMotion()) return;
 
     const ctx = gsap.context(() => {
@@ -24,7 +28,33 @@ export default function MissionLog() {
           ease: "expo.out",
           scrollTrigger: { trigger: entry, start: "top 90%" },
         });
+        /* node lights up while its entry owns the viewport center */
+        const dot = entry.querySelector(".log-dot");
+        if (dot) {
+          ScrollTrigger.create({
+            trigger: entry,
+            start: "top 65%",
+            end: "bottom 35%",
+            toggleClass: { targets: dot, className: "is-active" },
+          });
+        }
       });
+
+      /* the mission line draws itself as you read down the log */
+      gsap.fromTo(
+        spine,
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: list,
+            start: "top 70%",
+            end: "bottom 45%",
+            scrub: 0.4,
+          },
+        },
+      );
     }, section);
 
     return () => ctx.revert();
@@ -52,35 +82,47 @@ export default function MissionLog() {
         </p>
       </div>
 
-      <ol>
-        {MISSIONS.map((mission) => (
-          <li key={mission.company} data-entry className="hairline-t py-9 first:border-t-0 lg:first:border-t">
-            <div className="flex flex-wrap items-baseline justify-between gap-3">
-              <h3 className="font-sans text-2xl font-medium uppercase tracking-tight sm:text-3xl">
-                {mission.company}
-                {mission.detail && (
-                  <span className="font-display italic lowercase text-dim"> / {mission.detail}</span>
-                )}
-              </h3>
-              <span className="font-mono-ui text-dim flex items-center gap-3 tabular-nums">
-                {mission.active && (
-                  <span className="flex items-center gap-2 text-accent">
-                    <span className="status-dot" aria-hidden="true" />
-                    Active
-                  </span>
-                )}
-                {mission.period}
-              </span>
-            </div>
-            <p className="font-mono-ui text-dim mt-2">
-              {mission.role} — {mission.location}
-            </p>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-dim sm:text-base">
-              {mission.description}
-            </p>
-          </li>
-        ))}
-      </ol>
+      <div className="relative pl-7 sm:pl-10">
+        {/* timeline spine: faint guide + scroll-drawn accent line */}
+        <div className="absolute bottom-0 left-0 top-0 w-px" style={{ background: "var(--line)" }} />
+        <div
+          ref={spineRef}
+          className="absolute bottom-0 left-0 top-0 w-px origin-top"
+          style={{ background: "var(--accent)", transform: "scaleY(0)" }}
+          aria-hidden="true"
+        />
+
+        <ol ref={listRef}>
+          {MISSIONS.map((mission) => (
+            <li key={mission.company} data-entry className="hairline-t relative py-9 first:border-t-0 lg:first:border-t">
+              <span className="log-dot" aria-hidden="true" />
+              <div className="flex flex-wrap items-baseline justify-between gap-3">
+                <h3 className="font-sans text-2xl font-medium uppercase tracking-tight sm:text-3xl">
+                  {mission.company}
+                  {mission.detail && (
+                    <span className="font-display italic lowercase text-dim"> / {mission.detail}</span>
+                  )}
+                </h3>
+                <span className="font-mono-ui text-dim flex items-center gap-3 tabular-nums">
+                  {mission.active && (
+                    <span className="flex items-center gap-2 text-accent">
+                      <span className="status-dot" aria-hidden="true" />
+                      Active
+                    </span>
+                  )}
+                  {mission.period}
+                </span>
+              </div>
+              <p className="font-mono-ui text-dim mt-2">
+                {mission.role} — {mission.location}
+              </p>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-dim sm:text-base">
+                {mission.description}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </div>
     </section>
   );
 }

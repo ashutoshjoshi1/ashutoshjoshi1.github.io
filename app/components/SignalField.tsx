@@ -100,7 +100,7 @@ export default function SignalField() {
         }
         if (isAccent) {
           const pulse = 0.55 + Math.sin(t * 1.4 + j) * 0.3;
-          ctx.strokeStyle = `rgba(255, 77, 0, ${pulse})`;
+          ctx.strokeStyle = `rgba(0, 230, 93, ${pulse})`;
         } else {
           ctx.strokeStyle = "rgba(234, 230, 221, 0.3)";
         }

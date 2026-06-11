@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CONTACT } from "../lib/data";
-import { splitChars, prefersReducedMotion } from "../lib/motion";
+import { splitChars, scrambleTo, attachRepel, prefersReducedMotion } from "../lib/motion";
 
 const LINKS = [
   { label: "GitHub", href: CONTACT.github },
@@ -17,6 +17,7 @@ export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const magnetRef = useRef<HTMLAnchorElement>(null);
+  const copyRef = useRef<HTMLButtonElement>(null);
   const [time, setTime] = useState("--:--:--");
 
   useEffect(() => {
@@ -40,6 +41,8 @@ export default function Footer() {
     if (!footer || !title) return;
     if (prefersReducedMotion()) return;
 
+    let detachRepel: (() => void) | undefined;
+
     const ctx = gsap.context(() => {
       const lines = title.querySelectorAll<HTMLElement>("[data-line]");
       const chars: HTMLElement[] = [];
@@ -51,10 +54,16 @@ export default function Footer() {
         ease: "expo.out",
         stagger: 0.03,
         scrollTrigger: { trigger: title, start: "top 88%" },
+        onComplete: () => {
+          detachRepel = attachRepel(chars, { radius: 160, strength: 38 });
+        },
       });
     }, footer);
 
-    return () => ctx.revert();
+    return () => {
+      detachRepel?.();
+      ctx.revert();
+    };
   }, []);
 
   /* magnetic email button */
@@ -83,11 +92,24 @@ export default function Footer() {
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
+  const copyEmail = async () => {
+    const button = copyRef.current;
+    try {
+      await navigator.clipboard.writeText(CONTACT.email);
+      if (button) scrambleTo(button, "COPIED ✓", 450);
+      setTimeout(() => {
+        if (copyRef.current) scrambleTo(copyRef.current, "COPY", 350);
+      }, 1800);
+    } catch {
+      if (button) button.textContent = CONTACT.email;
+    }
+  };
+
   return (
     <footer id="contact" ref={footerRef} className="hairline-t relative overflow-hidden">
       <div className="gutter pb-12 pt-[var(--section)]">
         <p className="font-mono-ui text-dim mb-10">
-          <span className="text-accent">(04)</span> — Contact / Transmission open
+          <span className="text-accent">(05)</span> — Contact / Transmission open
         </p>
 
         <h2
@@ -105,15 +127,26 @@ export default function Footer() {
         </h2>
 
         <div className="mt-14 flex flex-col gap-10 sm:flex-row sm:items-center sm:justify-between">
-          <a
-            ref={magnetRef}
-            href={`mailto:${CONTACT.email}`}
-            data-cursor="hover"
-            className="inline-flex w-fit items-center gap-4 border border-[var(--line)] px-7 py-4 font-mono-ui transition-colors duration-300 hover:border-[var(--accent)] hover:text-accent"
-          >
-            <span className="status-dot" aria-hidden="true" />
-            {CONTACT.email}
-          </a>
+          <div className="flex items-center gap-3">
+            <a
+              ref={magnetRef}
+              href={`mailto:${CONTACT.email}`}
+              data-cursor="hover"
+              className="inline-flex w-fit items-center gap-4 border border-[var(--line)] px-7 py-4 font-mono-ui transition-colors duration-300 hover:border-[var(--accent)] hover:text-accent"
+            >
+              <span className="status-dot" aria-hidden="true" />
+              {CONTACT.email}
+            </a>
+            <button
+              ref={copyRef}
+              onClick={copyEmail}
+              data-cursor="hover"
+              aria-label="Copy email address to clipboard"
+              className="border border-[var(--line)] px-4 py-4 font-mono-ui transition-colors duration-300 hover:border-[var(--accent)] hover:text-accent"
+            >
+              COPY
+            </button>
+          </div>
 
           <ul className="flex flex-wrap items-center gap-7">
             {LINKS.map((link) => (

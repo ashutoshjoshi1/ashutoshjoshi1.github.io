@@ -7,9 +7,24 @@ import { PROJECTS } from "../lib/data";
 import { prefersReducedMotion } from "../lib/motion";
 import ProjectVisual from "./ProjectVisual";
 
+/* CRT-style switch glitch: a few frames of sliced clip-path + jitter */
+function runGlitch(el: HTMLElement): void {
+  const tl = gsap.timeline();
+  for (let i = 0; i < 5; i++) {
+    const top = Math.random() * 60;
+    const bottom = Math.random() * 60;
+    tl.set(el, {
+      clipPath: `inset(${top}% 0 ${bottom}% 0)`,
+      x: (Math.random() - 0.5) * 18,
+    }).to({}, { duration: 0.035 });
+  }
+  tl.set(el, { clipPath: "inset(0% 0 0% 0)", x: 0 });
+}
+
 export default function Work() {
   const sectionRef = useRef<HTMLElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
+  const previewInnerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<number | null>(null);
 
   useEffect(() => {
@@ -94,6 +109,9 @@ export default function Work() {
       ease: "expo.out",
       overwrite: "auto",
     });
+    if (active !== null && previewInnerRef.current && !prefersReducedMotion()) {
+      runGlitch(previewInnerRef.current);
+    }
   }, [active]);
 
   return (
@@ -170,7 +188,7 @@ export default function Work() {
         style={{ background: "var(--bg-elev)" }}
       >
         {active !== null && (
-          <>
+          <div ref={previewInnerRef}>
             <ProjectVisual seed={PROJECTS[active].seed} className="block h-56 w-full" />
             <div className="flex items-center justify-between px-4 py-3 hairline-t">
               <span className="font-mono-ui text-accent">{PROJECTS[active].domain}</span>
@@ -178,7 +196,7 @@ export default function Work() {
                 {PROJECTS[active].index} / {PROJECTS[active].year}
               </span>
             </div>
-          </>
+          </div>
         )}
       </div>
     </section>
