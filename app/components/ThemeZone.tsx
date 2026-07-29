@@ -5,27 +5,28 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { prefersReducedMotion } from "../lib/motion";
 
+/* must mirror the :root tokens in globals.css — this is the tween's home state */
 const DARK = {
-  "--bg": "#0b0a08",
-  "--bg-elev": "#14120e",
-  "--ink": "#eae6dd",
-  "--ink-dim": "#8f8a7b",
-  "--line": "rgba(234, 230, 221, 0.12)",
-  "--line-soft": "rgba(234, 230, 221, 0.06)",
-  "--accent": "#00e65d",
-  "--accent-dim": "rgba(0, 230, 93, 0.35)",
+  "--bg": "#06070b",
+  "--bg-elev": "#0c0e16",
+  "--ink": "#f2f4fa",
+  "--ink-dim": "#98a0b4",
+  "--line": "rgba(242, 244, 250, 0.12)",
+  "--line-soft": "rgba(242, 244, 250, 0.055)",
+  "--accent": "#46e5a1",
+  "--accent-dim": "rgba(70, 229, 161, 0.35)",
 };
 
 const PAPER = {
-  "--bg": "#e9e4d8",
-  "--bg-elev": "#ded7c6",
-  "--ink": "#161310",
-  "--ink-dim": "#6e6757",
-  "--line": "rgba(22, 19, 16, 0.18)",
-  "--line-soft": "rgba(22, 19, 16, 0.08)",
-  /* phosphor green drops to forest depth for contrast on bone paper */
-  "--accent": "#0b7c3c",
-  "--accent-dim": "rgba(11, 124, 60, 0.35)",
+  "--bg": "#eceae2",
+  "--bg-elev": "#e0ddd2",
+  "--ink": "#131418",
+  "--ink-dim": "#676c7a",
+  "--line": "rgba(19, 20, 24, 0.18)",
+  "--line-soft": "rgba(19, 20, 24, 0.08)",
+  /* aurora green drops to forest depth for contrast on lab paper */
+  "--accent": "#0d7d55",
+  "--accent-dim": "rgba(13, 125, 85, 0.35)",
 };
 
 interface ThemeZoneProps {

@@ -6,9 +6,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { getLenis, scrambleTo, prefersReducedMotion } from "../lib/motion";
 
 const LINKS = [
+  { label: "ML", target: "#systems" },
   { label: "Work", target: "#work" },
   { label: "Log", target: "#log" },
-  { label: "Rules", target: "#rules" },
+  { label: "Lab", target: "#lab" },
   { label: "Stack", target: "#stack" },
   { label: "Contact", target: "#contact" },
 ];

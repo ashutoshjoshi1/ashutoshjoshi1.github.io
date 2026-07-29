@@ -69,7 +69,7 @@ export default function MissionLog() {
     >
       <div className="lg:sticky lg:top-28 lg:self-start">
         <p className="font-mono-ui text-dim mb-6">
-          <span className="text-accent">(02)</span> — Experience
+          <span className="text-accent">(03)</span> — Experience
         </p>
         <h2 id="log-heading" className="leading-[0.92] tracking-tight" style={{ fontSize: "var(--text-title)" }}>
           <span className="font-sans font-medium uppercase">Mission</span>

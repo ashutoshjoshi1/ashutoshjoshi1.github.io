@@ -37,11 +37,14 @@ export default function SpecSheet() {
     scrambleTo(el, label, 420);
   };
 
+  /* each capability group sits on its own band of the spectrum */
+  const bands = ["var(--uv)", "var(--cyan)", "var(--green)", "var(--blue)", "var(--amber)"];
+
   return (
     <section id="stack" ref={sectionRef} aria-labelledby="stack-heading" className="py-[var(--section)]">
       <div className="gutter mb-14">
         <p className="font-mono-ui text-dim mb-6">
-          <span className="text-accent">(04)</span> — Capabilities
+          <span className="text-accent">(06)</span> — Capabilities
         </p>
         <h2 id="stack-heading" className="leading-[0.92] tracking-tight" style={{ fontSize: "var(--text-title)" }}>
           <span className="font-sans font-medium uppercase">Spec</span>{" "}
@@ -50,13 +53,14 @@ export default function SpecSheet() {
       </div>
 
       <dl>
-        {STACK.map((group) => (
+        {STACK.map((group, gi) => (
           <div
             key={group.label}
             data-spec-row
+            style={{ ["--band" as string]: bands[gi % bands.length] }}
             className="gutter hairline-t grid grid-cols-1 gap-3 py-7 sm:grid-cols-[11rem_1fr] sm:items-baseline lg:grid-cols-[16rem_1fr]"
           >
-            <dt className="font-mono-ui text-dim">{group.label}</dt>
+            <dt className="font-mono-ui band-text">{group.label}</dt>
             <dd className="flex flex-wrap gap-x-7 gap-y-2">
               {group.items.map((item) => (
                 <span
@@ -64,7 +68,7 @@ export default function SpecSheet() {
                   data-label={item}
                   data-cursor="hover"
                   onMouseEnter={onHover}
-                  className="cursor-default font-sans text-xl font-medium uppercase tracking-tight transition-colors duration-200 hover:text-accent sm:text-2xl"
+                  className="cursor-default font-sans text-xl font-medium uppercase tracking-tight transition-colors duration-200 hover:text-[color:var(--band)] sm:text-2xl"
                 >
                   {item}
                 </span>

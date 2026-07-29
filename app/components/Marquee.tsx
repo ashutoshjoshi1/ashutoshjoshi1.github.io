@@ -8,11 +8,15 @@ import { prefersReducedMotion } from "../lib/motion";
 const ITEMS = [
   "Signal from noise",
   "NASA Pandora network",
-  "AI systems",
-  "Multi-agent",
+  "LLM agents",
+  "RAG pipelines",
+  "Production ML",
+  "Evals & guardrails",
   "C++ / Python / TypeScript",
-  "Full-stack",
 ];
+
+/* separators walk the spectrum instead of repeating one accent */
+const BANDS = ["var(--uv)", "var(--blue)", "var(--cyan)", "var(--green)", "var(--volt)", "var(--amber)"];
 
 const BASE_SPEED = 2.6; /* %/s of track width */
 const VELOCITY_GAIN = 6.5;
@@ -68,7 +72,7 @@ export default function Marquee() {
           >
             {item}
           </span>
-          <span className="text-accent" aria-hidden="true">
+          <span style={{ color: BANDS[i % BANDS.length] }} aria-hidden="true">
             ✦
           </span>
         </span>

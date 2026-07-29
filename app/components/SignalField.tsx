@@ -82,7 +82,7 @@ export default function SignalField() {
         ctx.lineTo(width + X_STEP, baseY + ROW_GAP);
         ctx.lineTo(-X_STEP, baseY + ROW_GAP);
         ctx.closePath();
-        ctx.fillStyle = "#0b0a08";
+        ctx.fillStyle = "#06070b";
         ctx.fill();
 
         ctx.beginPath();
@@ -102,7 +102,7 @@ export default function SignalField() {
           const pulse = 0.55 + Math.sin(t * 1.4 + j) * 0.3;
           ctx.strokeStyle = `rgba(0, 230, 93, ${pulse})`;
         } else {
-          ctx.strokeStyle = "rgba(234, 230, 221, 0.3)";
+          ctx.strokeStyle = "rgba(242, 244, 250, 0.3)";
         }
         ctx.lineWidth = 1;
         ctx.stroke();

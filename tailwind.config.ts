@@ -14,6 +14,13 @@ export default {
         ink: "var(--ink)",
         "ink-dim": "var(--ink-dim)",
         accent: "var(--accent)",
+        uv: "var(--uv)",
+        blue: "var(--blue)",
+        cyan: "var(--cyan)",
+        green: "var(--green)",
+        volt: "var(--volt)",
+        amber: "var(--amber)",
+        red: "var(--red)",
       },
       borderColor: {
         line: "var(--line)",

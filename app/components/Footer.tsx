@@ -107,9 +107,10 @@ export default function Footer() {
 
   return (
     <footer id="contact" ref={footerRef} className="hairline-t relative overflow-hidden">
-      <div className="gutter pb-12 pt-[var(--section)]">
+      <div className="aurora aurora--footer" aria-hidden="true" />
+      <div className="gutter relative pb-12 pt-[var(--section)]">
         <p className="font-mono-ui text-dim mb-10">
-          <span className="text-accent">(05)</span> — Contact / Transmission open
+          <span className="text-accent">(08)</span> — Contact / Transmission open
         </p>
 
         <h2

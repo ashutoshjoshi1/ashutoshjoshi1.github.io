@@ -119,14 +119,14 @@ export default function Work() {
       <div className="gutter mb-16 flex items-end justify-between">
         <div>
           <p className="font-mono-ui text-dim mb-6">
-            <span className="text-accent">(01)</span> — Selected work
+            <span className="text-accent">(02)</span> — Selected work
           </p>
           <h2 id="work-heading" className="leading-[0.92] tracking-tight" style={{ fontSize: "var(--text-title)" }}>
             <span className="font-sans font-medium uppercase">Field</span>{" "}
             <span className="font-display italic">notes</span>
           </h2>
         </div>
-        <p className="font-mono-ui text-dim hidden sm:block">8 transmissions / 2024 — 26</p>
+        <p className="font-mono-ui text-dim hidden sm:block">9 transmissions / 2024 — 26</p>
       </div>
 
       <ul onMouseLeave={() => setActive(null)}>
@@ -140,9 +140,10 @@ export default function Work() {
               onMouseEnter={() => setActive(i)}
               onFocus={() => setActive(i)}
               onBlur={() => setActive(null)}
+              style={{ ["--band" as string]: project.band }}
               className="gutter group grid grid-cols-[2.6rem_1fr] items-baseline gap-x-4 py-7 transition-colors duration-300 hover:bg-[var(--bg-elev)] sm:grid-cols-[3.5rem_1fr_auto] sm:py-9"
             >
-              <span className="font-mono-ui text-dim transition-colors duration-300 group-hover:text-accent">
+              <span className="font-mono-ui text-dim transition-colors duration-300 group-hover:text-[color:var(--band)]">
                 {project.index}
               </span>
               <div>
@@ -166,11 +167,13 @@ export default function Work() {
                 </div>
               </div>
               <div className="hidden flex-col items-end gap-2 self-start sm:flex">
-                <span className="font-mono-ui text-dim">{project.domain}</span>
+                <span className="font-mono-ui transition-colors duration-300 text-dim group-hover:text-[color:var(--band)]">
+                  {project.domain}
+                </span>
                 <span className="font-mono-ui text-dim opacity-60">{project.year}</span>
                 <span
                   aria-hidden="true"
-                  className="mt-2 inline-block text-accent opacity-0 transition-all duration-500 [transition-timing-function:var(--ease-expo)] -translate-x-2 group-hover:translate-x-0 group-hover:opacity-100"
+                  className="mt-2 inline-block text-[color:var(--band)] opacity-0 transition-all duration-500 [transition-timing-function:var(--ease-expo)] -translate-x-2 group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   ↗
                 </span>
@@ -188,10 +191,10 @@ export default function Work() {
         style={{ background: "var(--bg-elev)" }}
       >
         {active !== null && (
-          <div ref={previewInnerRef}>
+          <div ref={previewInnerRef} style={{ ["--band" as string]: PROJECTS[active].band }}>
             <ProjectVisual seed={PROJECTS[active].seed} className="block h-56 w-full" />
             <div className="flex items-center justify-between px-4 py-3 hairline-t">
-              <span className="font-mono-ui text-accent">{PROJECTS[active].domain}</span>
+              <span className="font-mono-ui band-text">{PROJECTS[active].domain}</span>
               <span className="font-mono-ui text-dim">
                 {PROJECTS[active].index} / {PROJECTS[active].year}
               </span>

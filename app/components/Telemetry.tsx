@@ -6,10 +6,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { prefersReducedMotion } from "../lib/motion";
 
 const READINGS = [
-  { value: 6, pad: 2, suffix: "", label: "years shipping software" },
+  { value: 6, pad: 2, suffix: "+", label: "years shipping software" },
+  { value: 300, pad: 3, suffix: "+", label: "instruments running my ML" },
   { value: 5, pad: 2, suffix: "", label: "continents of instruments" },
-  { value: 8, pad: 2, suffix: "", label: "selected transmissions" },
-  { value: 150, pad: 3, suffix: "+", label: "repos of experiments" },
+  { value: 9, pad: 2, suffix: "", label: "selected transmissions" },
 ];
 
 export default function Telemetry() {

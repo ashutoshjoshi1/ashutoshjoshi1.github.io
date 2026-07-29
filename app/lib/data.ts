@@ -8,22 +8,37 @@ export interface Project {
   link: string;
   /* seed that shapes this project's generative waveform signature */
   seed: number;
+  /* spectral band — the domain's color on the spectrum (CSS variable) */
+  band: string;
 }
 
 export const PROJECTS: Project[] = [
   {
     index: "01",
     name: "CommonGround",
-    domain: "AI Infrastructure",
+    domain: "RAG / AI Infrastructure",
     year: "2025",
     description:
-      "Enterprise RAG platform — multimodal document ingestion with OCR, semantic Q&A with citations, prompt versioning, evaluation datasets and audit trails.",
+      "Enterprise RAG platform — multimodal document ingestion with OCR, pgvector semantic Q&A with citations, prompt versioning, evaluation datasets and audit trails for compliance-ready retrieval.",
     stack: ["FastAPI", "Next.js", "pgvector", "Redis", "Docker"],
     link: "https://github.com/ashutoshjoshi1/CommonGround",
     seed: 7,
+    band: "var(--cyan)",
   },
   {
     index: "02",
+    name: "InCortex",
+    domain: "Agentic AI / Open Source",
+    year: "2026",
+    description:
+      "Self-learning agentic AI framework — persistent vector memory with forgetting curves, gated tool use with human-in-the-loop approval, strategies competing under UCB bandits, Brier/ECE calibration audits. 450 tests, 100% coverage.",
+    stack: ["Python", "Vector Memory", "REST", "pytest"],
+    link: "https://github.com/ashutoshjoshi1/InCortex",
+    seed: 23,
+    band: "var(--uv)",
+  },
+  {
+    index: "03",
     name: "BlickO-CPP",
     domain: "Systems / NASA",
     year: "2026",
@@ -32,9 +47,10 @@ export const PROJECTS: Project[] = [
     stack: ["C++17", "CMake", "CUDA-ready", "CI"],
     link: "https://github.com/ashutoshjoshi1/BlickO-CPP",
     seed: 31,
+    band: "var(--amber)",
   },
   {
-    index: "03",
+    index: "04",
     name: "Pandora Summarizer",
     domain: "Distributed Systems / NASA",
     year: "2025",
@@ -43,9 +59,10 @@ export const PROJECTS: Project[] = [
     stack: ["Python", "GCS", "Flask", "Pydantic"],
     link: "https://github.com/ashutoshjoshi1/Pandora-Summarizer",
     seed: 13,
+    band: "var(--blue)",
   },
   {
-    index: "04",
+    index: "05",
     name: "MoneyBall",
     domain: "AI Agents",
     year: "2025",
@@ -54,9 +71,10 @@ export const PROJECTS: Project[] = [
     stack: ["FastAPI", "Next.js", "PostgreSQL", "Zep", "OpenAI"],
     link: "https://github.com/ashutoshjoshi1/MoneyBall",
     seed: 53,
+    band: "var(--uv)",
   },
   {
-    index: "05",
+    index: "06",
     name: "ReBirth",
     domain: "Generative AI / MLOps",
     year: "2025",
@@ -65,9 +83,10 @@ export const PROJECTS: Project[] = [
     stack: ["Next.js", "FastAPI", "Celery", "Redis", "Docker"],
     link: "https://github.com/ashutoshjoshi1/ReBirth",
     seed: 19,
+    band: "var(--green)",
   },
   {
-    index: "06",
+    index: "07",
     name: "Claude TopstepX",
     domain: "LLM Systems",
     year: "2026",
@@ -76,9 +95,10 @@ export const PROJECTS: Project[] = [
     stack: ["Python", "Anthropic API", "pytest"],
     link: "https://github.com/ashutoshjoshi1/Claude-TopstepX",
     seed: 41,
+    band: "var(--volt)",
   },
   {
-    index: "07",
+    index: "08",
     name: "RETRVE",
     domain: "Product / Fintech",
     year: "2025",
@@ -87,9 +107,10 @@ export const PROJECTS: Project[] = [
     stack: ["Expo", "React Native", "Supabase", "pgvector"],
     link: "https://github.com/ashutoshjoshi1/RETRVE",
     seed: 67,
+    band: "var(--blue)",
   },
   {
-    index: "08",
+    index: "09",
     name: "IMU-3D",
     domain: "Graphics / Native",
     year: "2025",
@@ -98,6 +119,75 @@ export const PROJECTS: Project[] = [
     stack: ["C++17", "OpenGL", "Dear ImGui", "GLFW"],
     link: "https://github.com/ashutoshjoshi1/IMU-3D-model-SW",
     seed: 89,
+    band: "var(--amber)",
+  },
+];
+
+/* Production ML systems built and operated at SciGlob / NASA GSFC —
+   the professional counterpart to the personal projects above. */
+export interface MLSystem {
+  tag: string;
+  title: string;
+  detail: string;
+  metric: string;
+  band: string;
+  seed: number;
+}
+
+export const ML_SYSTEMS: MLSystem[] = [
+  {
+    tag: "Deep Learning",
+    title: "Fleet anomaly detection",
+    detail:
+      "Deep-learning models watch live streams from every instrument in the network, flagging sensor and data irregularities the moment they appear — hours of daily manual monitoring, eliminated.",
+    metric: "300+ instruments · live",
+    band: "var(--cyan)",
+    seed: 11,
+  },
+  {
+    tag: "Computer Vision",
+    title: "CNN cloud detection",
+    detail:
+      "An encoder–decoder CNN reads the sky in real time and gates sun-scan measurements on actual conditions — raising scan quality across the whole network.",
+    metric: "in the live scan loop",
+    band: "var(--blue)",
+    seed: 29,
+  },
+  {
+    tag: "Edge → Cloud",
+    title: "Fleet health scoring",
+    detail:
+      "Raw L0 instrument streams parsed at the edge, health scored 0–100 per instrument, daily summaries shipped to cloud dashboards.",
+    metric: "0–100, every day",
+    band: "var(--green)",
+    seed: 47,
+  },
+  {
+    tag: "ML Reliability",
+    title: "Evals, guardrails, observability",
+    detail:
+      "Evaluation and monitoring for production ML — a fleet-wide observability dashboard that accelerates triage across five continents, plus per-scan traceable logging that makes every data product auditable end to end.",
+    metric: "5 continents",
+    band: "var(--uv)",
+    seed: 61,
+  },
+  {
+    tag: "High-Performance Compute",
+    title: "Blick L0→L2 in C++17",
+    detail:
+      "Leading the ground-up rewrite of the spectral processing suite — 14 modular libraries, a parity harness validated against legacy output, GPU-ready acceleration.",
+    metric: "14 libraries",
+    band: "var(--amber)",
+    seed: 73,
+  },
+  {
+    tag: "Data Engineering",
+    title: "Analysis-ready NASA data",
+    detail:
+      "Automated acquisition, cleaning and feature-engineering pipelines that turn raw spectrometer measurements into reproducible, analysis-ready datasets for NASA and ESA researchers.",
+    metric: "NASA / ESA",
+    band: "var(--volt)",
+    seed: 83,
   },
 ];
 
@@ -115,11 +205,11 @@ export const MISSIONS: Mission[] = [
   {
     company: "SciGlob Instruments",
     detail: "NASA GSFC",
-    role: "Software Engineer",
+    role: "Software Engineer — AI/ML Systems",
     location: "Columbia, MD",
     period: "2024 — NOW",
     description:
-      "Building the data backbone of the Pandora atmospheric research network — acquisition, processing and storage pipelines that turn raw spectrometer noise into NASA science.",
+      "Building the ML and data backbone of NASA's Pandora network — 300+ spectrometers on five continents running deep-learning anomaly detection, CNN cloud detection in the live scan loop, and a C++17 rewrite of the spectral processing core.",
     active: true,
   },
   {
@@ -128,15 +218,16 @@ export const MISSIONS: Mission[] = [
     location: "Laurel, MD",
     period: "2024",
     description:
-      "Built internal web tools that retired the spreadsheets, and analytics that made gut-feeling decisions measurable.",
+      "Python ETL and ML pipelines (PySpark, scikit-learn, TensorFlow) over AWS S3 and Snowflake — cut operating costs 25% and retired the spreadsheets with dashboards and internal tools.",
   },
   {
     company: "UMBC",
+    detail: "M.P.S. Data Science · 3.89",
     role: "Graduate Student Assistant",
     location: "Baltimore, MD",
-    period: "2023",
+    period: "2022 — 2024",
     description:
-      "Taught, graded and debugged everything from off-by-one errors to existential dread while building web apps for coursework at scale.",
+      "Machine learning concentration by day; taught, graded and debugged everything from off-by-one errors to existential dread the rest of the time.",
   },
   {
     company: "Tata Consultancy Services",
@@ -144,20 +235,50 @@ export const MISSIONS: Mission[] = [
     location: "Bangalore, IN",
     period: "2020 — 2022",
     description:
-      "Engineered large-scale ETL pipelines for Albertsons — keeping inventory, orders and reality in agreement.",
+      "Large-scale ETL for Albertsons — 10M+ rows with 20+ automated quality checks (−30% defects), plus load analysis and CI/CD automation that cut release time 40%.",
   },
 ];
 
 export const STACK: { label: string; items: string[] }[] = [
-  { label: "Languages", items: ["Python", "TypeScript", "C++", "SQL"] },
-  { label: "AI / ML", items: ["LLM Systems", "RAG", "Multi-Agent", "PyTorch", "Evals"] },
-  { label: "Frontend", items: ["React", "Next.js", "React Native", "GSAP"] },
-  { label: "Backend", items: ["FastAPI", "Node.js", "PostgreSQL", "Redis", "Celery"] },
-  { label: "Infra", items: ["Docker", "GCP", "Azure", "CI/CD", "Linux"] },
+  {
+    label: "Generative AI / LLM",
+    items: [
+      "RAG",
+      "Embeddings & Vector Search",
+      "Multi-Agent Systems",
+      "Tool Use / Function Calling",
+      "Evals & Guardrails",
+      "LLM Observability",
+      "Prompt Versioning",
+      "Anthropic & OpenAI APIs",
+    ],
+  },
+  {
+    label: "ML & Data Science",
+    items: [
+      "PyTorch",
+      "TensorFlow",
+      "scikit-learn",
+      "CNNs / Encoder–Decoder",
+      "Computer Vision",
+      "Anomaly Detection",
+      "PySpark",
+      "Pandas / NumPy",
+    ],
+  },
+  { label: "Languages", items: ["Python", "C++17", "TypeScript", "SQL", "Java"] },
+  {
+    label: "Cloud & Platform",
+    items: ["FastAPI", "Docker", "GCP", "Azure", "AWS", "CI/CD", "MLOps", "Linux"],
+  },
+  {
+    label: "Data Engineering",
+    items: ["ETL / ELT", "PostgreSQL / pgvector", "Redis", "Snowflake", "Tableau / Power BI"],
+  },
 ];
 
 export const CONTACT = {
-  email: "ashutxsh.jxshi@gmail.com",
+  email: "http.ashutosh@gmail.com",
   phone: "+1 551 344 6092",
   github: "https://github.com/ashutoshjoshi1",
   linkedin: "https://www.linkedin.com/in/ashutosh--joshi/",
@@ -167,4 +288,4 @@ export const CONTACT = {
 };
 
 export const MANIFESTO =
-  "I write software that listens to the physical world — a network of atmospheric instruments on five continents feeding NASA science, pipelines that turn raw photons into data products, and AI systems that turn data into decisions.";
+  "I build AI systems that listen to the physical world — a network of atmospheric instruments on five continents feeding NASA science, pipelines that turn raw photons into data products, and LLM agents that turn data into decisions.";

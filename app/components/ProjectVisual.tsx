@@ -48,7 +48,7 @@ export default function ProjectVisual({ seed, className }: ProjectVisualProps) {
           key={row}
           d={buildRow(seed, row)}
           fill="none"
-          stroke={row === accentRow ? "var(--accent)" : "rgba(234, 230, 221, 0.34)"}
+          stroke={row === accentRow ? "var(--band, var(--accent))" : "rgba(242, 244, 250, 0.3)"}
           strokeWidth={row === accentRow ? 1.4 : 1}
         />
       ))}

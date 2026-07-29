@@ -68,7 +68,7 @@ export default function FlightRules() {
     >
       <div className="gutter mb-16">
         <p className="font-mono-ui text-dim mb-6">
-          <span className="text-accent">(03)</span> — Operating principles
+          <span className="text-accent">(05)</span> — Operating principles
         </p>
         <h2
           id="rules-heading"

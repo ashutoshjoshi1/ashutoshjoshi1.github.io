@@ -23,24 +23,31 @@ const SITE_URL = "https://ashutoshjoshi1.github.io";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Ashutosh Joshi — Software & AI Engineer | Signal from Noise",
+  title: "Ashutosh Joshi — AI/ML Engineer | Signal from Noise",
   description:
-    "Ashutosh Joshi is a software engineer building the data backbone of NASA's Pandora atmospheric network — and AI systems, LLM agents, and products after dark. Based in Columbia, MD.",
+    "Ashutosh Joshi is an AI/ML systems engineer building the data backbone of NASA's Pandora atmospheric network — plus LLM agents, RAG platforms and neural systems. His portfolio trains a neural network live in your browser. Based in Columbia, MD.",
   keywords: [
     "Ashutosh Joshi",
-    "Software Engineer",
+    "AI/ML Engineer",
+    "Machine Learning Engineer",
     "AI Engineer",
+    "Software Engineer",
     "NASA",
     "Pandora spectrometer",
     "SciGlob",
+    "Machine Learning",
+    "Neural Networks",
+    "LLM",
+    "LLM Agents",
+    "RAG",
+    "Multi-Agent Systems",
+    "MLOps",
+    "PyTorch",
     "C++",
     "Python",
     "TypeScript",
     "React",
     "Next.js",
-    "LLM",
-    "RAG",
-    "Multi-Agent Systems",
     "FastAPI",
     "Portfolio",
     "Columbia MD",
@@ -73,7 +80,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Ashutosh Joshi — Signal from Noise",
     description:
-      "Software engineer for NASA's Pandora atmospheric network. AI systems, agents, and products after dark.",
+      "AI/ML systems engineer for NASA's Pandora atmospheric network. LLM agents, RAG platforms, neural systems — one trains live on this page.",
     url: "https://ashutoshjoshi1.github.io",
     siteName: "Ashutosh Joshi Portfolio",
     locale: "en_US",
@@ -86,13 +93,13 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Ashutosh Joshi — Signal from Noise",
     description:
-      "Software engineer for NASA's Pandora atmospheric network. AI systems, agents, and products after dark.",
+      "AI/ML systems engineer for NASA's Pandora atmospheric network. LLM agents, RAG platforms, neural systems — one trains live on this page.",
     images: ["/images/og-aj.png"],
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0b0a08",
+  themeColor: "#06070b",
   initialScale: 1,
   width: "device-width",
 };
@@ -107,7 +114,7 @@ const JSON_LD = {
       name: "Ashutosh Joshi",
       url: SITE_URL,
       email: `mailto:${CONTACT.email}`,
-      jobTitle: "Software Engineer",
+      jobTitle: "AI/ML Software Engineer",
       worksFor: {
         "@type": "Organization",
         name: "SciGlob Instruments & Services",
@@ -123,9 +130,12 @@ const JSON_LD = {
       knowsAbout: [
         "Software Engineering",
         "Artificial Intelligence",
+        "Machine Learning",
+        "Neural Networks",
         "LLM Systems",
         "Multi-Agent Systems",
         "Retrieval-Augmented Generation",
+        "MLOps",
         "C++",
         "Python",
         "TypeScript",

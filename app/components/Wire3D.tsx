@@ -43,7 +43,7 @@ function cssColor(name: string, alpha: number): () => string {
         const b = parseInt(raw.slice(5, 7), 16);
         cached = `rgba(${r}, ${g}, ${b}, ${alpha})`;
       } else {
-        cached = raw || `rgba(234, 230, 221, ${alpha})`;
+        cached = raw || `rgba(242, 244, 250, ${alpha})`;
       }
     }
     return cached;

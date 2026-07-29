@@ -3,23 +3,48 @@
 @tailwind utilities;
 
 :root {
-  /* SIGNAL FROM NOISE — design tokens (dark / mission control) */
-  --bg: #0b0a08;
-  --bg-elev: #14120e;
-  --ink: #eae6dd;
-  --ink-dim: #8f8a7b;
-  --line: rgba(234, 230, 221, 0.12);
-  --line-soft: rgba(234, 230, 221, 0.06);
-  --accent: #00e65d;
-  --accent-dim: rgba(0, 230, 93, 0.35);
+  /* SPECTRAL OBSERVATORY — design tokens.
+     One dominant deep-space ink field; accents are bands of a calibrated
+     spectrum (uv → blue → cyan → green → volt → amber), the way a
+     spectrometer splits light. Green stays the "signal lock" primary. */
+  --bg: #06070b;
+  --bg-elev: #0c0e16;
+  --bg-raise: #12152033;
+  --ink: #f2f4fa;
+  --ink-dim: #98a0b4;
+  --line: rgba(242, 244, 250, 0.12);
+  --line-soft: rgba(242, 244, 250, 0.055);
 
-  /* paper inversion targets (animated onto <html> by the ThemeZone) */
-  --paper-bg: #e9e4d8;
-  --paper-bg-elev: #ded7c6;
-  --paper-ink: #161310;
-  --paper-ink-dim: #6e6757;
-  --paper-line: rgba(22, 19, 16, 0.18);
-  --paper-line-soft: rgba(22, 19, 16, 0.08);
+  /* spectral bands */
+  --uv: #9d8cff;
+  --blue: #5ea8ff;
+  --cyan: #3fd8e8;
+  --green: #46e5a1;
+  --volt: #d8f55a;
+  --amber: #ffb454;
+  --red: #ff6e6e;
+
+  --accent: var(--green);
+  --accent-dim: rgba(70, 229, 161, 0.35);
+
+  --spectrum: linear-gradient(
+    90deg,
+    var(--uv) 0%,
+    var(--blue) 22%,
+    var(--cyan) 44%,
+    var(--green) 66%,
+    var(--volt) 84%,
+    var(--amber) 100%
+  );
+
+  /* paper inversion targets (animated onto <html> by the ThemeZone) —
+     cool lab paper so the spectral accents survive the flip */
+  --paper-bg: #eceae2;
+  --paper-bg-elev: #e0ddd2;
+  --paper-ink: #131418;
+  --paper-ink-dim: #676c7a;
+  --paper-line: rgba(19, 20, 24, 0.18);
+  --paper-line-soft: rgba(19, 20, 24, 0.08);
 
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --section: clamp(7rem, 14vw, 13rem);
@@ -93,7 +118,73 @@ body::after {
   100% { transform: translate(2%, 2%); }
 }
 
-/* typography helpers */
+/* ---- spectral atmosphere ------------------------------------------------ */
+
+/* the identity element: a thin band of split light */
+.spectrum-strip {
+  height: 2px;
+  width: 100%;
+  background: var(--spectrum);
+}
+.spectrum-strip--glow {
+  box-shadow: 0 0 24px rgba(94, 168, 255, 0.35);
+}
+
+/* aurora wash — layered radial glows, GPU-cheap, sits behind content */
+.aurora {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(52% 42% at 12% 8%, rgba(157, 140, 255, 0.13), transparent 68%),
+    radial-gradient(45% 38% at 88% 16%, rgba(63, 216, 232, 0.1), transparent 70%),
+    radial-gradient(60% 46% at 50% 108%, rgba(70, 229, 161, 0.12), transparent 72%);
+}
+.aurora--footer {
+  background:
+    radial-gradient(55% 60% at 18% 100%, rgba(157, 140, 255, 0.14), transparent 70%),
+    radial-gradient(50% 55% at 82% 100%, rgba(70, 229, 161, 0.12), transparent 70%);
+}
+
+/* gradient signal text — for single glyphs / short accents only */
+.text-spectrum {
+  background: var(--spectrum);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* spectral band tint helpers (set --band inline from data) */
+.band-text { color: var(--band, var(--accent)); }
+.band-bg { background: var(--band, var(--accent)); }
+.band-line { border-color: var(--band, var(--accent)); }
+.band-dim { color: color-mix(in srgb, var(--band, var(--accent)) 62%, var(--ink-dim)); }
+
+/* raised glass panel for bento tiles */
+.panel {
+  position: relative;
+  border: 1px solid var(--line-soft);
+  background: linear-gradient(180deg, rgba(242, 244, 250, 0.03), rgba(242, 244, 250, 0.008));
+  transition: border-color 0.5s var(--ease-expo), background-color 0.5s var(--ease-expo);
+}
+.panel::before {
+  /* band keyline that ignites on hover */
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--band, var(--accent));
+  opacity: 0.55;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s var(--ease-expo);
+}
+.panel:hover { border-color: var(--line); }
+.panel:hover::before { transform: scaleX(1); }
+
+/* ---- typography helpers -------------------------------------------------- */
 .font-display {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
@@ -130,7 +221,7 @@ body::after {
   will-change: transform;
 }
 
-/* scroll progress hairline — sits above the nav, outside its blend mode */
+/* scroll progress hairline — the spectrum itself fills as you read */
 .scroll-progress {
   position: fixed;
   top: 0;
@@ -138,7 +229,7 @@ body::after {
   right: 0;
   height: 2px;
   z-index: 96;
-  background: var(--accent);
+  background: var(--spectrum);
   transform: scaleX(0);
   transform-origin: left;
   pointer-events: none;
@@ -224,13 +315,32 @@ body::after {
   left: 0;
   width: 100%;
   height: 1px;
-  background: var(--accent);
+  background: var(--band, var(--accent));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.7s var(--ease-expo);
 }
 .rule-card:hover::before {
   transform: scaleX(1);
+}
+
+/* retrieval console */
+.term-text {
+  font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.75;
+}
+.term-caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 2px;
+  background: var(--accent);
+  vertical-align: text-bottom;
+  animation: caret-blink 1.1s steps(1) infinite;
+}
+@keyframes caret-blink {
+  50% { opacity: 0; }
 }
 
 /* custom cursor */

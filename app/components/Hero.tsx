@@ -58,7 +58,7 @@ export default function Hero() {
             delay: 0.75,
           });
           if (roleRef.current) {
-            scrambleTo(roleRef.current, "Software Engineer — SciGlob / NASA GSFC", 1100);
+            scrambleTo(roleRef.current, "Senior Software Engineer — AI/ML Systems · NASA Pandora", 1100);
           }
         };
 
@@ -104,6 +104,7 @@ export default function Hero() {
       aria-labelledby="hero-heading"
       className="relative flex h-[100svh] min-h-[620px] flex-col overflow-hidden"
     >
+      <div className="aurora" aria-hidden="true" />
       <div className="absolute inset-0 opacity-90">
         <SignalField />
       </div>
@@ -127,9 +128,11 @@ export default function Hero() {
 
       <div className="gutter relative z-10 flex flex-1 flex-col justify-end pb-10 sm:pb-14">
         <div ref={metaRef}>
+          {/* the identity element — light, split into its bands */}
+          <span className="spectrum-strip spectrum-strip--glow mb-6 block w-24 sm:w-36" aria-hidden="true" />
           <p className="font-mono-ui text-dim mb-4">
             <span className="text-accent">[</span>{" "}
-            <span ref={roleRef}>Software Engineer — SciGlob / NASA GSFC</span>{" "}
+            <span ref={roleRef}>Senior Software Engineer — AI/ML Systems · NASA Pandora</span>{" "}
             <span className="text-accent">]</span>
           </p>
         </div>
@@ -158,8 +161,8 @@ export default function Hero() {
         <div className="mt-10 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
           <p className="max-w-md text-base leading-relaxed text-dim sm:text-lg">
             I turn raw sensor noise into NASA science by day — and build{" "}
-            <em className="font-display italic text-ink">AI systems, agents and products</em>{" "}
-            after dark.
+            <em className="font-display italic text-ink">LLM agents, RAG systems and neural nets</em>{" "}
+            after dark. One of them is training on this page right now.
           </p>
           <div className="font-mono-ui text-dim flex items-center gap-6 whitespace-nowrap">
             <span>39.20°N / 76.86°W</span>
