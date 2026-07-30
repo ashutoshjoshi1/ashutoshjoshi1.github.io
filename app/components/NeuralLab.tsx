@@ -384,16 +384,23 @@ export default function NeuralLab() {
     };
 
     if (reducedRef.current) {
-      /* no animation loop — train once off the critical path, show the result */
+      /* no animation loop — train in idle-time chunks until the boundary is
+         actually learned, then leave the converged snapshot on screen */
       const runIdle = (fn: () => void) =>
         typeof window.requestIdleCallback === "function"
           ? window.requestIdleCallback(() => fn())
           : window.setTimeout(fn, 80);
-      runIdle(() => {
-        trainBurst(600);
+      const trainChunk = () => {
+        if (!alive) return;
+        trainBurst(2000);
         drawAll();
         syncStats();
-      });
+        const net = netRef.current;
+        if (net && net.step < 40000 && net.accuracy(samplesRef.current) < 0.97) {
+          runIdle(trainChunk);
+        }
+      };
+      runIdle(trainChunk);
     } else {
       rafRef.current = requestAnimationFrame(loop);
     }
