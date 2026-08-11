@@ -56,9 +56,9 @@ const FACT_DOCS: Doc[] = [
     id: "fact-ai",
     tag: "AI/ML",
     text:
-      "ai ml machine learning artificial intelligence llm large language models rag retrieval augmented generation embeddings vector search pgvector agents multi-agent orchestration evals evaluation prompt engineering generative ai experience",
+      "ai ml machine learning artificial intelligence llm large language models rag retrieval augmented generation embeddings vector search pgvector agents multi-agent orchestration evals evaluation prompt engineering generative ai agent security guardrails safety experience",
     answer:
-      "AI/ML runs through most of the work: an enterprise RAG platform with evaluation datasets (CommonGround), a self-learning agentic framework with vector memory and calibration audits (InCortex), a six-agent sports prediction system (MoneyBall), an LLM trading engine with a deterministic core and ~93% test coverage (Claude TopstepX), and a generative video pipeline (ReBirth). Day job: deep-learning anomaly detection and CNN cloud detection running on 300+ NASA Pandora instruments. Plus this page — the lab section above trains a neural net in your browser, and this console is TF-IDF retrieval.",
+      "AI/ML runs through most of the work: a runtime security control plane for AI agents (Phulax), an enterprise RAG platform with evaluation datasets (CommonGround), a self-learning agentic framework with vector memory and calibration audits (InCortex), an eight-agent AI software company in a 3D office (Office.ai), a six-agent sports prediction system (MoneyBall), an LLM trading engine with a deterministic core and ~93% test coverage (Claude TopstepX), and a generative video pipeline (ReBirth). Day job: deep-learning anomaly detection and CNN cloud detection running on 300+ NASA Pandora instruments. Plus this page — the lab section above trains a neural net in your browser, and this console is TF-IDF retrieval.",
     link: "#work",
   },
   {

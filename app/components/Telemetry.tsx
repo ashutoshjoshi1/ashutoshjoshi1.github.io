@@ -9,7 +9,7 @@ const READINGS = [
   { value: 6, pad: 2, suffix: "+", label: "years shipping software" },
   { value: 300, pad: 3, suffix: "+", label: "instruments running my ML" },
   { value: 5, pad: 2, suffix: "", label: "continents of instruments" },
-  { value: 9, pad: 2, suffix: "", label: "selected transmissions" },
+  { value: 12, pad: 2, suffix: "", label: "selected transmissions" },
 ];
 
 export default function Telemetry() {

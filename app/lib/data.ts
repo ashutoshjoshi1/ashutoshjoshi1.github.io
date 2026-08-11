@@ -15,6 +15,18 @@ export interface Project {
 export const PROJECTS: Project[] = [
   {
     index: "01",
+    name: "Phulax",
+    domain: "AI Agent Security / Open Source",
+    year: "2026",
+    description:
+      "Open-source runtime security control plane for AI agents — a local gateway intercepts every tool call and enforces allow / deny / approval / freeze through a deterministic policy engine, with metadata-first audit trails that cite the exact rule behind every decision.",
+    stack: ["Python", "PostgreSQL", "Redis", "Docker"],
+    link: "https://github.com/phulax-io/phulax",
+    seed: 97,
+    band: "var(--volt)",
+  },
+  {
+    index: "02",
     name: "CommonGround",
     domain: "RAG / AI Infrastructure",
     year: "2025",
@@ -26,7 +38,7 @@ export const PROJECTS: Project[] = [
     band: "var(--cyan)",
   },
   {
-    index: "02",
+    index: "03",
     name: "InCortex",
     domain: "Agentic AI / Open Source",
     year: "2026",
@@ -38,7 +50,31 @@ export const PROJECTS: Project[] = [
     band: "var(--uv)",
   },
   {
-    index: "03",
+    index: "04",
+    name: "Office.ai",
+    domain: "Agentic AI / 3D",
+    year: "2026",
+    description:
+      "An AI-staffed software company as an operating system — eight specialized agents take an idea from validation to a deployed, billing SaaS through real GitHub PRs, Vercel deploys and Stripe, all rendered as a navigable 3D office with human approval gates.",
+    stack: ["Next.js", "React Three Fiber", "FastAPI", "Supabase", "Stripe"],
+    link: "https://github.com/ashutoshjoshi1/Office.ai",
+    seed: 59,
+    band: "var(--green)",
+  },
+  {
+    index: "05",
+    name: "SciGlob Library",
+    domain: "Instrument Control / NASA",
+    year: "2026",
+    description:
+      "Unified Python interface to every device in a Pandora-class atmospheric instrument — 14 device types behind one YAML-configured facade, each with a hardware driver and a simulation twin so the full instrument runs without physical hardware.",
+    stack: ["Python", "pyserial", "YAML", "OpenCV"],
+    link: "https://github.com/ashutoshjoshi1/SciGlob-Library",
+    seed: 37,
+    band: "var(--amber)",
+  },
+  {
+    index: "06",
     name: "BlickO-CPP",
     domain: "Systems / NASA",
     year: "2026",
@@ -50,7 +86,7 @@ export const PROJECTS: Project[] = [
     band: "var(--amber)",
   },
   {
-    index: "04",
+    index: "07",
     name: "Pandora Summarizer",
     domain: "Distributed Systems / NASA",
     year: "2025",
@@ -62,7 +98,7 @@ export const PROJECTS: Project[] = [
     band: "var(--blue)",
   },
   {
-    index: "05",
+    index: "08",
     name: "MoneyBall",
     domain: "AI Agents",
     year: "2025",
@@ -74,7 +110,7 @@ export const PROJECTS: Project[] = [
     band: "var(--uv)",
   },
   {
-    index: "06",
+    index: "09",
     name: "ReBirth",
     domain: "Generative AI / MLOps",
     year: "2025",
@@ -86,7 +122,7 @@ export const PROJECTS: Project[] = [
     band: "var(--green)",
   },
   {
-    index: "07",
+    index: "10",
     name: "Claude TopstepX",
     domain: "LLM Systems",
     year: "2026",
@@ -98,7 +134,7 @@ export const PROJECTS: Project[] = [
     band: "var(--volt)",
   },
   {
-    index: "08",
+    index: "11",
     name: "RETRVE",
     domain: "Product / Fintech",
     year: "2025",
@@ -110,7 +146,7 @@ export const PROJECTS: Project[] = [
     band: "var(--blue)",
   },
   {
-    index: "09",
+    index: "12",
     name: "IMU-3D",
     domain: "Graphics / Native",
     year: "2025",
