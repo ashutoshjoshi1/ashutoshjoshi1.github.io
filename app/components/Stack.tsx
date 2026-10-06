@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import StackArt, { type ArtKind } from "./StackArt";
-import { CHAPTERS, TOOLCHAIN } from "../lib/data";
+import { CHAPTERS, EMPLOYERS, TOOLCHAIN } from "../lib/data";
 import { prefersReducedMotion } from "../lib/motion";
 
 /* how the four panels sit in space for each chapter: whole-stack rotation
@@ -45,6 +45,35 @@ export default function Stack() {
   const sectionRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
+  const tiltRef = useRef<HTMLDivElement>(null);
+
+  /* the whole stack leans toward the cursor — a separate wrapper so it
+     never fights the scroll timeline's rotations */
+  useEffect(() => {
+    const section = sectionRef.current;
+    const tilt = tiltRef.current;
+    if (!section || !tilt || prefersReducedMotion()) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+
+    const toY = gsap.quickTo(tilt, "rotationY", { duration: 0.9, ease: "power3.out" });
+    const toX = gsap.quickTo(tilt, "rotationX", { duration: 0.9, ease: "power3.out" });
+    const onMove = (e: PointerEvent) => {
+      const rect = section.getBoundingClientRect();
+      if (e.clientY < rect.top || e.clientY > rect.bottom) return;
+      toY(((e.clientX / window.innerWidth) * 2 - 1) * 8);
+      toX(-((e.clientY - rect.top) / Math.max(1, rect.height) - 0.5) * 2 * 5);
+    };
+    const onLeave = () => {
+      toY(0);
+      toX(0);
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    document.documentElement.addEventListener("pointerleave", onLeave);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      document.documentElement.removeEventListener("pointerleave", onLeave);
+    };
+  }, []);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -117,32 +146,34 @@ export default function Stack() {
       <div ref={pinRef} className="stack-frame flex h-[100svh] min-h-[640px] flex-col overflow-hidden">
         {/* the 3D stage */}
         <div className="stage relative h-[46%] min-h-[260px] w-full [--panel-w:clamp(230px,36vw,430px)]">
-          <div className="stage-float absolute inset-0">
-            <div ref={innerRef} className="stage-inner">
-              {/* depth order: 0 glass screen (headline chart), 1 drawing,
-                  2 annotations, 3 back frame */}
-              <div data-panel className="panel3d panel3d--screen">
-                {ART.map((art, i) => (
-                  <div key={i} data-art={i} className="art-layer" style={i > 0 ? LATER_CHAPTER : undefined}>
-                    <StackArt kind={art.screen} seed={11 + i} />
-                  </div>
-                ))}
+          <div ref={tiltRef} className="stage-tilt">
+            <div className="stage-float absolute inset-0">
+              <div ref={innerRef} className="stage-inner">
+                {/* depth order: 0 glass screen (headline chart), 1 drawing,
+                    2 annotations, 3 back frame */}
+                <div data-panel className="panel3d panel3d--screen">
+                  {ART.map((art, i) => (
+                    <div key={i} data-art={i} className="art-layer" style={i > 0 ? LATER_CHAPTER : undefined}>
+                      <StackArt kind={art.screen} seed={11 + i} />
+                    </div>
+                  ))}
+                </div>
+                <div data-panel className="panel3d">
+                  {ART.map((art, i) => (
+                    <div key={i} data-art={i} className="art-layer" style={i > 0 ? LATER_CHAPTER : undefined}>
+                      <StackArt kind={art.drawing} seed={31 + i} />
+                    </div>
+                  ))}
+                </div>
+                <div data-panel className="panel3d">
+                  {ART.map((_, i) => (
+                    <div key={i} data-art={i} className="art-layer" style={i > 0 ? LATER_CHAPTER : undefined}>
+                      <StackArt kind="annotations" seed={53 + i} />
+                    </div>
+                  ))}
+                </div>
+                <div data-panel className="panel3d panel3d--back" />
               </div>
-              <div data-panel className="panel3d">
-                {ART.map((art, i) => (
-                  <div key={i} data-art={i} className="art-layer" style={i > 0 ? LATER_CHAPTER : undefined}>
-                    <StackArt kind={art.drawing} seed={31 + i} />
-                  </div>
-                ))}
-              </div>
-              <div data-panel className="panel3d">
-                {ART.map((_, i) => (
-                  <div key={i} data-art={i} className="art-layer" style={i > 0 ? LATER_CHAPTER : undefined}>
-                    <StackArt kind="annotations" seed={53 + i} />
-                  </div>
-                ))}
-              </div>
-              <div data-panel className="panel3d panel3d--back" />
             </div>
           </div>
         </div>
@@ -170,6 +201,18 @@ export default function Stack() {
                       {chapter.metric}
                     </span>
                   </p>
+                )}
+                {i === 0 && (
+                  <div data-extra className="mt-9">
+                    <p className="font-mono-ui text-faint">Shipped at</p>
+                    <ul className="mt-3 flex flex-wrap justify-center gap-x-8 gap-y-2" aria-label="Where the work has shipped">
+                      {EMPLOYERS.map((name) => (
+                        <li key={name} className="text-[1.05rem] font-medium tracking-[-0.01em] text-[rgba(255,255,255,0.5)]">
+                          {name}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
                 {i === 1 && (
                   <ul data-extra className="mt-8 flex flex-wrap justify-center gap-x-7 gap-y-2" aria-label="Serving toolchain">

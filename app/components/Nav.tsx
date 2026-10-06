@@ -10,6 +10,7 @@ import { getLenis, prefersReducedMotion } from "../lib/motion";
 
 const LINKS = [
   { label: "Serving", href: "#serving" },
+  { label: "Serving lab", href: "#serving-lab" },
   { label: "NASA", href: "#systems" },
   { label: "Work", href: "#work" },
   { label: "Experience", href: "#experience" },

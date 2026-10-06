@@ -2,11 +2,13 @@
 
 import { useEffect, useState, type MouseEvent } from "react";
 import { Mark } from "./Icons";
+import WebVitals from "./WebVitals";
 import { scrollToHash } from "./Button";
 import { CONTACT, PROFILE } from "../lib/data";
 
 const SECTIONS = [
   { label: "Serving", href: "#serving" },
+  { label: "Serving lab", href: "#serving-lab" },
   { label: "NASA", href: "#systems" },
   { label: "Work", href: "#work" },
   { label: "Experience", href: "#experience" },
@@ -98,7 +100,10 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-      <div className="mt-16 flex flex-wrap justify-between gap-4 text-sm text-faint">
+      <div className="mt-14 border-t border-line pt-6">
+        <WebVitals />
+      </div>
+      <div className="mt-6 flex flex-wrap justify-between gap-4 text-sm text-faint">
         <span>© 2026 {PROFILE.name}</span>
         <span>Built with Next.js, GSAP and Lenis. No templates.</span>
       </div>

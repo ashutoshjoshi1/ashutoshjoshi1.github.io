@@ -7,6 +7,10 @@ import {
   dish,
   torus,
   waveGrid,
+  lattice,
+  octahedron,
+  helix,
+  globe,
   type WireModel,
 } from "../lib/wire3d";
 import { prefersReducedMotion } from "../lib/motion";
@@ -16,6 +20,10 @@ const MODELS: Record<string, () => WireModel> = {
   dish,
   torus,
   waveGrid,
+  lattice,
+  octahedron,
+  helix,
+  globe,
 };
 
 interface Wire3DProps {

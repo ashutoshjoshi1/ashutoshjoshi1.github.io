@@ -344,7 +344,15 @@ body {
   .flow-dash {
     animation: dash-flow 7s linear infinite;
   }
+  /* every wrapper between the perspective root and the panels must
+     preserve 3D, or the panels flatten into its plane */
+  .stage-tilt {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+  }
   .stage-float {
+    transform-style: preserve-3d;
     animation: stage-float 9s ease-in-out infinite;
   }
   /* chapters share one grid cell and cross-fade in the pinned timeline */

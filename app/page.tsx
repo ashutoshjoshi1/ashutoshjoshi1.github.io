@@ -3,6 +3,7 @@ import AnnouncementBar from "./components/AnnouncementBar";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Stack from "./components/Stack";
+import ServingLab from "./components/ServingLab";
 import Impact from "./components/Impact";
 import Fleet from "./components/Fleet";
 import Work from "./components/Work";
@@ -23,6 +24,8 @@ export default function Home() {
         <Hero />
         {/* pinned: the LLM serving story, told on a 3D panel stack */}
         <Stack />
+        {/* the same ideas, hands-on: a simulated server the visitor tunes */}
+        <ServingLab />
         {/* the forest card pins while its numbers land… */}
         <Impact />
         {/* …then this grey sheet slides up over it and carries the rest */}

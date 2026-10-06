@@ -16,6 +16,7 @@ export default function Hero() {
   const tpsRef = useRef<HTMLSpanElement>(null);
   const ttftRef = useRef<HTMLSpanElement>(null);
   const batchRef = useRef<HTMLSpanElement>(null);
+  const queueRef = useRef<HTMLSpanElement>(null);
 
   /* live readout from the simulated engine — written straight to the DOM
      so a 600ms stats tick never re-renders the hero */
@@ -23,6 +24,7 @@ export default function Hero() {
     if (tpsRef.current) tpsRef.current.textContent = Math.round(stats.tokensPerSec).toLocaleString("en-US");
     if (ttftRef.current) ttftRef.current.textContent = String(Math.round(stats.ttftP50));
     if (batchRef.current) batchRef.current.textContent = `${stats.busy}/${stats.slots}`;
+    if (queueRef.current) queueRef.current.textContent = String(stats.queue);
   }, []);
 
   useEffect(() => {
@@ -116,14 +118,14 @@ export default function Hero() {
         <div className="absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-6 bg-gradient-to-t from-black via-black/80 to-transparent px-5 pb-5 pt-16 sm:px-8 sm:pb-7">
           <p data-hero-fade className="font-mono-ui hidden items-center gap-2.5 text-dim sm:flex">
             <span className="status-dot" aria-hidden="true" />
-            Live sim · continuous batching
+            Live sim · move or tap to add traffic
           </p>
           <p data-hero-fade className="font-mono-ui text-dim">
             Scroll to explore
           </p>
           <p data-hero-fade className="font-mono-ui hidden tabular-nums text-dim md:block">
             <span ref={tpsRef}>—</span> tok/s · TTFT p50 <span ref={ttftRef}>—</span> ms · batch{" "}
-            <span ref={batchRef}>—</span>
+            <span ref={batchRef}>—</span> · queue <span ref={queueRef}>—</span>
           </p>
         </div>
       </div>

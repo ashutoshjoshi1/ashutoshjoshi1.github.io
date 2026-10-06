@@ -1,16 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import {
-  BatchEngine,
-  CELL_DECODE,
-  CELL_PREFILL,
-  MARK_DONE,
-  MARK_FIRST,
-  MARK_HIT,
-  type EngineStats,
-  type Step,
-} from "../lib/batching";
+import { BatchEngine, type EngineStats, type Step } from "../lib/batching";
+import { drawTimeline } from "../lib/timeline";
 import { prefersReducedMotion } from "../lib/motion";
 
 const MIN_LANE_PX = 22;
@@ -18,7 +10,10 @@ const MAX_LANES = 36;
 const SIM_SPEED = 0.14; /* simulated ms per real ms: slow motion so tokens read */
 const PX_PER_MS = 0.46;
 const STATS_EVERY_MS = 600;
-const SIGNAL: [number, number, number] = [114, 206, 123];
+const HOVER_BURST = 3;
+const CLICK_BURST = 10;
+const BURST_COOLDOWN_MS = 450;
+const RIPPLE_MS = 900;
 
 interface BatchFieldProps {
   className?: string;
@@ -34,7 +29,8 @@ function requestsPerSec(slots: number): number {
 /*
  * The hero "footage": a live continuous-batching timeline. Lanes are batch
  * slots; green bars are prefill, ticks are decoded tokens, hollow squares
- * mark each request's first token. Time flows right to left.
+ * mark each request's first token. Time flows right to left. Moving the
+ * cursor over it sends bursts of traffic the batch has to absorb.
  */
 export default function BatchField({ className, onStats }: BatchFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -53,6 +49,7 @@ export default function BatchField({ className, onStats }: BatchFieldProps) {
     let engine = new BatchEngine(1, 1, 1);
     let history: Step[] = [];
     let guides: HTMLCanvasElement | null = null;
+    let ripples: { x: number; y: number; at: number; big: boolean }[] = [];
     let width = 0;
     let height = 0;
     let lanes = 0;
@@ -62,6 +59,7 @@ export default function BatchField({ className, onStats }: BatchFieldProps) {
     let raf = 0;
     let last = 0;
     let lastStats = 0;
+    let lastBurst = 0;
     let inView = true;
 
     const windowMs = () => width / PX_PER_MS;
@@ -111,73 +109,32 @@ export default function BatchField({ className, onStats }: BatchFieldProps) {
       guides = paintGuides(dpr);
     };
 
-    const xAt = (t: number) => width - (simNow - t) * PX_PER_MS;
-    const ageAt = (x: number) => {
-      const a = Math.min(1, Math.max(0, x / width));
-      return 0.12 + 0.88 * Math.pow(a, 1.4);
-    };
-
-    const render = () => {
+    const render = (now: number) => {
       ctx.globalAlpha = 1;
       ctx.clearRect(0, 0, width, height);
       if (guides) ctx.drawImage(guides, 0, 0, width, height);
+      drawTimeline(ctx, history, {
+        left: 0,
+        right: width,
+        top,
+        lanePx,
+        lanes,
+        nowMs: simNow,
+        pxPerMs: PX_PER_MS,
+        fade: true,
+        showWaste: false,
+      });
 
-      /* pass 1 — decode ticks, white, brightness per request */
-      ctx.fillStyle = "#ffffff";
-      for (const st of history) {
-        const x1 = xAt(st.t1);
-        if (x1 < -4 || x1 > width + 4) continue;
-        const age = ageAt(x1);
-        for (let s = 0; s < lanes; s++) {
-          if (st.kind[s] !== CELL_DECODE) continue;
-          ctx.globalAlpha = (st.shade[s] / 255) * age * 0.9;
-          ctx.fillRect(x1 - 1.5, top + s * lanePx - 3.5, 1.5, 7);
-        }
-      }
-
-      /* pass 2 — prefill bars and prefix-cache hits, signal green */
-      ctx.fillStyle = `rgb(${SIGNAL[0]}, ${SIGNAL[1]}, ${SIGNAL[2]})`;
-      for (const st of history) {
-        const x0 = xAt(st.t0);
-        const x1 = xAt(st.t1);
-        if (x1 < -4 || x0 > width + 4) continue;
-        const age = ageAt(x1);
-        for (let s = 0; s < lanes; s++) {
-          if (st.kind[s] !== CELL_PREFILL) continue;
-          const y = top + s * lanePx;
-          ctx.globalAlpha = 0.8 * age;
-          ctx.fillRect(x0, y - 1, Math.max(1, x1 - x0 - 1), 2);
-          if (st.mark[s] & MARK_HIT) {
-            ctx.beginPath();
-            ctx.moveTo(x0, y - 4);
-            ctx.lineTo(x0 + 4, y);
-            ctx.lineTo(x0, y + 4);
-            ctx.lineTo(x0 - 4, y);
-            ctx.closePath();
-            ctx.fill();
-          }
-        }
-      }
-
-      /* pass 3 — keypoints: first token (hollow square), done (ring) */
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 1;
-      for (const st of history) {
-        const x1 = xAt(st.t1);
-        if (x1 < -8 || x1 > width + 8) continue;
-        const age = ageAt(x1);
-        for (let s = 0; s < lanes; s++) {
-          const m = st.mark[s];
-          if (!m) continue;
-          const y = top + s * lanePx;
-          ctx.globalAlpha = age;
-          if (m & MARK_FIRST) ctx.strokeRect(x1 - 3.5, y - 3.5, 7, 7);
-          if (m & MARK_DONE) {
-            ctx.beginPath();
-            ctx.arc(x1 + 4, y, 2.5, 0, Math.PI * 2);
-            ctx.stroke();
-          }
-        }
+      /* cursor ripples: where traffic was injected */
+      ripples = ripples.filter((r) => now - r.at < RIPPLE_MS);
+      ctx.strokeStyle = "#72ce7b";
+      ctx.lineWidth = 1.2;
+      for (const r of ripples) {
+        const p = (now - r.at) / RIPPLE_MS;
+        ctx.globalAlpha = (1 - p) * 0.8;
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, (r.big ? 14 : 8) + p * (r.big ? 90 : 46), 0, Math.PI * 2);
+        ctx.stroke();
       }
       ctx.globalAlpha = 1;
     };
@@ -195,24 +152,46 @@ export default function BatchField({ className, onStats }: BatchFieldProps) {
       simNow += dt * SIM_SPEED;
       while (engine.clock < simNow + 40) history.push(engine.step());
       trim();
-      render();
+      render(now);
       if (now - lastStats > STATS_EVERY_MS) {
         lastStats = now;
         emitStats();
       }
     };
 
+    /* traffic bursts follow the cursor (hover) or a tap/click */
+    const burst = (clientX: number, clientY: number, big: boolean) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      if (x < 0 || y < 0 || x > rect.width || y > rect.height) return;
+      const now = performance.now();
+      if (!big && now - lastBurst < BURST_COOLDOWN_MS) return;
+      lastBurst = now;
+      engine.inject(big ? CLICK_BURST : HOVER_BURST);
+      ripples.push({ x, y, at: now, big });
+      lastStats = 0; /* refresh the readout right away */
+    };
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") burst(e.clientX, e.clientY, false);
+    };
+    const onDown = (e: PointerEvent) => burst(e.clientX, e.clientY, true);
+
     setup();
-    render();
+    render(performance.now());
     emitStats();
-    if (!reduced) raf = requestAnimationFrame(loop);
+    if (!reduced) {
+      raf = requestAnimationFrame(loop);
+      window.addEventListener("pointermove", onMove, { passive: true });
+      window.addEventListener("pointerdown", onDown, { passive: true });
+    }
 
     let resizeRaf = 0;
     const ro = new ResizeObserver(() => {
       cancelAnimationFrame(resizeRaf);
       resizeRaf = requestAnimationFrame(() => {
         setup();
-        render();
+        render(performance.now());
       });
     });
     ro.observe(canvas);
@@ -227,6 +206,8 @@ export default function BatchField({ className, onStats }: BatchFieldProps) {
       cancelAnimationFrame(resizeRaf);
       ro.disconnect();
       io.disconnect();
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerdown", onDown);
     };
   }, []);
 

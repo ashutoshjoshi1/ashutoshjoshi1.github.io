@@ -5,30 +5,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Wire3D from "./Wire3D";
 import SectionIntro from "./SectionIntro";
+import { PRINCIPLES } from "../lib/data";
 import { prefersReducedMotion } from "../lib/motion";
-
-const PRINCIPLES = [
-  {
-    model: "waveGrid" as const,
-    title: "Measure, then tune.",
-    body: "Every model and config change runs through the benchmark harness: TTFT, ITL, P95/P99, MFU/MBU. Intuition picks the experiment; numbers pick the winner.",
-  },
-  {
-    model: "torus" as const,
-    title: "The tail is the product.",
-    body: "Users feel P99, not the average. Chunked prefill keeps one long prompt from stalling everyone's decode, and cache-aware routing keeps hot prefixes hot.",
-  },
-  {
-    model: "icosahedron" as const,
-    title: "Every GPU hour has an owner.",
-    body: "Quantization, speculative decoding, MIG for small models and SLO-driven autoscaling. Idle silicon is a bug, not a cost of doing business.",
-  },
-  {
-    model: "dish" as const,
-    title: "Parity before speed.",
-    body: "The Blick C++17 rewrite answers to a parity harness against legacy output before any optimization lands. Fast and wrong is just wrong, sooner.",
-  },
-];
 
 export default function Principles() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -40,13 +18,11 @@ export default function Principles() {
     if (!section || prefersReducedMotion()) return;
 
     const ctx = gsap.context(() => {
-      gsap.from("[data-principle]", {
-        y: 60,
-        opacity: 0,
-        duration: 1.1,
-        ease: "expo.out",
-        stagger: 0.1,
-        scrollTrigger: { trigger: "[data-principles]", start: "top 84%" },
+      gsap.set("[data-principle]", { opacity: 0, y: 60 });
+      ScrollTrigger.batch("[data-principle]", {
+        start: "top 88%",
+        onEnter: (batch) =>
+          gsap.to(batch, { opacity: 1, y: 0, duration: 1.1, ease: "expo.out", stagger: 0.09, overwrite: true }),
       });
     }, section);
     return () => ctx.revert();
@@ -63,11 +39,11 @@ export default function Principles() {
         id="principles-heading"
         eyebrow="Principles"
         lines={["How I work."]}
-        lead="Four rules I hold every system to, drawn as the shapes they came from."
+        lead="Eight rules I hold every system to: four from serving models at scale, four flight rules from the instrument work. Each is drawn as the shape it came from."
         className="mb-14 max-w-2xl"
       />
-      <div data-principles className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-        {PRINCIPLES.map((rule) => (
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        {PRINCIPLES.map((rule, i) => (
           <article
             key={rule.title}
             data-principle
@@ -75,8 +51,16 @@ export default function Principles() {
             onMouseLeave={() => setHovered(null)}
             className="card flex flex-col p-6 sm:p-7"
           >
-            <Wire3D model={rule.model} boosted={hovered === rule.title} className="mx-auto block h-44 w-full max-w-[14rem]" />
-            <h3 className="mt-6 text-[length:var(--text-card)] leading-snug tracking-[-0.01em]">{rule.title}</h3>
+            <div className="flex items-center justify-between">
+              <span className="font-mono-ui text-faint">{String(i + 1).padStart(2, "0")}</span>
+              <span className="font-mono-ui text-faint">{i < 4 ? "Serving" : "Flight rule"}</span>
+            </div>
+            <Wire3D
+              model={rule.model}
+              boosted={hovered === rule.title}
+              className="mx-auto mt-2 block h-40 w-full max-w-[13rem]"
+            />
+            <h3 className="mt-5 text-[length:var(--text-card)] leading-snug tracking-[-0.01em]">{rule.title}</h3>
             <p className="mt-3 text-[0.95rem] leading-relaxed text-dim">{rule.body}</p>
           </article>
         ))}

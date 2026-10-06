@@ -1,10 +1,12 @@
 import {
   PROJECTS,
+  MORE_WORK,
   EXPERIENCE,
   EDUCATION,
   SKILLS,
   CHAPTERS,
   FLEET,
+  PRINCIPLES,
   IMPACT_STATEMENT,
   IMPACT_METRICS,
   CONTACT,
@@ -43,8 +45,29 @@ const projectDocs: Doc[] = PROJECTS.map((p) => ({
   id: `project-${p.index}`,
   tag: `${p.index} · ${p.name}`,
   text: `${p.name} ${p.domain} ${p.description} ${p.stack.join(" ")}`,
-  answer: `${p.name} (${p.year}, ${p.domain}) — ${p.description} Built with ${p.stack.join(", ")}.`,
-  link: p.link,
+  answer: `${p.name} (${p.year}, ${p.domain}) — ${p.description} Built with ${p.stack.join(", ")}.${
+    p.private ? " The repo is private; a walkthrough is available on request." : ""
+  }`,
+  /* private repos would 404 for visitors — point at the card instead */
+  link: p.private ? "#work" : p.link,
+}));
+
+const moreWorkDocs: Doc[] = MORE_WORK.flatMap((group) =>
+  group.items.map((item) => ({
+    id: `repo-${item.name}`,
+    tag: `GitHub · ${item.name}`,
+    text: `${item.name} ${item.summary} ${item.language} ${item.year} ${group.label} github repository project`,
+    answer: `${item.name} (${item.year}, ${item.language}) — ${item.summary}`,
+    link: item.link,
+  })),
+);
+
+const principleDocs: Doc[] = PRINCIPLES.map((p, i) => ({
+  id: `principle-${i}`,
+  tag: `Principle · ${p.title}`,
+  text: `${p.title} ${p.body} principles how work philosophy approach values rules`,
+  answer: `${p.title} ${p.body}`,
+  link: "#principles",
 }));
 
 const experienceDocs: Doc[] = EXPERIENCE.map((r, i) => ({
@@ -175,8 +198,8 @@ const FACT_DOCS: Doc[] = [
   {
     id: "fact-education",
     tag: "Education",
-    text: "education degree university masters bachelors graduate school umbc maryland medi-caps study studied college data science computer science",
-    answer: `Education: ${EDUCATION.map((e) => `${e.degree}, ${e.school}`).join("; ")}.`,
+    text: "education degree university masters bachelors graduate school umbc maryland medi-caps study studied college data science computer science gpa grades teaching assistant",
+    answer: `Education: ${EDUCATION.map((e) => `${e.degree}, ${e.school}${e.note ? ` (${e.note})` : ""}`).join("; ")}. Alongside the M.S., a Graduate Student Assistant at UMBC from 2022 to 2024.`,
     link: "#experience",
   },
   {
@@ -201,9 +224,9 @@ const FACT_DOCS: Doc[] = [
     id: "fact-site",
     tag: "This site",
     text:
-      "site website portfolio built how this page console terminal lab neural network playground backprop tf-idf tfidf retrieval simulation hero animation how does this work",
+      "site website portfolio built how this page console terminal lab neural network playground backprop tf-idf tfidf retrieval simulation simulator serving lab interactive hero animation how does this work",
     answer:
-      "This site is a Next.js static export animated with GSAP and Lenis. The hero is a simulated continuous-batching LLM server (prefill, decode and prefix-cache hits, one forward pass at a time), the serving story plays out on CSS 3D panels, the lab trains a 2-8-8-1 MLP with hand-written backprop, and this console is TF-IDF + cosine retrieval over the site's own text. No AI API calls; everything runs in your browser.",
+      "This site is a Next.js static export animated with GSAP and Lenis. The hero is a simulated LLM server you can flood with traffic, the serving story plays out on CSS 3D panels, and the serving lab lets you flip batching, chunked prefill, prefix caching, speculative decoding and FP8 weights while capacity and latency update live. The lab trains a 2-8-8-1 MLP with hand-written backprop, the footer measures this page's own Core Web Vitals, and this console is TF-IDF + cosine retrieval over the site's text. No AI API calls; everything runs in your browser.",
     link: "#lab",
   },
   {
@@ -229,7 +252,15 @@ const FACT_DOCS: Doc[] = [
   },
 ];
 
-export const CORPUS: Doc[] = [...projectDocs, ...experienceDocs, ...chapterDocs, ...fleetDocs, ...FACT_DOCS];
+export const CORPUS: Doc[] = [
+  ...projectDocs,
+  ...moreWorkDocs,
+  ...experienceDocs,
+  ...chapterDocs,
+  ...fleetDocs,
+  ...principleDocs,
+  ...FACT_DOCS,
+];
 
 /* ---------------------------------------------------------- tokenizer */
 

@@ -37,6 +37,31 @@ const PATHS: Record<string, ReactNode> = {
       <path d="M10 10h4v4h-4z" />
     </>
   ),
+  shield: (
+    <>
+      <path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z" />
+      <path d="M9 12l2 2 4-4" />
+    </>
+  ),
+  database: (
+    <>
+      <ellipse cx="12" cy="6" rx="7" ry="2.8" />
+      <path d="M5 6v6c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V6" />
+      <path d="M5 12v6c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8v-6" />
+    </>
+  ),
+  school: (
+    <>
+      <path d="M2.5 9.5L12 5l9.5 4.5L12 14z" />
+      <path d="M6.5 11.5V16c1.5 1.4 3.4 2 5.5 2s4-.6 5.5-2v-4.5" />
+    </>
+  ),
+  lock: (
+    <>
+      <rect x="5" y="11" width="14" height="9" rx="2" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </>
+  ),
   trend: <path d="M3 17l6-6 4 4 8-8M15 7h6v6" />,
   bars: <path d="M5 20V11M12 20V4M19 20v-6" />,
   flow: (

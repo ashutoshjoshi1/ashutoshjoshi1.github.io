@@ -159,6 +159,124 @@ export function waveGrid(): WireModel {
   };
 }
 
+/* Lattice — a 3×3×3 grid of compute cells: every GPU hour accounted for. */
+export function lattice(): WireModel {
+  const points: Vec3[] = [];
+  const edges: Edge[] = [];
+  const N = 3;
+  const at = (i: number, j: number, k: number) => (i * N + j) * N + k;
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < N; j++) {
+      for (let k = 0; k < N; k++) {
+        points.push([(i - 1) * 0.62, (j - 1) * 0.62, (k - 1) * 0.62]);
+      }
+    }
+  }
+  const accents = new Set<number>();
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < N; j++) {
+      for (let k = 0; k < N; k++) {
+        /* the central column lights up */
+        const central = i === 1 && k === 1;
+        if (i < N - 1) edges.push([at(i, j, k), at(i + 1, j, k)]);
+        if (j < N - 1) {
+          if (central) accents.add(edges.length);
+          edges.push([at(i, j, k), at(i, j + 1, k)]);
+        }
+        if (k < N - 1) edges.push([at(i, j, k), at(i, j, k + 1)]);
+      }
+    }
+  }
+  return { points, edges, accents };
+}
+
+/* Octahedron with a mirrored inner twin — parity between two builds. */
+export function octahedron(): WireModel {
+  const outer: Vec3[] = [
+    [1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1],
+  ];
+  const inner = outer.map(([x, y, z]) => [x * 0.48, y * 0.48, z * 0.48] as Vec3);
+  const points = [...outer, ...inner];
+  const edges: Edge[] = [];
+  const accents = new Set<number>();
+  const faces: Edge[] = [];
+  for (let a = 0; a < 6; a++) {
+    for (let b = a + 1; b < 6; b++) {
+      /* opposite vertices (0-1, 2-3, 4-5) are not edges */
+      if (Math.floor(a / 2) !== Math.floor(b / 2)) faces.push([a, b]);
+    }
+  }
+  for (const [a, b] of faces) edges.push([a, b]);
+  for (const [a, b] of faces) {
+    accents.add(edges.length);
+    edges.push([a + 6, b + 6]);
+  }
+  /* spokes tie each outer vertex to its twin */
+  for (let v = 0; v < 6; v++) edges.push([v, v + 6]);
+  return { points, edges, accents };
+}
+
+/* Double helix with rungs — the feedback loop, closing on itself. */
+export function helix(): WireModel {
+  const points: Vec3[] = [];
+  const edges: Edge[] = [];
+  const accents = new Set<number>();
+  const STEPS = 22;
+  const TURNS = 1.6;
+  for (let s = 0; s < STEPS; s++) {
+    const t = s / (STEPS - 1);
+    const a = t * TURNS * Math.PI * 2;
+    const y = t * 2 - 1;
+    points.push([Math.cos(a) * 0.5, y, Math.sin(a) * 0.5]);
+    points.push([Math.cos(a + Math.PI) * 0.5, y, Math.sin(a + Math.PI) * 0.5]);
+  }
+  for (let s = 0; s < STEPS - 1; s++) {
+    edges.push([s * 2, (s + 1) * 2]);
+    edges.push([s * 2 + 1, (s + 1) * 2 + 1]);
+  }
+  for (let s = 0; s < STEPS; s += 2) {
+    accents.add(edges.length);
+    edges.push([s * 2, s * 2 + 1]);
+  }
+  return { points, edges, accents };
+}
+
+/* Globe — latitude rings and meridians: five continents of instruments. */
+export function globe(): WireModel {
+  const points: Vec3[] = [];
+  const edges: Edge[] = [];
+  const accents = new Set<number>();
+  const LATS = 5;
+  const SEG = 16;
+  const MERIDIANS = 6;
+  /* latitude rings */
+  for (let l = 0; l < LATS; l++) {
+    const phi = ((l + 1) / (LATS + 1)) * Math.PI - Math.PI / 2;
+    const r = Math.cos(phi);
+    const y = Math.sin(phi);
+    const base = points.length;
+    for (let s = 0; s < SEG; s++) {
+      const a = (s / SEG) * Math.PI * 2;
+      points.push([Math.cos(a) * r, y, Math.sin(a) * r]);
+    }
+    for (let s = 0; s < SEG; s++) {
+      if (l === Math.floor(LATS / 2)) accents.add(edges.length);
+      edges.push([base + s, base + ((s + 1) % SEG)]);
+    }
+  }
+  /* meridians, pole to pole */
+  for (let m = 0; m < MERIDIANS; m++) {
+    const a = (m / MERIDIANS) * Math.PI;
+    const base = points.length;
+    for (let s = 0; s <= SEG; s++) {
+      const phi = (s / SEG) * Math.PI * 2;
+      points.push([Math.cos(phi) * Math.cos(a), Math.sin(phi), Math.cos(phi) * Math.sin(a)]);
+    }
+    for (let s = 0; s < SEG; s++) edges.push([base + s, base + s + 1]);
+  }
+  return { points, edges, accents };
+}
+
 /* ---- renderer ----------------------------------------------------------- */
 
 export interface WireRendererOptions {

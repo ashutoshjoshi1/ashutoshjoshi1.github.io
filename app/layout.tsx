@@ -170,7 +170,7 @@ const JSON_LD = {
           "@type": "SoftwareSourceCode",
           name: project.name,
           description: project.description,
-          codeRepository: project.link,
+          ...(project.private ? {} : { codeRepository: project.link }),
           programmingLanguage: project.stack[0],
           author: { "@id": `${SITE_URL}/#person` },
           dateCreated: project.year,

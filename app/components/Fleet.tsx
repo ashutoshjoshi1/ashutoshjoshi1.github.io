@@ -7,7 +7,7 @@ import FleetGlyph, { type GlyphKind } from "./FleetGlyph";
 import SectionIntro from "./SectionIntro";
 import Button from "./Button";
 import { Icon } from "./Icons";
-import { FLEET } from "../lib/data";
+import { FIELD_STATEMENT, FLEET } from "../lib/data";
 import { prefersReducedMotion } from "../lib/motion";
 
 /* x/y: top-left in % of the field; w/h in px (scaled down on phones);
@@ -133,7 +133,7 @@ export default function Fleet() {
             size="display"
             eyebrow="NASA · Pandonia Global Network"
             lines={["Ground truth", <span key="tail" className="text-taupe">for NASA science.</span>]}
-            lead="Production machine learning on 300+ Pandora spectrometers across five continents, from the raw instrument stream to datasets researchers trust."
+            lead={FIELD_STATEMENT}
             className="relative z-10 max-w-3xl"
           >
             <Button href="#fleet-systems" variant="solid" icon="down">
@@ -167,7 +167,9 @@ export default function Fleet() {
         </div>
 
         <div className="gutter mt-12 flex flex-wrap items-end justify-between gap-6">
-          <h3 className="h2 max-w-xl">Proven on a planetary instrument network.</h3>
+          <h3 className="h2 max-w-xl">
+            {FLEET.length} systems, one planetary instrument network.
+          </h3>
           <div className="flex gap-2">
             <button
               type="button"
