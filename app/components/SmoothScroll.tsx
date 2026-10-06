@@ -13,7 +13,22 @@ interface SmoothScrollProps {
 export default function SmoothScroll({ children }: SmoothScrollProps) {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    if (prefersReducedMotion()) return;
+    /* mobile URL bars resize the viewport constantly; don't re-measure
+       every pin and scrub for that */
+    ScrollTrigger.config({ ignoreMobileResize: true });
+
+    /* pins and scrubs are measured against text — re-measure once the
+       real fonts have swapped in */
+    let cancelled = false;
+    document.fonts?.ready.then(() => {
+      if (!cancelled) ScrollTrigger.refresh();
+    });
+
+    if (prefersReducedMotion()) {
+      return () => {
+        cancelled = true;
+      };
+    }
 
     const lenis = new Lenis({
       duration: 1.15,
@@ -27,6 +42,7 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      cancelled = true;
       gsap.ticker.remove(tick);
       lenis.destroy();
       setLenis(null);

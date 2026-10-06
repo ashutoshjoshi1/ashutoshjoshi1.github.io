@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MLP, makeDataset, DATASETS, LAYER_SIZES, type DatasetKind, type Sample } from "../lib/neural";
 import { mulberry32, prefersReducedMotion, scrambleTo } from "../lib/motion";
+import SectionIntro from "./SectionIntro";
 
 const GRID = 88; /* boundary field resolution — chunky pixels on purpose */
 const LEARNING_RATES = [0.01, 0.03, 0.1] as const;
@@ -22,11 +23,11 @@ interface Stats {
 
 type Rgb = [number, number, number];
 
-/* mirror the :root fallbacks in globals.css */
+/* mirror the .theme-dark tokens in globals.css (the lab renders inside one) */
 const FALLBACK: Record<"accent" | "ink" | "dim", Rgb> = {
-  accent: [70, 229, 161],
-  ink: [242, 244, 250],
-  dim: [152, 160, 180],
+  accent: [114, 206, 123],
+  ink: [255, 255, 255],
+  dim: [153, 153, 153],
 };
 
 /* handles #rgb, #rrggbb and the rgb()/rgba() strings GSAP writes mid-tween */
@@ -49,9 +50,10 @@ function parseColor(raw: string): Rgb | null {
   return null;
 }
 
-function cssColor(name: string, fallback: Rgb): Rgb {
+/* read from the section, not <html>, so the scoped theme's tokens apply */
+function cssColor(el: Element, name: string, fallback: Rgb): Rgb {
   if (typeof window === "undefined") return fallback;
-  const raw = getComputedStyle(document.documentElement).getPropertyValue(name);
+  const raw = getComputedStyle(el).getPropertyValue(name);
   return parseColor(raw) ?? fallback;
 }
 
@@ -321,10 +323,12 @@ export default function NeuralLab() {
     rngRef.current = mulberry32(DATASET_SEEDS.spiral * 3 + 1);
 
     const refreshColors = () => {
+      const host = sectionRef.current ?? document.documentElement;
       colorsRef.current = {
-        accent: cssColor("--accent", FALLBACK.accent),
-        ink: cssColor("--ink", FALLBACK.ink),
-        dim: cssColor("--ink-dim", FALLBACK.dim),
+        accent: cssColor(host, "--accent", FALLBACK.accent),
+        ink: cssColor(host, "--ink", FALLBACK.ink),
+        /* --ink-dim is translucent; the canvas needs an opaque grey */
+        dim: cssColor(host, "--lab-dim", FALLBACK.dim),
       };
     };
     refreshColors();
@@ -467,37 +471,32 @@ export default function NeuralLab() {
   };
 
   const chip = (active: boolean) =>
-    `border px-3 py-2 font-mono-ui transition-colors duration-300 ${
+    `rounded-[var(--radius-button)] border px-3 py-2 font-mono-ui transition-colors duration-300 ${
       active
         ? "border-[var(--accent)] text-accent"
         : "border-[var(--line)] text-dim hover:border-[var(--accent)] hover:text-accent"
     }`;
 
-  return (
-    <section id="lab" ref={sectionRef} aria-labelledby="lab-heading" className="py-[var(--section)]">
-      <div className="gutter mb-14">
-        <p data-lab-reveal className="font-mono-ui text-dim mb-6">
-          <span className="text-accent">(04)</span> — Lab / Live training run
-        </p>
-        <h2
-          id="lab-heading"
-          data-lab-reveal
-          className="leading-[0.92] tracking-tight"
-          style={{ fontSize: "var(--text-title)" }}
-        >
-          <span className="font-sans font-medium uppercase">Watch it</span>{" "}
-          <span className="font-display italic text-accent">learn.</span>
-        </h2>
-        <p data-lab-reveal className="mt-8 max-w-xl text-base leading-relaxed text-dim sm:text-lg">
-          A {LAYER_SIZES.join("·")} multilayer perceptron training in your browser right now —
-          backprop <em className="font-display italic text-ink">hand-rolled in ~200 lines of TypeScript</em>.
-          No PyTorch, no WebGL, no API calls. Click the field to drop new points; it adapts live.
-        </p>
-      </div>
+  const panel = "overflow-hidden rounded-[var(--radius-tile)] border border-[var(--line)] bg-[var(--card)]";
 
-      <div className="gutter grid grid-cols-1 gap-4 lg:grid-cols-12" data-lab-reveal>
+  return (
+    <section
+      id="lab"
+      ref={sectionRef}
+      aria-labelledby="lab-heading"
+      className="pb-[calc(var(--section)*0.5)] pt-[var(--section)]"
+    >
+      <SectionIntro
+        id="lab-heading"
+        eyebrow="Lab · live training run"
+        lines={["Watch it learn."]}
+        lead={`A ${LAYER_SIZES.join("·")} multilayer perceptron training in your browser right now, with backprop hand-rolled in about 200 lines of TypeScript. No PyTorch, no WebGL, no API calls. Click the field to drop new points and it adapts live.`}
+        className="gutter mb-14 max-w-3xl"
+      />
+
+      <div className="gutter grid grid-cols-1 gap-2 lg:grid-cols-12" data-lab-reveal>
         {/* decision field */}
-        <div className="border border-[var(--line)] lg:col-span-7">
+        <div className={`${panel} lg:col-span-7`}>
           <div className="flex items-center justify-between border-b border-[var(--line)] px-4 py-2.5">
             <span className="font-mono-ui text-dim">Decision field — f: ℝ² → [0, 1]</span>
             <span className="font-mono-ui text-accent hidden sm:inline">● live</span>
@@ -519,9 +518,9 @@ export default function NeuralLab() {
         </div>
 
         {/* instrument column */}
-        <div className="flex flex-col gap-4 lg:col-span-5">
+        <div className="flex flex-col gap-2 lg:col-span-5">
           {/* topology */}
-          <div className="border border-[var(--line)]">
+          <div className={panel}>
             <div className="flex items-center justify-between border-b border-[var(--line)] px-4 py-2.5">
               <span className="font-mono-ui text-dim">Topology {LAYER_SIZES.join("-")}</span>
               <span className="font-mono-ui text-dim">{PARAM_COUNT} params</span>
@@ -537,7 +536,7 @@ export default function NeuralLab() {
           </div>
 
           {/* telemetry */}
-          <div className="border border-[var(--line)]">
+          <div className={panel}>
             <div className="grid grid-cols-3 divide-x divide-[var(--line)] border-b border-[var(--line)]">
               <div className="px-4 py-3">
                 <p className="font-mono-ui text-dim">Step</p>
@@ -564,7 +563,7 @@ export default function NeuralLab() {
           </div>
 
           {/* controls */}
-          <div className="border border-[var(--line)] px-4 py-4">
+          <div className={`${panel} px-4 py-4`}>
             <p className="font-mono-ui text-dim mb-3">Dataset</p>
             <div className="flex flex-wrap gap-2">
               {DATASETS.map((d) => (

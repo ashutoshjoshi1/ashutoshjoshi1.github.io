@@ -7,6 +7,8 @@ const STEP = 6;
 
 interface ProjectVisualProps {
   seed: number;
+  /* light cards get dark strokes, coloured cards get light ones */
+  tone?: "light" | "dark";
   className?: string;
 }
 
@@ -33,8 +35,10 @@ function buildRow(seed: number, row: number): string {
 }
 
 /* Deterministic per-project waveform signature — same seed, same trace. */
-export default function ProjectVisual({ seed, className }: ProjectVisualProps) {
+export default function ProjectVisual({ seed, tone = "dark", className }: ProjectVisualProps) {
   const accentRow = seed % ROWS;
+  const stroke = tone === "dark" ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.22)";
+  const accent = tone === "dark" ? "var(--signal)" : "var(--forest)";
   return (
     <svg
       viewBox={`0 0 ${W} ${H}`}
@@ -42,26 +46,15 @@ export default function ProjectVisual({ seed, className }: ProjectVisualProps) {
       preserveAspectRatio="xMidYMid slice"
       aria-hidden="true"
     >
-      <rect width={W} height={H} fill="var(--bg-elev)" />
       {Array.from({ length: ROWS }, (_, row) => (
         <path
           key={row}
           d={buildRow(seed, row)}
           fill="none"
-          stroke={row === accentRow ? "var(--band, var(--accent))" : "rgba(242, 244, 250, 0.3)"}
-          strokeWidth={row === accentRow ? 1.4 : 1}
+          stroke={row === accentRow ? accent : stroke}
+          strokeWidth={row === accentRow ? 1.5 : 1}
         />
       ))}
-      <text
-        x={12}
-        y={H - 12}
-        fill="var(--ink-dim)"
-        fontSize="9"
-        fontFamily="ui-monospace, SF Mono, Menlo, monospace"
-        letterSpacing="2"
-      >
-        {`SIG/${String(seed).padStart(3, "0")}`}
-      </text>
     </svg>
   );
 }

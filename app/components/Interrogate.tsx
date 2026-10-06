@@ -4,14 +4,17 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ask, CORPUS, type Doc } from "../lib/retrieval";
-import { getLenis, prefersReducedMotion } from "../lib/motion";
+import { CONTACT } from "../lib/data";
+import { prefersReducedMotion } from "../lib/motion";
+import SectionIntro from "./SectionIntro";
+import { scrollToHash } from "./Button";
 
 const TYPE_INTERVAL_MS = 24;
 const TYPE_CHUNK = 5;
 
 const SUGGESTIONS = [
-  "experience with RAG?",
-  "c++ or python?",
+  "LLM inference experience?",
+  "vLLM vs SGLang?",
   "the NASA work",
   "why hire ashu?",
   "how was this site built?",
@@ -128,7 +131,7 @@ export default function Interrogate() {
       };
 
       if (result.sources.some((s) => s.id === "resume")) {
-        window.open("/resume.pdf", "_blank", "noopener");
+        window.open(CONTACT.resume, "_blank", "noopener");
       }
 
       /* a fresh submission implies the user wants to see the new answer */
@@ -162,45 +165,37 @@ export default function Interrogate() {
   const onSourceClick = (e: React.MouseEvent<HTMLAnchorElement>, link: string) => {
     if (link.startsWith("#")) {
       e.preventDefault();
-      const lenis = getLenis();
-      if (lenis) lenis.scrollTo(link, { duration: 1.4 });
-      else document.querySelector(link)?.scrollIntoView({ behavior: "smooth" });
+      scrollToHash(link);
     }
   };
 
   return (
-    <section id="query" ref={sectionRef} aria-labelledby="query-heading" className="py-[var(--section)]">
-      <div className="gutter mb-14">
-        <p data-query-reveal className="font-mono-ui text-dim mb-6">
-          <span className="text-accent">(07)</span> — Query / Retrieval console
-        </p>
-        <h2
-          id="query-heading"
-          data-query-reveal
-          className="leading-[0.92] tracking-tight"
-          style={{ fontSize: "var(--text-title)" }}
-        >
-          <span className="font-sans font-medium uppercase">Ask the</span>{" "}
-          <span className="font-display italic text-accent">archive.</span>
-        </h2>
-        <p data-query-reveal className="mt-8 max-w-xl text-base leading-relaxed text-dim sm:text-lg">
-          The retrieval pattern I ship in production, scaled down to one page —{" "}
-          <em className="font-display italic text-ink">TF-IDF vectors and cosine similarity</em> over
-          everything on this site. It only answers from indexed documents. No API, no hallucinations.
-        </p>
-      </div>
+    <section
+      id="ask"
+      ref={sectionRef}
+      aria-labelledby="ask-heading"
+      data-nav="light"
+      className="py-[var(--section)]"
+    >
+      <SectionIntro
+        id="ask-heading"
+        eyebrow="Retrieval console"
+        lines={["Ask about my work."]}
+        lead="TF-IDF vectors and cosine similarity over everything on this page, running in your browser. It answers only from indexed documents. No API calls, so nothing is made up."
+        className="gutter mb-14 max-w-3xl"
+      />
 
       <div className="gutter" data-query-reveal>
         <div
-          className="mx-auto max-w-4xl border border-[var(--line)]"
+          className="theme-forest mx-auto max-w-4xl overflow-hidden rounded-[var(--radius-card)] bg-forest"
           onClick={() => {
             /* don't yank focus while the user is selecting answer text */
             if (window.getSelection()?.isCollapsed !== false) inputRef.current?.focus();
           }}
         >
           {/* title bar */}
-          <div className="flex items-center justify-between border-b border-[var(--line)] px-4 py-2.5">
-            <span className="font-mono-ui text-dim">guest@signal — retrieval console</span>
+          <div className="flex items-center justify-between border-b border-[var(--line)] px-5 py-3">
+            <span className="font-mono-ui text-dim">guest@ashu — retrieval console</span>
             <span className="font-mono-ui text-dim hidden items-center gap-3 sm:flex">
               <span className="status-dot" aria-hidden="true" />
               <span>index hot</span>
@@ -282,7 +277,7 @@ export default function Interrogate() {
               type="text"
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder="ask about rag, c++, nasa, hiring…"
+              placeholder="ask about inference, gpus, nasa, hiring…"
               aria-label="Ask the retrieval console a question"
               autoComplete="off"
               spellCheck={false}
@@ -291,10 +286,9 @@ export default function Interrogate() {
             />
             <button
               type="submit"
-              data-cursor="hover"
-              className="font-mono-ui border border-[var(--line)] px-3 py-1.5 transition-colors duration-300 hover:border-[var(--accent)] hover:text-accent"
+              className="btn btn-solid btn-sm font-mono-ui !h-9 !text-[0.75rem]"
             >
-              SEND
+              Send
             </button>
           </form>
         </div>
@@ -305,13 +299,13 @@ export default function Interrogate() {
         </div>
 
         {/* recruiter-grade openers */}
-        <div className="mx-auto mt-4 flex max-w-4xl flex-wrap gap-2">
+        <div className="mx-auto mt-3 flex max-w-4xl flex-wrap gap-2">
           {SUGGESTIONS.map((s) => (
             <button
               key={s}
+              type="button"
               onClick={() => submit(s)}
-              data-cursor="hover"
-              className="font-mono-ui border border-[var(--line)] px-3 py-2 text-dim transition-colors duration-300 hover:border-[var(--accent)] hover:text-accent"
+              className="btn btn-soft btn-sm"
             >
               {s}
             </button>

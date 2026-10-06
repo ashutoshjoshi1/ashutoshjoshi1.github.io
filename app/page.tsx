@@ -1,47 +1,47 @@
 import SmoothScroll from "./components/SmoothScroll";
-import Preloader from "./components/Preloader";
-import Cursor from "./components/Cursor";
-import ScrollProgress from "./components/ScrollProgress";
+import AnnouncementBar from "./components/AnnouncementBar";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
-import Marquee from "./components/Marquee";
-import ThemeZone from "./components/ThemeZone";
-import Manifesto from "./components/Manifesto";
-import Telemetry from "./components/Telemetry";
-import Systems from "./components/Systems";
+import Stack from "./components/Stack";
+import Impact from "./components/Impact";
+import Fleet from "./components/Fleet";
 import Work from "./components/Work";
-import MissionLog from "./components/MissionLog";
+import Experience from "./components/Experience";
 import NeuralLab from "./components/NeuralLab";
-import FlightRules from "./components/FlightRules";
-import SpecSheet from "./components/SpecSheet";
+import Principles from "./components/Principles";
+import Skills from "./components/Skills";
 import Interrogate from "./components/Interrogate";
+import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
 export default function Home() {
   return (
     <SmoothScroll>
-      <Preloader />
-      <Cursor />
-      <ScrollProgress />
+      <AnnouncementBar />
       <Nav />
       <main>
         <Hero />
-        <Marquee />
-        {/* the page inverts to paper while the mission statement holds the viewport */}
-        <ThemeZone>
-          <Manifesto />
-          <Telemetry />
-        </ThemeZone>
-        {/* the day job — production ML at planetary scale */}
-        <Systems />
-        <Work />
-        <MissionLog />
-        {/* a real MLP trains live in the browser — the proof-of-skill centerpiece */}
-        <NeuralLab />
-        <FlightRules />
-        <SpecSheet />
-        {/* client-side RAG over the site's own corpus */}
-        <Interrogate />
+        {/* pinned: the LLM serving story, told on a 3D panel stack */}
+        <Stack />
+        {/* the forest card pins while its numbers land… */}
+        <Impact />
+        {/* …then this grey sheet slides up over it and carries the rest */}
+        <div className="sheet">
+          <Fleet />
+          <Work />
+          <Experience />
+          {/* the lab: a black card holding the live-training MLP */}
+          <div className="frame-x">
+            <div data-nav="dark" className="theme-dark overflow-hidden rounded-[22px] bg-black">
+              <NeuralLab />
+              <Principles />
+            </div>
+          </div>
+          <Skills />
+          {/* client-side retrieval over the site's own text */}
+          <Interrogate />
+          <Contact />
+        </div>
       </main>
       <Footer />
     </SmoothScroll>

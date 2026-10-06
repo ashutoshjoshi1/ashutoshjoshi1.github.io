@@ -28,14 +28,15 @@ interface Wire3DProps {
   boosted?: boolean;
 }
 
-/* reads the live CSS custom properties so models follow theme inversion */
-function cssColor(name: string, alpha: number): () => string {
+/* reads the live CSS custom properties from the canvas itself, so models
+   follow whatever theme scope (e.g. .theme-dark) they're rendered in */
+function cssColor(el: Element, name: string, alpha: number): () => string {
   let cached = "";
   let lastRead = 0;
   return () => {
     const now = performance.now();
     if (now - lastRead > 120 || !cached) {
-      const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      const raw = getComputedStyle(el).getPropertyValue(name).trim();
       lastRead = now;
       if (raw.startsWith("#")) {
         const r = parseInt(raw.slice(1, 3), 16);
@@ -72,8 +73,8 @@ export default function Wire3D({
         speed,
         zoom,
         mouseInfluence,
-        ink: cssColor("--ink", 1),
-        accent: cssColor("--accent", 1),
+        ink: cssColor(canvas, "--ink", 1),
+        accent: cssColor(canvas, "--accent", 1),
       },
       prefersReducedMotion(),
     );

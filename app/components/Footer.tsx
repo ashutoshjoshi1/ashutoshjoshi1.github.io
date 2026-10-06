@@ -1,179 +1,106 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { CONTACT } from "../lib/data";
-import { splitChars, scrambleTo, attachRepel, prefersReducedMotion } from "../lib/motion";
+import { useEffect, useState, type MouseEvent } from "react";
+import { Mark } from "./Icons";
+import { scrollToHash } from "./Button";
+import { CONTACT, PROFILE } from "../lib/data";
 
-const LINKS = [
-  { label: "GitHub", href: CONTACT.github },
-  { label: "LinkedIn", href: CONTACT.linkedin },
-  { label: "Resume", href: CONTACT.resume },
-  { label: CONTACT.phone, href: `tel:${CONTACT.phone.replace(/\s/g, "")}` },
+const SECTIONS = [
+  { label: "Serving", href: "#serving" },
+  { label: "NASA", href: "#systems" },
+  { label: "Work", href: "#work" },
+  { label: "Experience", href: "#experience" },
+  { label: "Lab", href: "#lab" },
+  { label: "Ask", href: "#ask" },
 ];
 
+const ELSEWHERE = [
+  { label: "GitHub", href: CONTACT.github },
+  { label: "LinkedIn", href: CONTACT.linkedin },
+  { label: "Résumé (PDF)", href: CONTACT.resume },
+];
+
+const linkClass = "text-dim transition-colors duration-300 hover:text-ink";
+
 export default function Footer() {
-  const footerRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const magnetRef = useRef<HTMLAnchorElement>(null);
-  const copyRef = useRef<HTMLButtonElement>(null);
-  const [time, setTime] = useState("--:--:--");
+  const [time, setTime] = useState("--:--");
 
   useEffect(() => {
     const fmt = new Intl.DateTimeFormat("en-US", {
       hour: "2-digit",
       minute: "2-digit",
-      second: "2-digit",
       hour12: false,
       timeZone: "America/New_York",
     });
     const update = () => setTime(fmt.format(new Date()));
     update();
-    const id = setInterval(update, 1000);
-    return () => clearInterval(id);
+    const id = window.setInterval(update, 15000);
+    return () => window.clearInterval(id);
   }, []);
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const footer = footerRef.current;
-    const title = titleRef.current;
-    if (!footer || !title) return;
-    if (prefersReducedMotion()) return;
-
-    let detachRepel: (() => void) | undefined;
-
-    const ctx = gsap.context(() => {
-      const lines = title.querySelectorAll<HTMLElement>("[data-line]");
-      const chars: HTMLElement[] = [];
-      lines.forEach((line) => chars.push(...splitChars(line)));
-      gsap.set(chars, { yPercent: 130 });
-      gsap.to(chars, {
-        yPercent: 0,
-        duration: 1.15,
-        ease: "expo.out",
-        stagger: 0.03,
-        scrollTrigger: { trigger: title, start: "top 88%" },
-        onComplete: () => {
-          detachRepel = attachRepel(chars, { radius: 160, strength: 38 });
-        },
-      });
-    }, footer);
-
-    return () => {
-      detachRepel?.();
-      ctx.revert();
-    };
-  }, []);
-
-  /* magnetic email button */
-  useEffect(() => {
-    const magnet = magnetRef.current;
-    if (!magnet) return;
-    if (prefersReducedMotion()) return;
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-
-    const xTo = gsap.quickTo(magnet, "x", { duration: 0.4, ease: "power3.out" });
-    const yTo = gsap.quickTo(magnet, "y", { duration: 0.4, ease: "power3.out" });
-    const onMove = (e: MouseEvent) => {
-      const rect = magnet.getBoundingClientRect();
-      const dx = e.clientX - (rect.left + rect.width / 2);
-      const dy = e.clientY - (rect.top + rect.height / 2);
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 180) {
-        xTo(dx * 0.28);
-        yTo(dy * 0.28);
-      } else {
-        xTo(0);
-        yTo(0);
-      }
-    };
-    window.addEventListener("mousemove", onMove, { passive: true });
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
-
-  const copyEmail = async () => {
-    const button = copyRef.current;
-    try {
-      await navigator.clipboard.writeText(CONTACT.email);
-      if (button) scrambleTo(button, "COPIED ✓", 450);
-      setTimeout(() => {
-        if (copyRef.current) scrambleTo(copyRef.current, "COPY", 350);
-      }, 1800);
-    } catch {
-      if (button) button.textContent = CONTACT.email;
-    }
+  const onSection = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    scrollToHash(href);
   };
 
   return (
-    <footer id="contact" ref={footerRef} className="hairline-t relative overflow-hidden">
-      <div className="aurora aurora--footer" aria-hidden="true" />
-      <div className="gutter relative pb-12 pt-[var(--section)]">
-        <p className="font-mono-ui text-dim mb-10">
-          <span className="text-accent">(08)</span> — Contact / Transmission open
-        </p>
-
-        <h2
-          ref={titleRef}
-          aria-label="Let's make signal."
-          className="leading-[0.9] tracking-[-0.03em]"
-          style={{ fontSize: "var(--text-hero)" }}
-        >
-          <span data-line className="block font-sans font-medium uppercase">
-            Let&apos;s make
-          </span>
-          <span data-line className="block font-display italic lowercase text-accent">
-            signal.
-          </span>
-        </h2>
-
-        <div className="mt-14 flex flex-col gap-10 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
-            <a
-              ref={magnetRef}
-              href={`mailto:${CONTACT.email}`}
-              data-cursor="hover"
-              className="inline-flex w-fit items-center gap-4 border border-[var(--line)] px-7 py-4 font-mono-ui transition-colors duration-300 hover:border-[var(--accent)] hover:text-accent"
-            >
-              <span className="status-dot" aria-hidden="true" />
-              {CONTACT.email}
-            </a>
-            <button
-              ref={copyRef}
-              onClick={copyEmail}
-              data-cursor="hover"
-              aria-label="Copy email address to clipboard"
-              className="border border-[var(--line)] px-4 py-4 font-mono-ui transition-colors duration-300 hover:border-[var(--accent)] hover:text-accent"
-            >
-              COPY
-            </button>
-          </div>
-
-          <ul className="flex flex-wrap items-center gap-7">
-            {LINKS.map((link) => (
-              <li key={link.label}>
-                <a
-                  href={link.href}
-                  target={link.href.startsWith("http") || link.href.endsWith(".pdf") ? "_blank" : undefined}
-                  rel="noopener noreferrer"
-                  className="font-mono-ui u-sweep"
-                  data-cursor="hover"
-                >
+    <footer className="gutter bg-sheet pb-10 pt-20" data-nav="light">
+      <div className="grid gap-12 border-t border-line pt-12 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+        <div>
+          <a href="#top" onClick={(e) => onSection(e, "#top")} className="flex items-center gap-2.5 text-lg">
+            <Mark />
+            ashutosh joshi
+          </a>
+          <p className="mt-4 max-w-xs text-dim">
+            {PROFILE.role}. LLM inference, GPU systems and production ML.
+          </p>
+        </div>
+        <nav aria-label="Footer">
+          <p className="eyebrow mb-4">Sections</p>
+          <ul className="space-y-2.5">
+            {SECTIONS.map((link) => (
+              <li key={link.href}>
+                <a href={link.href} onClick={(e) => onSection(e, link.href)} className={linkClass}>
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <div>
+          <p className="eyebrow mb-4">Elsewhere</p>
+          <ul className="space-y-2.5">
+            {ELSEWHERE.map((link) => (
+              <li key={link.href}>
+                <a href={link.href} target="_blank" rel="noopener noreferrer" className={linkClass}>
                   {link.label}
                 </a>
               </li>
             ))}
           </ul>
         </div>
+        <div>
+          <p className="eyebrow mb-4">Contact</p>
+          <ul className="space-y-2.5">
+            <li>
+              <a href={`mailto:${CONTACT.email}`} className={`${linkClass} break-all`}>
+                {CONTACT.email}
+              </a>
+            </li>
+            <li>
+              <a href={`tel:${CONTACT.phone.replace(/\s/g, "")}`} className={linkClass}>
+                {CONTACT.phone}
+              </a>
+            </li>
+            <li className="text-dim">
+              {CONTACT.location} · <span className="tabular-nums">{time}</span> ET
+            </li>
+          </ul>
+        </div>
       </div>
-
-      <div className="gutter hairline-t flex flex-wrap items-center justify-between gap-3 py-5">
-        <span className="font-mono-ui text-dim">© 2026 Ashutosh Joshi</span>
-        <span className="font-mono-ui text-dim hidden sm:inline">
-          {CONTACT.location} — {CONTACT.coords}
-        </span>
-        <span className="font-mono-ui text-dim tabular-nums">{time} EST</span>
-        <span className="font-mono-ui text-dim">Signal from noise</span>
+      <div className="mt-16 flex flex-wrap justify-between gap-4 text-sm text-faint">
+        <span>© 2026 {PROFILE.name}</span>
+        <span>Built with Next.js, GSAP and Lenis. No templates.</span>
       </div>
     </footer>
   );

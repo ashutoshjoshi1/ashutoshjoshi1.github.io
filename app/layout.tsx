@@ -1,56 +1,61 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { PROJECTS, CONTACT } from "./lib/data";
+import { PROJECTS, CONTACT, EDUCATION } from "./lib/data";
 import "./globals.css";
 
-const displayFont = localFont({
-  src: [
-    { path: "../public/fonts/InstrumentSerif-Regular.woff2", weight: "400", style: "normal" },
-    { path: "../public/fonts/InstrumentSerif-Italic.woff2", weight: "400", style: "italic" },
-  ],
-  variable: "--font-display",
+/* Hanken Grotesk (OFL) stands in for scale.com's commercial Aeonik Pro —
+   same width and color at regular weight. With an Aeonik web licence,
+   swap the file here and nothing else needs to change. */
+const sansFont = localFont({
+  src: "../public/fonts/HankenGrotesk-Variable.woff2",
+  variable: "--font-sans",
+  weight: "100 900",
   display: "swap",
 });
 
-const sansFont = localFont({
-  src: "../public/fonts/SpaceGrotesk-Variable.woff2",
-  variable: "--font-sans",
-  weight: "300 700",
+const monoFont = localFont({
+  src: [
+    { path: "../public/fonts/DMMono-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../public/fonts/DMMono-Medium.woff2", weight: "500", style: "normal" },
+  ],
+  variable: "--font-mono",
   display: "swap",
 });
 
 const SITE_URL = "https://ashutoshjoshi1.github.io";
+const DESCRIPTION =
+  "Ashutosh Joshi is a software engineer for AI/ML systems at SciGlob (NASA). He architected a production LLM inference platform on vLLM (+87% throughput per GPU, −60% serving cost) and builds machine learning for 300+ NASA Pandora instruments. Based in Baltimore, MD.";
+const SHORT_DESCRIPTION =
+  "Software engineer, AI/ML systems. LLM inference on vLLM (+87% throughput per GPU, −60% serving cost), GPU orchestration in Go and Kubernetes, and production ML for NASA.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Ashutosh Joshi — AI/ML Engineer | Signal from Noise",
-  description:
-    "Ashutosh Joshi is an AI/ML systems engineer building the data backbone of NASA's Pandora atmospheric network — plus LLM agents, RAG platforms and neural systems. His portfolio trains a neural network live in your browser. Based in Columbia, MD.",
+  title: "Ashutosh Joshi — LLM Inference & AI/ML Systems Engineer",
+  description: DESCRIPTION,
   keywords: [
     "Ashutosh Joshi",
-    "AI/ML Engineer",
+    "AI/ML Systems Engineer",
+    "LLM Inference Engineer",
     "Machine Learning Engineer",
-    "AI Engineer",
     "Software Engineer",
+    "vLLM",
+    "SGLang",
+    "TensorRT-LLM",
+    "LLM serving",
+    "GPU",
+    "CUDA",
+    "Kubernetes",
+    "Go",
+    "Quantization",
+    "Speculative decoding",
     "NASA",
-    "Pandora spectrometer",
     "SciGlob",
-    "Machine Learning",
-    "Neural Networks",
-    "LLM",
-    "LLM Agents",
-    "RAG",
-    "Multi-Agent Systems",
-    "MLOps",
+    "Pandora spectrometer",
     "PyTorch",
+    "RAG",
     "C++",
     "Python",
-    "TypeScript",
-    "React",
-    "Next.js",
-    "FastAPI",
-    "Portfolio",
-    "Columbia MD",
+    "Baltimore MD",
   ],
   alternates: { canonical: "/" },
   category: "technology",
@@ -78,28 +83,26 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Ashutosh Joshi — Signal from Noise",
-    description:
-      "AI/ML systems engineer for NASA's Pandora atmospheric network. LLM agents, RAG platforms, neural systems — one trains live on this page.",
-    url: "https://ashutoshjoshi1.github.io",
-    siteName: "Ashutosh Joshi Portfolio",
+    title: "Ashutosh Joshi — LLM Inference & AI/ML Systems",
+    description: SHORT_DESCRIPTION,
+    url: SITE_URL,
+    siteName: "Ashutosh Joshi",
     locale: "en_US",
     type: "website",
     images: [
-      { url: "/images/og-aj.png", width: 1200, height: 630, alt: "Ashutosh Joshi portfolio preview" },
+      { url: "/images/og-aj.png", width: 1200, height: 630, alt: "Ashutosh Joshi — LLM inference and AI/ML systems" },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ashutosh Joshi — Signal from Noise",
-    description:
-      "AI/ML systems engineer for NASA's Pandora atmospheric network. LLM agents, RAG platforms, neural systems — one trains live on this page.",
+    title: "Ashutosh Joshi — LLM Inference & AI/ML Systems",
+    description: SHORT_DESCRIPTION,
     images: ["/images/og-aj.png"],
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#06070b",
+  themeColor: "#000000",
   initialScale: 1,
   width: "device-width",
 };
@@ -114,7 +117,7 @@ const JSON_LD = {
       name: "Ashutosh Joshi",
       url: SITE_URL,
       email: `mailto:${CONTACT.email}`,
-      jobTitle: "AI/ML Software Engineer",
+      jobTitle: "Software Engineer — AI/ML Systems",
       worksFor: {
         "@type": "Organization",
         name: "SciGlob Instruments & Services",
@@ -122,38 +125,37 @@ const JSON_LD = {
       },
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Columbia",
+        addressLocality: "Baltimore",
         addressRegion: "MD",
         addressCountry: "US",
       },
       sameAs: [CONTACT.github, CONTACT.linkedin],
       knowsAbout: [
-        "Software Engineering",
-        "Artificial Intelligence",
+        "LLM Inference",
+        "vLLM",
+        "SGLang",
+        "TensorRT-LLM",
+        "GPU Systems",
+        "CUDA",
+        "Kubernetes",
+        "Quantization",
+        "Speculative Decoding",
         "Machine Learning",
-        "Neural Networks",
-        "LLM Systems",
-        "Multi-Agent Systems",
+        "Computer Vision",
         "Retrieval-Augmented Generation",
-        "MLOps",
-        "C++",
         "Python",
+        "C++",
+        "Go",
         "TypeScript",
-        "Distributed Systems",
-        "Atmospheric Instrumentation",
       ],
-      alumniOf: {
-        "@type": "CollegeOrUniversity",
-        name: "University of Maryland, Baltimore County",
-      },
+      alumniOf: EDUCATION.map((degree) => ({ "@type": "CollegeOrUniversity", name: degree.school })),
     },
     {
       "@type": "WebSite",
       "@id": `${SITE_URL}/#website`,
       url: SITE_URL,
-      name: "Ashutosh Joshi — Signal from Noise",
-      description:
-        "Portfolio of Ashutosh Joshi: software engineer for NASA's Pandora atmospheric network and builder of AI systems, agents and products.",
+      name: "Ashutosh Joshi",
+      description: SHORT_DESCRIPTION,
       author: { "@id": `${SITE_URL}/#person` },
       inLanguage: "en-US",
     },
@@ -185,7 +187,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="overscroll-y-none">
-      <body className={`${displayFont.variable} ${sansFont.variable} antialiased`}>
+      <body className={`${sansFont.variable} ${monoFont.variable} antialiased`}>
         {children}
         <script
           type="application/ld+json"

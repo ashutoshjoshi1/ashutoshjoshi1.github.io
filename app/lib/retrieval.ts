@@ -1,4 +1,15 @@
-import { PROJECTS, MISSIONS, STACK, CONTACT, MANIFESTO } from "./data";
+import {
+  PROJECTS,
+  EXPERIENCE,
+  EDUCATION,
+  SKILLS,
+  CHAPTERS,
+  FLEET,
+  IMPACT_STATEMENT,
+  IMPACT_METRICS,
+  CONTACT,
+  MANIFESTO,
+} from "./data";
 
 /*
  * RETRIEVAL — the console's brain. TF-IDF vectors + cosine similarity over
@@ -36,21 +47,88 @@ const projectDocs: Doc[] = PROJECTS.map((p) => ({
   link: p.link,
 }));
 
-const missionDocs: Doc[] = MISSIONS.map((m, i) => ({
-  id: `mission-${i}`,
-  tag: `LOG · ${m.company}`,
-  text: `${m.company} ${m.detail ?? ""} ${m.role} ${m.location} ${m.period} ${m.description} experience work job career`,
-  answer: `${m.role} @ ${m.company}${m.detail ? ` (${m.detail})` : ""}, ${m.location}, ${m.period}. ${m.description}`,
-  link: "#log",
+const experienceDocs: Doc[] = EXPERIENCE.map((r, i) => ({
+  id: `experience-${i}`,
+  tag: `Experience · ${r.company}`,
+  text: `${r.company} ${r.org ?? ""} ${r.role} ${r.location} ${r.period} ${r.summary} ${r.highlights.join(" ")} experience work job career`,
+  answer: `${r.role} at ${r.company}${r.org ? ` (${r.org})` : ""}, ${r.location}, ${r.period}. ${r.summary} ${r.highlights.join(" ")}`,
+  link: "#experience",
+}));
+
+const chapterDocs: Doc[] = CHAPTERS.map((c, i) => ({
+  id: `serving-${i}`,
+  tag: `Serving · ${c.eyebrow}`,
+  text: `${c.eyebrow} ${c.title} ${c.body} ${c.metric ?? ""} llm inference serving platform production`,
+  answer: `${c.title} ${c.body}${c.metric ? ` (${c.metric})` : ""}`,
+  link: "#serving",
+}));
+
+const fleetDocs: Doc[] = FLEET.map((f, i) => ({
+  id: `fleet-${i}`,
+  tag: `NASA · ${f.title}`,
+  text: `${f.title} ${f.statement} ${f.label} nasa pandora instruments spectrometers`,
+  answer: `${f.title}: ${f.statement}`,
+  link: "#systems",
 }));
 
 const FACT_DOCS: Doc[] = [
   {
     id: "fact-mission",
-    tag: "00 · Mission",
+    tag: "About",
     text: `mission manifesto about who is ashutosh ashu summary bio introduction ${MANIFESTO}`,
     answer: MANIFESTO,
     link: "#top",
+  },
+  {
+    id: "fact-impact",
+    tag: "Impact",
+    text: `impact results metrics numbers achievements savings throughput cost latency ttft idle gpu hours ${IMPACT_STATEMENT}`,
+    answer: `${IMPACT_STATEMENT} In numbers: ${IMPACT_METRICS.map((m) => `${m.sign}${m.value}% ${m.label.toLowerCase()}`).join(", ")}.`,
+    link: "#impact",
+  },
+  {
+    id: "fact-inference",
+    tag: "LLM inference",
+    text:
+      "llm inference serving vllm sglang tensorrt-llm triton kv cache pagedattention continuous batching prefix caching chunked prefill quantization fp8 int8 awq gptq speculative decoding moe serving throughput latency rag agents",
+    answer:
+      "LLM inference is the core of the day job: a production vLLM platform for RAG and agentic workflows, tuned with continuous batching, chunked prefill and prefix caching (+87% throughput per GPU, −20% P99 TTFT), plus FP8/INT8 and AWQ quantization and speculative decoding (−60% serving cost). Also fluent in SGLang, TensorRT-LLM, Triton, PagedAttention and MoE serving.",
+    link: "#serving",
+  },
+  {
+    id: "fact-runtimes",
+    tag: "Runtime bake-off",
+    text: "vllm versus sglang versus tensorrt-llm compare comparison evaluated runtime choice which engine benchmark head to head",
+    answer:
+      "vLLM, SGLang and TensorRT-LLM were evaluated head to head on throughput, tail latency and quantization support, and the production runtime was recommended from workload-specific benchmarks rather than reputation.",
+    link: "#serving",
+  },
+  {
+    id: "fact-gpu",
+    tag: "GPU systems",
+    text:
+      "gpu gpus cuda distributed multi-gpu tensor parallelism pipeline parallelism nccl disaggregated prefill decode kv-cache offload rdma gpudirect nvlink infiniband mig",
+    answer:
+      "Distributed GPU serving: large models across multi-GPU nodes with tensor and pipeline parallelism over NCCL, MIG partitions for smaller models, and working knowledge of disaggregated prefill/decode, KV-cache offload, RDMA, GPUDirect and NVLink/InfiniBand. Idle GPU hours came down 40%.",
+    link: "#serving",
+  },
+  {
+    id: "fact-k8s",
+    tag: "Kubernetes",
+    text:
+      "kubernetes k8s go golang controllers crds operators helm gpu scheduling mig multi-tenant isolation cache-aware routing autoscaling slo orchestration model lifecycle",
+    answer:
+      "Kubernetes for GPUs: Go controllers and CRDs for model lifecycle management, GPU-aware scheduling and autoscaling of vLLM workloads, shipped with Helm, plus MIG partitioning, multi-tenant isolation, cache-aware routing and SLO-driven autoscaling.",
+    link: "#serving",
+  },
+  {
+    id: "fact-profiling",
+    tag: "Performance",
+    text:
+      "performance profiling benchmark benchmarking harness ttft itl tpot p95 p99 tail latency mfu mbu nsight systems compute pytorch profiler root cause regression incidents",
+    answer:
+      "A benchmarking harness tracks TTFT, ITL, P95/P99 latency and MFU/MBU, and every model or config change has to pass it. Latency regressions across multi-tier RAG and agent pipelines get root-caused end to end with Nsight Systems/Compute and PyTorch Profiler.",
+    link: "#serving",
   },
   {
     id: "fact-ai",
@@ -58,24 +136,24 @@ const FACT_DOCS: Doc[] = [
     text:
       "ai ml machine learning artificial intelligence llm large language models rag retrieval augmented generation embeddings vector search pgvector agents multi-agent orchestration evals evaluation prompt engineering generative ai agent security guardrails safety experience",
     answer:
-      "AI/ML runs through most of the work: a runtime security control plane for AI agents (Phulax), an enterprise RAG platform with evaluation datasets (CommonGround), a self-learning agentic framework with vector memory and calibration audits (InCortex), an eight-agent AI software company in a 3D office (Office.ai), a six-agent sports prediction system (MoneyBall), an LLM trading engine with a deterministic core and ~93% test coverage (Claude TopstepX), and a generative video pipeline (ReBirth). Day job: deep-learning anomaly detection and CNN cloud detection running on 300+ NASA Pandora instruments. Plus this page — the lab section above trains a neural net in your browser, and this console is TF-IDF retrieval.",
+      "Beyond serving, AI runs through the side projects: a runtime security control plane for AI agents (Phulax), an enterprise RAG platform with evaluation datasets (CommonGround), a self-learning agentic framework (InCortex), an eight-agent AI software company in a 3D office (Office.ai), a six-agent sports prediction system (MoneyBall) and an LLM trading engine with a deterministic core (Claude TopstepX). At work: deep-learning anomaly detection and CNN cloud detection on 300+ NASA Pandora instruments.",
     link: "#work",
   },
   {
     id: "fact-nasa",
-    tag: "LOG · NASA",
+    tag: "NASA",
     text:
-      "nasa gsfc goddard pandora spectrometer atmosphere atmospheric science instruments satellite ground network sciglob space physical world sensors",
+      "nasa gsfc goddard pandora pandonia spectrometer atmosphere atmospheric science instruments ground network sciglob space physical world sensors esa trace gas",
     answer:
-      "Day job: building the ML and data backbone of NASA's Pandora atmospheric network at SciGlob — 300+ spectrometers on five continents running deep-learning anomaly detection on live streams, an encoder–decoder CNN gating sun-scans on real-time sky conditions, fleet health scoring at the edge, and a ground-up C++17 rewrite of the Blick spectral processing suite.",
-    link: "#log",
+      "At SciGlob, for NASA: ML and data systems for the Pandora network of 300+ spectrometers on five continents. Deep-learning anomaly detection, an encoder–decoder CNN for real-time cloud detection, a full-stack instrument-health platform, edge-to-cloud pipelines delivering auditable trace-gas datasets to NASA and ESA researchers, and a ground-up C++17 rewrite of the Blick spectral processing suite.",
+    link: "#systems",
   },
   {
     id: "fact-cpp",
-    tag: "C++",
-    text: "c++ cpp c++17 systems programming native performance opengl imgui cmake cuda low level graphics",
+    tag: "C++ / CUDA",
+    text: "c++ cpp c++17 cuda systems programming native performance opengl imgui cmake low level graphics",
     answer:
-      "C++ work: BlickO-CPP, a ground-up C++17 rewrite of NASA's Blick spectral processing suite (14 modular libraries, parity test harness, GPU-ready), and IMU-3D, a native desktop app streaming live sensor data into a real-time OpenGL scene.",
+      "C++ work: leading the ground-up C++17 rewrite of the Blick spectral processing suite (L0→L2: 14 modular libraries, a parity harness against legacy output, a CUDA-ready GPU acceleration layer), and IMU-3D, a native desktop app streaming live sensor data into a real-time OpenGL scene.",
     link: "#work",
   },
   {
@@ -91,16 +169,15 @@ const FACT_DOCS: Doc[] = [
     tag: "Frontend",
     text: "frontend react next.js nextjs typescript react native expo web ui ux design gsap animation mobile app",
     answer:
-      "Frontend: React/Next.js and React Native (RETRVE ships as an Expo app). This site is a Next.js static export with GSAP, a custom zero-dependency 3D wireframe engine, and a hand-rolled neural net — no template.",
-    link: "#stack",
+      "Frontend: React/Next.js and React Native (RETRVE ships as an Expo app), and the full-stack instrument-health app for NASA is FastAPI plus Next.js and TypeScript. This site is a Next.js static export animated with GSAP and Lenis, with no template.",
+    link: "#skills",
   },
   {
     id: "fact-education",
     tag: "Education",
-    text: "education degree university masters graduate school umbc maryland study studied college data science gpa",
-    answer:
-      "Graduate school: M.P.S. in Data Science (Machine Learning concentration) at UMBC, GPA 3.89 — where he also taught and graded as a Graduate Student Assistant. Before that: Systems Engineer at Tata Consultancy Services in Bangalore.",
-    link: "#log",
+    text: "education degree university masters bachelors graduate school umbc maryland medi-caps study studied college data science computer science",
+    answer: `Education: ${EDUCATION.map((e) => `${e.degree}, ${e.school}`).join("; ")}.`,
+    link: "#experience",
   },
   {
     id: "fact-ds",
@@ -108,7 +185,7 @@ const FACT_DOCS: Doc[] = [
     text:
       "data science data engineering analytics etl elt pipelines pyspark pandas numpy scikit-learn tensorflow pytorch snowflake tableau power bi dashboards anomaly detection time series computer vision cnn model training evaluation precision recall roc auc",
     answer:
-      "Data science end to end: deep learning (CNNs, encoder–decoder), computer vision and time-series anomaly detection in production at NASA scale; PyTorch, TensorFlow, scikit-learn, PySpark for training and pipelines; ETL over Snowflake/PostgreSQL with Tableau and Power BI on top. Model evaluation is a habit, not an afterthought — precision/recall/F1, ROC-AUC, calibration.",
+      "Data science end to end: deep learning (CNNs, encoder–decoder), computer vision and time-series anomaly detection in production at NASA scale; PyTorch, TensorFlow, scikit-learn and PySpark for training and pipelines; ETL over Snowflake and PostgreSQL with Tableau and Power BI on top (−25% operating cost at 407 Associates, −30% data defects at TCS).",
     link: "#systems",
   },
   {
@@ -117,31 +194,31 @@ const FACT_DOCS: Doc[] = [
     text:
       "why hire should we hire strengths good fit value candidate interview opportunity recruiter team what makes different unique",
     answer:
-      "The rare overlap: production ML systems (RAG, agents, evals) AND hard systems engineering (C++17 for NASA instruments) AND full product velocity (design to deploy — you're looking at it). Six years shipping, five continents of instruments in production, and a bias for deterministic, testable AI.",
+      "The overlap that's hard to find: LLM inference performance (vLLM tuning, quantization, speculative decoding, multi-GPU serving), the platform around it (Go Kubernetes controllers, benchmark gates, profiling), and production ML on a real NASA instrument network. Results, not adjectives: +87% throughput per GPU, −60% serving cost, −40% idle GPU hours.",
     link: "#contact",
   },
   {
     id: "fact-site",
     tag: "This site",
     text:
-      "site website portfolio built how this page console terminal lab neural network playground backprop tf-idf tfidf retrieval how does this work",
+      "site website portfolio built how this page console terminal lab neural network playground backprop tf-idf tfidf retrieval simulation hero animation how does this work",
     answer:
-      "This site is a Next.js static export: GSAP + Lenis motion, a custom 3D wireframe engine, a 2-8-8-1 MLP with hand-written backprop training live in the lab section, and this console — TF-IDF + cosine retrieval over the site's own corpus. Zero AI API calls; everything runs in your browser.",
+      "This site is a Next.js static export animated with GSAP and Lenis. The hero is a simulated continuous-batching LLM server (prefill, decode and prefix-cache hits, one forward pass at a time), the serving story plays out on CSS 3D panels, the lab trains a 2-8-8-1 MLP with hand-written backprop, and this console is TF-IDF + cosine retrieval over the site's own text. No AI API calls; everything runs in your browser.",
     link: "#lab",
   },
   {
     id: "fact-location",
     tag: "Location",
     text: "location where based city live remote columbia maryland dc washington baltimore timezone",
-    answer: `Based in ${CONTACT.location} (${CONTACT.coords}) — the DC/Baltimore corridor, US Eastern time. Currently: open to opportunities.`,
+    answer: `Based in ${CONTACT.location}, in the DC/Baltimore corridor on US Eastern time, and open to new opportunities.`,
     link: "#contact",
   },
   {
     id: "fact-stack",
-    tag: "Stack",
-    text: `stack skills tools technologies capabilities ${STACK.map((g) => `${g.label} ${g.items.join(" ")}`).join(" ")}`,
-    answer: STACK.map((g) => `${g.label}: ${g.items.join(", ")}`).join(" // "),
-    link: "#stack",
+    tag: "Skills",
+    text: `stack skills tools technologies capabilities ${SKILLS.map((g) => `${g.label} ${g.items.join(" ")}`).join(" ")}`,
+    answer: SKILLS.map((g) => `${g.label}: ${g.items.join(", ")}`).join(" // "),
+    link: "#skills",
   },
   {
     id: "fact-contact",
@@ -152,7 +229,7 @@ const FACT_DOCS: Doc[] = [
   },
 ];
 
-export const CORPUS: Doc[] = [...projectDocs, ...missionDocs, ...FACT_DOCS];
+export const CORPUS: Doc[] = [...projectDocs, ...experienceDocs, ...chapterDocs, ...fleetDocs, ...FACT_DOCS];
 
 /* ---------------------------------------------------------- tokenizer */
 
@@ -182,6 +259,21 @@ const SYNONYMS: Record<string, string[]> = {
   backend: ["api", "server", "pipelines"],
   school: ["education", "university"],
   degree: ["education", "university"],
+  inference: ["serving", "llm", "vllm"],
+  serving: ["inference", "vllm"],
+  vllm: ["inference", "serving"],
+  sglang: ["vllm", "runtime"],
+  tensorrt: ["tensorrt-llm"],
+  gpu: ["gpus", "cuda", "nccl"],
+  gpus: ["gpu", "cuda"],
+  k8s: ["kubernetes"],
+  kubernetes: ["k8s", "controllers", "crds"],
+  golang: ["go", "controllers"],
+  quantization: ["fp8", "int8", "awq"],
+  latency: ["ttft", "p99", "itl"],
+  ttft: ["latency", "p99"],
+  cost: ["serving", "quantization"],
+  profiling: ["nsight", "profiler", "benchmark"],
 };
 
 export function tokenize(text: string): string[] {
@@ -264,7 +356,7 @@ export function search(query: string, topK = 3): { doc: Doc; score: number }[] {
 /* ------------------------------------------------------------ intents */
 
 const HELP_TEXT =
-  "Ask anything about the work — e.g. \"experience with RAG?\", \"c++ or python?\", \"tell me about the NASA work\", \"why hire ashu?\". Commands: projects · stack · contact · resume · clear. Answers are retrieved from indexed docs, never generated.";
+  "Ask anything about the work, e.g. \"LLM inference experience?\", \"vLLM vs SGLang?\", \"tell me about the NASA work\", \"why hire ashu?\". Commands: projects · stack · contact · resume · clear. Answers are retrieved from indexed docs, never generated.";
 
 function intentAnswer(query: string): AskResult | null {
   const q = query.trim().toLowerCase();
@@ -316,7 +408,7 @@ export function ask(query: string): AskResult {
   if (hits.length === 0) {
     return {
       answer:
-        "No strong match in the corpus — and this console refuses to make things up. Try `help`, or ask about rag, agents, c++, nasa, python, or hiring.",
+        "No strong match in the corpus, and this console refuses to make things up. Try `help`, or ask about inference, gpus, kubernetes, nasa, rag, c++ or hiring.",
       sources: [],
       score: 0,
       ms,

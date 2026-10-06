@@ -8,8 +8,6 @@ export interface Project {
   link: string;
   /* seed that shapes this project's generative waveform signature */
   seed: number;
-  /* spectral band — the domain's color on the spectrum (CSS variable) */
-  band: string;
 }
 
 export const PROJECTS: Project[] = [
@@ -23,7 +21,6 @@ export const PROJECTS: Project[] = [
     stack: ["Python", "PostgreSQL", "Redis", "Docker"],
     link: "https://github.com/phulax-io/phulax",
     seed: 97,
-    band: "var(--volt)",
   },
   {
     index: "02",
@@ -35,7 +32,6 @@ export const PROJECTS: Project[] = [
     stack: ["FastAPI", "Next.js", "pgvector", "Redis", "Docker"],
     link: "https://github.com/ashutoshjoshi1/CommonGround",
     seed: 7,
-    band: "var(--cyan)",
   },
   {
     index: "03",
@@ -47,7 +43,6 @@ export const PROJECTS: Project[] = [
     stack: ["Python", "Vector Memory", "REST", "pytest"],
     link: "https://github.com/ashutoshjoshi1/InCortex",
     seed: 23,
-    band: "var(--uv)",
   },
   {
     index: "04",
@@ -59,7 +54,6 @@ export const PROJECTS: Project[] = [
     stack: ["Next.js", "React Three Fiber", "FastAPI", "Supabase", "Stripe"],
     link: "https://github.com/ashutoshjoshi1/Office.ai",
     seed: 59,
-    band: "var(--green)",
   },
   {
     index: "05",
@@ -71,7 +65,6 @@ export const PROJECTS: Project[] = [
     stack: ["Python", "pyserial", "YAML", "OpenCV"],
     link: "https://github.com/ashutoshjoshi1/SciGlob-Library",
     seed: 37,
-    band: "var(--amber)",
   },
   {
     index: "06",
@@ -83,7 +76,6 @@ export const PROJECTS: Project[] = [
     stack: ["C++17", "CMake", "CUDA-ready", "CI"],
     link: "https://github.com/ashutoshjoshi1/BlickO-CPP",
     seed: 31,
-    band: "var(--amber)",
   },
   {
     index: "07",
@@ -95,7 +87,6 @@ export const PROJECTS: Project[] = [
     stack: ["Python", "GCS", "Flask", "Pydantic"],
     link: "https://github.com/ashutoshjoshi1/Pandora-Summarizer",
     seed: 13,
-    band: "var(--blue)",
   },
   {
     index: "08",
@@ -107,7 +98,6 @@ export const PROJECTS: Project[] = [
     stack: ["FastAPI", "Next.js", "PostgreSQL", "Zep", "OpenAI"],
     link: "https://github.com/ashutoshjoshi1/MoneyBall",
     seed: 53,
-    band: "var(--uv)",
   },
   {
     index: "09",
@@ -119,7 +109,6 @@ export const PROJECTS: Project[] = [
     stack: ["Next.js", "FastAPI", "Celery", "Redis", "Docker"],
     link: "https://github.com/ashutoshjoshi1/ReBirth",
     seed: 19,
-    band: "var(--green)",
   },
   {
     index: "10",
@@ -131,7 +120,6 @@ export const PROJECTS: Project[] = [
     stack: ["Python", "Anthropic API", "pytest"],
     link: "https://github.com/ashutoshjoshi1/Claude-TopstepX",
     seed: 41,
-    band: "var(--volt)",
   },
   {
     index: "11",
@@ -143,7 +131,6 @@ export const PROJECTS: Project[] = [
     stack: ["Expo", "React Native", "Supabase", "pgvector"],
     link: "https://github.com/ashutoshjoshi1/RETRVE",
     seed: 67,
-    band: "var(--blue)",
   },
   {
     index: "12",
@@ -155,161 +142,285 @@ export const PROJECTS: Project[] = [
     stack: ["C++17", "OpenGL", "Dear ImGui", "GLFW"],
     link: "https://github.com/ashutoshjoshi1/IMU-3D-model-SW",
     seed: 89,
-    band: "var(--amber)",
   },
 ];
 
-/* Production ML systems built and operated at SciGlob / NASA GSFC —
-   the professional counterpart to the personal projects above. */
-export interface MLSystem {
-  tag: string;
+export const PROFILE = {
+  name: "Ashutosh Joshi",
+  role: "Software Engineer — AI/ML Systems",
+  org: "NASA via SciGlob Instruments",
+  headline: ["I build the systems that make", "AI fast, affordable and reliable."],
+};
+
+export const MANIFESTO =
+  "I build the systems that make AI fast, affordable and reliable: LLM inference platforms tuned down to the GPU, the Kubernetes controllers that schedule them, and machine learning running across 300+ NASA instruments on five continents.";
+
+/* The production LLM serving work, told as the chapters of the pinned
+   "stack" section. Each chapter drives one arrangement of the 3D panels. */
+export interface Chapter {
+  eyebrow: string;
   title: string;
-  detail: string;
-  metric: string;
-  band: string;
-  seed: number;
+  body: string;
+  metric?: string;
 }
 
-export const ML_SYSTEMS: MLSystem[] = [
+export const CHAPTERS: Chapter[] = [
   {
-    tag: "Deep Learning",
-    title: "Fleet anomaly detection",
-    detail:
-      "Deep-learning models watch live streams from every instrument in the network, flagging sensor and data irregularities the moment they appear — hours of daily manual monitoring, eliminated.",
-    metric: "300+ instruments · live",
-    band: "var(--cyan)",
-    seed: 11,
+    eyebrow: "LLM inference",
+    title: "Speed is a systems problem.",
+    body: "Most of what an AI product costs, and most of its latency, lives below the model: batching, memory, parallelism and scheduling. That is where I work, from the request router down to the GPU, measured end to end.",
   },
   {
-    tag: "Computer Vision",
-    title: "CNN cloud detection",
-    detail:
-      "An encoder–decoder CNN reads the sky in real time and gates sun-scan measurements on actual conditions — raising scan quality across the whole network.",
-    metric: "in the live scan loop",
-    band: "var(--blue)",
-    seed: 29,
+    eyebrow: "Serving",
+    title: "Inference that pays for itself.",
+    body: "I architected a production LLM inference platform on vLLM that powers RAG and agentic workflows, with continuous batching, chunked prefill and prefix caching tuned per workload.",
+    metric: "+87% throughput per GPU · −20% P99 TTFT",
   },
   {
-    tag: "Edge → Cloud",
-    title: "Fleet health scoring",
-    detail:
-      "Raw L0 instrument streams parsed at the edge, health scored 0–100 per instrument, daily summaries shipped to cloud dashboards.",
-    metric: "0–100, every day",
-    band: "var(--green)",
-    seed: 47,
+    eyebrow: "Orchestration",
+    title: "Kubernetes that understands GPUs.",
+    body: "Go controllers and CRDs own the model lifecycle: GPU-aware scheduling, MIG partitions for smaller models, tensor and pipeline parallelism over NCCL for large ones, cache-aware routing and SLO-driven autoscaling.",
+    metric: "−40% idle GPU hours",
   },
   {
-    tag: "ML Reliability",
-    title: "Evals, guardrails, observability",
-    detail:
-      "Evaluation and monitoring for production ML — a fleet-wide observability dashboard that accelerates triage across five continents, plus per-scan traceable logging that makes every data product auditable end to end.",
-    metric: "5 continents",
-    band: "var(--uv)",
-    seed: 61,
+    eyebrow: "Efficiency",
+    title: "Cheaper tokens, same answers.",
+    body: "Quantized execution with FP8/INT8 and AWQ, plus speculative decoding, each checked against accuracy and latency targets before it reaches production.",
+    metric: "−60% serving cost",
   },
   {
-    tag: "High-Performance Compute",
-    title: "Blick L0→L2 in C++17",
-    detail:
-      "Leading the ground-up rewrite of the spectral processing suite — 14 modular libraries, a parity harness validated against legacy output, GPU-ready acceleration.",
-    metric: "14 libraries",
-    band: "var(--amber)",
-    seed: 73,
-  },
-  {
-    tag: "Data Engineering",
-    title: "Analysis-ready NASA data",
-    detail:
-      "Automated acquisition, cleaning and feature-engineering pipelines that turn raw spectrometer measurements into reproducible, analysis-ready datasets for NASA and ESA researchers.",
-    metric: "NASA / ESA",
-    band: "var(--volt)",
-    seed: 83,
+    eyebrow: "Benchmarks",
+    title: "Nothing ships unmeasured.",
+    body: "A benchmarking harness tracks TTFT, ITL, P95/P99 and MFU/MBU, and every model or config change has to pass it. vLLM, SGLang and TensorRT-LLM were compared head to head; regressions get root-caused with Nsight and PyTorch Profiler.",
+    metric: "TTFT · ITL · P99 · MFU/MBU",
   },
 ];
 
-export interface Mission {
+export const TOOLCHAIN = ["vLLM", "SGLang", "TensorRT-LLM", "Triton", "Kubernetes", "NCCL", "CUDA"];
+
+export const IMPACT_STATEMENT =
+  "87% more throughput from every GPU, at 60% lower serving cost, on the LLM inference platform I architected and run in production.";
+
+export interface ImpactMetric {
+  sign: "+" | "−";
+  value: number;
+  label: string;
+}
+
+export const IMPACT_METRICS: ImpactMetric[] = [
+  { sign: "+", value: 87, label: "Throughput per GPU" },
+  { sign: "−", value: 20, label: "P99 time to first token" },
+  { sign: "−", value: 60, label: "Serving cost" },
+  { sign: "−", value: 40, label: "Idle GPU hours" },
+];
+
+/* ML and data systems running NASA's Pandora network. */
+export interface FleetSystem {
+  icon: "pulse" | "cloud" | "gauge" | "edge" | "chip";
+  title: string;
+  statement: string;
+  label: string;
+}
+
+export const FLEET: FleetSystem[] = [
+  {
+    icon: "pulse",
+    title: "Fleet anomaly detection",
+    statement:
+      "Deep-learning anomaly detection across 300+ Pandora spectrometers. Hours of daily manual monitoring, eliminated.",
+    label: "Pandonia Global Network",
+  },
+  {
+    icon: "cloud",
+    title: "CNN cloud detection",
+    statement:
+      "An encoder–decoder CNN that detects clouds in real time, inside the live measurement loop.",
+    label: "Computer vision",
+  },
+  {
+    icon: "gauge",
+    title: "Instrument health",
+    statement:
+      "A full-stack instrument-health app that gives operators the state of 300+ instruments on five continents.",
+    label: "FastAPI · Next.js · TypeScript",
+  },
+  {
+    icon: "edge",
+    title: "Edge to cloud",
+    statement:
+      "Pipelines that parse raw L0 streams at the edge, score instrument health 0–100 and deliver auditable trace-gas datasets to NASA and ESA researchers.",
+    label: "Edge → cloud ML",
+  },
+  {
+    icon: "chip",
+    title: "Blick in C++17",
+    statement:
+      "Leading the ground-up C++17 rewrite of the Blick spectral suite (L0→L2): 14 libraries, a parity harness and a CUDA-ready GPU layer.",
+    label: "C++17 · CUDA",
+  },
+];
+
+export interface Role {
   company: string;
-  detail?: string;
+  org?: string;
   role: string;
-  location: string;
   period: string;
-  description: string;
+  location: string;
+  summary: string;
+  highlights: string[];
+  icon: "trend" | "bars" | "flow";
   active?: boolean;
 }
 
-export const MISSIONS: Mission[] = [
+export const EXPERIENCE: Role[] = [
   {
     company: "SciGlob Instruments",
-    detail: "NASA GSFC",
+    org: "NASA",
     role: "Software Engineer — AI/ML Systems",
+    period: "Nov 2024 — Present",
     location: "Columbia, MD",
-    period: "2024 — NOW",
-    description:
-      "Building the ML and data backbone of NASA's Pandora network — 300+ spectrometers on five continents running deep-learning anomaly detection, CNN cloud detection in the live scan loop, and a C++17 rewrite of the spectral processing core.",
+    summary: "LLM inference platforms and production ML for NASA's Pandora network.",
+    highlights: [
+      "Architected a production vLLM platform for RAG and agents: +87% throughput per GPU, −20% P99 TTFT.",
+      "Go Kubernetes controllers and CRDs for model lifecycle, GPU-aware scheduling and autoscaling.",
+      "Cut serving cost 60% with FP8/INT8, AWQ and speculative decoding; idle GPU hours down 40%.",
+      "Deep-learning anomaly detection and CNN cloud detection across 300+ spectrometers.",
+      "Leading the C++17 rewrite of the Blick spectral processing suite.",
+    ],
+    icon: "trend",
     active: true,
   },
   {
     company: "407 Associates",
     role: "Data Analyst & Developer",
+    period: "Apr 2024 — Nov 2024",
     location: "Laurel, MD",
-    period: "2024",
-    description:
-      "Python ETL and ML pipelines (PySpark, scikit-learn, TensorFlow) over AWS S3 and Snowflake — cut operating costs 25% and retired the spreadsheets with dashboards and internal tools.",
-  },
-  {
-    company: "UMBC",
-    detail: "M.P.S. Data Science · 3.89",
-    role: "Graduate Student Assistant",
-    location: "Baltimore, MD",
-    period: "2022 — 2024",
-    description:
-      "Machine learning concentration by day; taught, graded and debugged everything from off-by-one errors to existential dread the rest of the time.",
+    summary: "Data and ML pipelines that paid for themselves.",
+    highlights: [
+      "Python data and ML pipelines (PySpark, scikit-learn, TensorFlow) over SQL, S3 and Snowflake: operating costs down 25%.",
+      "Automated multi-source cleaning and validation; Tableau and Power BI dashboards replaced spreadsheet workflows.",
+    ],
+    icon: "bars",
   },
   {
     company: "Tata Consultancy Services",
-    role: "Systems Engineer",
+    role: "System Engineer",
+    period: "Jun 2020 — Aug 2022",
     location: "Bangalore, IN",
-    period: "2020 — 2022",
-    description:
-      "Large-scale ETL for Albertsons — 10M+ rows with 20+ automated quality checks (−30% defects), plus load analysis and CI/CD automation that cut release time 40%.",
+    summary: "Enterprise-scale ETL and performance engineering.",
+    highlights: [
+      "ETL for Albertsons over 10M+ rows with 20+ automated quality checks: data defects down 30%.",
+      "Load profiling and tuning: +25% throughput, −30% response time at 99.5%+ availability.",
+      "CI/CD and monitoring automation: release time down 40%, MTTR down 25%.",
+    ],
+    icon: "flow",
   },
 ];
 
-export const STACK: { label: string; items: string[] }[] = [
+export interface Degree {
+  degree: string;
+  school: string;
+  period?: string;
+}
+
+export const EDUCATION: Degree[] = [
   {
-    label: "Generative AI / LLM",
+    degree: "M.S. in Data Science (Advanced Applied AI)",
+    school: "University of Maryland, Baltimore County",
+    period: "2022 — 2024",
+  },
+  {
+    degree: "B.S. in Computer Science, specialization in AI",
+    school: "Medi-Caps University",
+  },
+];
+
+export const SKILLS: { label: string; items: string[] }[] = [
+  { label: "Languages", items: ["Python", "C++17", "Go", "CUDA", "SQL", "TypeScript", "Bash"] },
+  {
+    label: "LLM inference",
     items: [
-      "RAG",
-      "Embeddings & Vector Search",
-      "Multi-Agent Systems",
-      "Tool Use / Function Calling",
-      "Evals & Guardrails",
-      "LLM Observability",
-      "Prompt Versioning",
-      "Anthropic & OpenAI APIs",
+      "vLLM",
+      "SGLang",
+      "TensorRT-LLM",
+      "Triton",
+      "KV cache",
+      "PagedAttention",
+      "Continuous batching",
+      "Prefix caching",
+      "Chunked prefill",
+      "FP8 / INT8, AWQ, GPTQ",
+      "Speculative decoding",
+      "MoE serving",
     ],
   },
   {
-    label: "ML & Data Science",
+    label: "Performance & profiling",
+    items: [
+      "TTFT",
+      "ITL / TPOT",
+      "P99 tail latency",
+      "MFU / MBU",
+      "Benchmarking",
+      "Nsight Systems / Compute",
+      "PyTorch Profiler",
+      "Root-cause analysis",
+    ],
+  },
+  {
+    label: "Distributed GPU systems",
+    items: [
+      "Tensor & pipeline parallelism",
+      "NCCL",
+      "Disaggregated prefill / decode",
+      "KV-cache offload",
+      "RDMA",
+      "GPUDirect",
+      "NVLink / InfiniBand",
+    ],
+  },
+  {
+    label: "Kubernetes & orchestration",
+    items: [
+      "CRDs",
+      "Helm",
+      "GPU scheduling",
+      "MIG",
+      "Multi-tenant isolation",
+      "Cache-aware routing",
+      "Autoscaling",
+    ],
+  },
+  {
+    label: "ML & GenAI",
     items: [
       "PyTorch",
       "TensorFlow",
       "scikit-learn",
-      "CNNs / Encoder–Decoder",
-      "Computer Vision",
-      "Anomaly Detection",
-      "PySpark",
-      "Pandas / NumPy",
+      "Computer vision",
+      "Time-series anomaly detection",
+      "RAG",
+      "pgvector",
+      "Agentic AI",
+      "Guardrails",
     ],
   },
-  { label: "Languages", items: ["Python", "C++17", "TypeScript", "SQL", "Java"] },
   {
-    label: "Cloud & Platform",
-    items: ["FastAPI", "Docker", "GCP", "Azure", "AWS", "CI/CD", "MLOps", "Linux"],
+    label: "Data & backend",
+    items: [
+      "FastAPI",
+      "Flask",
+      "React / Next.js",
+      "PySpark",
+      "Snowflake",
+      "PostgreSQL",
+      "Redis",
+      "ETL / ELT pipelines",
+    ],
   },
   {
-    label: "Data Engineering",
-    items: ["ETL / ELT", "PostgreSQL / pgvector", "Redis", "Snowflake", "Tableau / Power BI"],
+    label: "Cloud & DevOps",
+    items: ["AWS", "GCP", "Azure", "Docker", "CI/CD", "Prometheus", "Grafana", "OpenTelemetry", "Linux"],
   },
 ];
 
@@ -319,9 +430,5 @@ export const CONTACT = {
   github: "https://github.com/ashutoshjoshi1",
   linkedin: "https://www.linkedin.com/in/ashutosh--joshi/",
   resume: "/resume.pdf",
-  location: "Columbia, MD",
-  coords: "39.20°N / 76.86°W",
+  location: "Baltimore, MD",
 };
-
-export const MANIFESTO =
-  "I build AI systems that listen to the physical world — a network of atmospheric instruments on five continents feeding NASA science, pipelines that turn raw photons into data products, and LLM agents that turn data into decisions.";
