@@ -56,6 +56,10 @@
 .nasa__layer[data-on="true"] {
   opacity: 1;
 }
+/* crop the globe's own legend out of the frame */
+.nasa__layer--globe {
+  object-position: 72% 50%;
+}
 .nasa__mask {
   pointer-events: none;
 }
@@ -85,8 +89,8 @@
   flex-direction: column;
   justify-content: center;
   gap: 0.9rem;
-  min-height: 40svh;
-  padding-block: 2.5rem;
+  min-height: 34svh;
+  padding-block: 2.25rem;
   color: var(--muted);
   transition: color var(--t-ui) ease;
 }

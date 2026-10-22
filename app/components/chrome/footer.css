@@ -27,6 +27,7 @@
   padding-top: calc(var(--section) * 0.6);
 }
 .footer__fit {
+  width: max-content;
   margin: 0 0 0 -0.04em;
   font-size: 15vw;
   font-weight: 800;

@@ -22,14 +22,26 @@ export interface Inset {
   left: number;
 }
 
-/* the window: a 4:5 portrait, centred on desktop, high on a phone */
+/* below this width the name sits above the window and the words below it */
+export const STACKED_BELOW = 900;
+/* room kept under a stacked window for the sentence and the button */
+const STACKED_FOOT = 224;
+
+/* the window: a 4:5 portrait, centred between the name and the words on
+   desktop; on phones and tablets, high in the screen under the name */
 export function windowInset(vw: number, vh: number): Inset {
-  const phone = vw < 700;
-  const width = phone ? vw * 0.78 : Math.min(vw * 0.36, vh * 0.72 * 0.8);
-  const height = width * 1.25;
+  if (vw >= STACKED_BELOW) {
+    const width = Math.min(vw * 0.36, vh * 0.72 * 0.8);
+    const height = width * 1.25;
+    const left = (vw - width) / 2;
+    const top = (vh - height) / 2;
+    return { top, right: left, bottom: top, left };
+  }
+  const top = vh * 0.3;
+  const height = Math.min(vw * 0.78 * 1.25, vh - top - STACKED_FOOT);
+  const width = height * 0.8;
   const left = (vw - width) / 2;
-  const top = phone ? Math.min(vh * 0.3, vh - height - 24) : (vh - height) / 2;
-  return { top, right: left, bottom: Math.max(0, vh - top - height), left };
+  return { top, right: left, bottom: vh - top - height, left };
 }
 
 export function insetAt(start: Inset, t: number): Inset {

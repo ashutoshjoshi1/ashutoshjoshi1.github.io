@@ -93,10 +93,17 @@
     background: var(--bg);
     color: var(--ink);
     clip-path: inset(0 0 100% 100%);
-    transition: clip-path var(--t-ui) var(--ease-out);
+    visibility: hidden;
+    transition:
+      clip-path var(--t-ui) var(--ease-out),
+      visibility 0s linear var(--t-ui);
   }
   .nav[data-menu="true"] .nav__menu {
     clip-path: inset(0);
+    visibility: visible;
+    transition:
+      clip-path var(--t-ui) var(--ease-out),
+      visibility 0s;
   }
   .nav__menu-action {
     margin-top: 1.5rem;

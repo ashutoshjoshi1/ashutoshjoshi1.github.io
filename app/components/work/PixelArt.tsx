@@ -71,5 +71,9 @@ export default function PixelArt({ slug, seed, label, className = "" }: PixelArt
     };
   }, [slug, seed]);
 
-  return <canvas ref={canvasRef} className={`pixel-art ${className}`} role="img" aria-label={label} />;
+  return label ? (
+    <canvas ref={canvasRef} className={`pixel-art ${className}`} role="img" aria-label={label} />
+  ) : (
+    <canvas ref={canvasRef} className={`pixel-art ${className}`} aria-hidden="true" />
+  );
 }

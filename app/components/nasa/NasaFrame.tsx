@@ -193,7 +193,7 @@ export default function NasaFrame({ active }: NasaFrameProps) {
         {/* eslint-disable-next-line @next/next/no-img-element -- static export, read by canvas */}
         <img
           ref={globeRef}
-          className="nasa__layer"
+          className="nasa__layer nasa__layer--globe"
           data-on={on("globe")}
           src={FLEET_PICTURES.globe.src}
           alt={FLEET_PICTURES.globe.alt}

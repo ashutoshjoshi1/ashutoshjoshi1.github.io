@@ -8,7 +8,7 @@ import { prefersReducedMotion, mulberry32 } from "../../lib/motion";
 import { clamp01, drawPixelated, fitCanvas } from "../../lib/pixels";
 import Icon from "../ui/Icon";
 import Lines from "../motion/Lines";
-import { blockAt, cropAt, insetAt, windowInset, type Inset, type Photo } from "./exposure";
+import { blockAt, cropAt, insetAt, windowInset, STACKED_BELOW, type Inset, type Photo } from "./exposure";
 import "./hero.css";
 
 const PHOTO: Photo = { width: 1370, height: 1954, focus: { x: 1010, y: 1230 }, landscapeY: 0.69 };
@@ -61,6 +61,8 @@ export default function Hero() {
         const fade = clamp01(progress / 0.4);
         copyRef.current.style.opacity = String(1 - fade);
         copyRef.current.style.transform = `translate3d(0, ${(-fade * 48).toFixed(1)}px, 0)`;
+        /* gone, not just transparent, once the picture has the screen */
+        copyRef.current.style.visibility = fade >= 1 ? "hidden" : "visible";
       }
       if (captionRef.current) captionRef.current.style.opacity = String(clamp01((progress - 0.92) / 0.08));
       if (!ready) return;
@@ -111,7 +113,7 @@ export default function Hero() {
       requestAnimationFrame(tick);
     };
 
-    const openDistance = () => window.innerHeight * (window.innerWidth < 700 ? OPEN_PHONE : OPEN_DESKTOP);
+    const openDistance = () => window.innerHeight * (window.innerWidth < STACKED_BELOW ? OPEN_PHONE : OPEN_DESKTOP);
     const trigger = ScrollTrigger.create({
       trigger: section,
       start: "top top",
@@ -167,7 +169,12 @@ export default function Hero() {
         </div>
 
         <div ref={copyRef} className="hero__copy wrap">
-          <Lines as="h1" id="hero-title" className="hero__title t-head" lines={HERO.name} delay={100} />
+          <div className="hero__name">
+            <Lines as="h1" id="hero-title" className="hero__title t-head" lines={HERO.name} delay={100} />
+            <p className="hero__role t-lead" data-rise style={delay(300)}>
+              {HERO.role}
+            </p>
+          </div>
           <div className="hero__side">
             <p className="hero__lede" data-rise style={delay(420)}>
               {HERO.lede}

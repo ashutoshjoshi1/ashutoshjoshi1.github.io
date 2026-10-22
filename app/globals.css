@@ -133,8 +133,9 @@ canvas {
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: var(--gutter);
   }
+  /* neighbouring sections add their padding: half each makes one gap */
   .section {
-    padding-block: var(--section);
+    padding-block: max(calc(var(--section) * 0.55), 3rem);
   }
 
   /* ---- type ------------------------------------------------------------- */
@@ -273,13 +274,14 @@ canvas {
     overflow: clip;
   }
   .roll__strip {
-    display: flex;
-    flex-direction: column;
+    display: block;
     transform: translateY(calc(var(--d) * -0.8em));
   }
-  .roll__strip > span {
-    height: 0.8em;
-    line-height: 0.8;
+  .roll__strip::before {
+    content: "0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9";
+    display: block;
+    white-space: pre;
+    line-height: 0.8em;
   }
 
   /* the ink fill: one statement fills from 45% ink as it rises */

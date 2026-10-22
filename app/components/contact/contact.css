@@ -23,7 +23,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 30% 55%;
+  /* keep the baked-in date and scale bar below the fold of the crop */
+  object-position: 30% 18%;
 }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
@@ -39,7 +40,7 @@
     transform: scale(1.08) translateY(-2%);
   }
   to {
-    transform: scale(1.01) translateY(2%);
+    transform: scale(1.04) translateY(1%);
   }
 }
 
@@ -95,7 +96,7 @@
   margin-top: 0.5rem;
 }
 
-@media (max-width: 699px) {
+@media (max-width: 899px) {
   .contact {
     display: block;
     min-height: 0;

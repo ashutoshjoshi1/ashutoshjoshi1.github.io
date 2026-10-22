@@ -1,11 +1,15 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MORE_WORK, PROJECTS, type Project } from "../../lib/data";
 import Lines from "../motion/Lines";
 import Icon from "../ui/Icon";
 import PixelArt from "./PixelArt";
 import "./work.css";
+
+/* where there is a pointer and room, a frame beside the list shows the
+   project; elsewhere each row carries its own small picture */
+const FRAME_QUERY = "(hover: hover) and (pointer: fine) and (min-width: 900px)";
 
 /* the preview frame follows the row, never the pointer */
 function useRowFrame() {
@@ -16,7 +20,7 @@ function useRowFrame() {
   const show = (project: Project, row: HTMLElement) => {
     const index = indexRef.current;
     const frame = frameRef.current;
-    if (!index || !frame || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (!index || !frame || !window.matchMedia(FRAME_QUERY).matches) return;
     const y = row.offsetTop + row.offsetHeight / 2 - frame.offsetHeight / 2;
     const max = index.offsetHeight - frame.offsetHeight;
     const opening = !frame.classList.contains("is-open");
@@ -31,13 +35,18 @@ function useRowFrame() {
     setShown(project);
   };
 
-  const hide = () => frameRef.current?.classList.remove("is-open");
+  /* at rest the frame holds the first project, so the index never leaves
+     half the screen empty; it then stays on whichever row was last pointed at */
+  useEffect(() => {
+    const first = indexRef.current?.querySelector<HTMLElement>(".work__row");
+    if (first) show(PROJECTS[0], first);
+  }, []);
 
-  return { indexRef, frameRef, shown, show, hide };
+  return { indexRef, frameRef, shown, show };
 }
 
 export default function Work() {
-  const { indexRef, frameRef, shown, show, hide } = useRowFrame();
+  const { indexRef, frameRef, shown, show } = useRowFrame();
   const [open, setOpen] = useState<string | null>(null);
 
   return (
@@ -50,14 +59,7 @@ export default function Work() {
         </p>
       </header>
 
-      <div
-        ref={indexRef}
-        className="work__index wrap"
-        onPointerLeave={hide}
-        onBlur={(e) => {
-          if (!e.currentTarget.contains(e.relatedTarget as Node | null)) hide();
-        }}
-      >
+      <div ref={indexRef} className="work__index wrap">
         <ul className="work__list">
           {PROJECTS.map((project, i) => {
             const isOpen = open === project.slug;
@@ -73,17 +75,17 @@ export default function Work() {
                   onFocus={(e) => show(project, e.currentTarget)}
                   onClick={() => setOpen(isOpen ? null : project.slug)}
                 >
-                  <span className="work__name">{project.name}</span>
-                  <span className="work__meta t-small">
-                    {project.domain}, {project.year}
+                  <span className="work__label">
+                    <span className="work__name">{project.name}</span>
+                    <span className="work__meta t-small">
+                      {project.domain}, {project.year}
+                    </span>
                   </span>
+                  <PixelArt slug={project.slug} seed={project.seed} label="" className="work__thumb" />
                 </button>
                 <div id={panelId} className="work__panel" role="region" aria-label={project.name} inert={!isOpen}>
                   <div className="work__panel-inner">
                     <div className="work__details">
-                    {isOpen && (
-                      <PixelArt slug={project.slug} seed={project.seed} label={`Drawing of ${project.name}`} className="work__panel-art" />
-                    )}
                     <p className="work__description measure">{project.description}</p>
                     <p className="work__stack t-small">{project.stack.join(", ")}</p>
                     {project.private ? (
@@ -108,7 +110,13 @@ export default function Work() {
       </div>
 
       <div className="work__more wrap">
-        <h3 className="work__more-title t-lead">More on GitHub</h3>
+        <div className="work__more-head">
+          <h3 className="work__more-title t-lead">More on GitHub</h3>
+          <p className="work__more-intro">
+            Thirteen smaller public repositories, each described from its own README: instrument software from the
+            lab, and the machine learning and vision work that came before it.
+          </p>
+        </div>
         {MORE_WORK.map((group) => (
           <div key={group.label} className="work__group">
             <h4 className="work__group-title t-small">{group.label}</h4>

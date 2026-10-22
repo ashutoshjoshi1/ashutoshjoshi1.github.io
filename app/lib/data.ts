@@ -297,7 +297,8 @@ export const PROFILE = {
 
 export const HERO = {
   name: ["Ashutosh", "Joshi"] as const,
-  lede: "Software engineer for AI/ML systems at SciGlob, on NASA’s Pandora network. I make LLM inference fast and cheap on GPUs.",
+  role: "AI/ML systems engineer at SciGlob, for NASA",
+  lede: "I make LLM inference fast and cheap on GPUs, and run machine learning across NASA’s 300+ Pandora instruments.",
   photo: "/images/hero-goddard.webp",
   photoAlt: "Ashutosh Joshi standing at the main gate sign of NASA’s Goddard Space Flight Center",
   caption: "At the main gate of NASA’s Goddard Space Flight Center, Greenbelt, Maryland.",
