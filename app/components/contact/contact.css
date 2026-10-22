@@ -79,7 +79,6 @@
     font-size: min(var(--step-head), 8.6vw);
   }
   .contact__label {
-    order: -1;
     padding: 0;
   }
 }

@@ -4,7 +4,7 @@ import { useMemo, type CSSProperties } from "react";
 import { clockTime, useNow } from "../../hooks/useNow";
 import { BANDS, NM_MAX, NM_MIN, nmToX, spectrumPath } from "../../lib/spectrum";
 import { GODDARD, nextSunrise, sunPath, sunPosition, type SunPosition } from "../../lib/sun";
-import type { Placement } from "../hero/PortraitFigure";
+import type { Placement } from "../split/placement";
 import Readout from "../split/Readout";
 
 /* the dome: a south-facing view of the sky, the observer at its foot */
@@ -56,6 +56,7 @@ export default function SkyFigure({ placement, on = true }: SkyFigureProps) {
       data-on={on}
       data-ui
       data-up={sky?.up ?? false}
+      aria-hidden={(placement === "stage" && !on) || undefined}
       {...(placement === "inline" ? { "data-reveal": "" } : {})}
     >
       <div className="figure__body sky">

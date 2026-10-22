@@ -26,14 +26,13 @@ export default function Experience() {
                   {role.company}
                   {role.org && <span className="sheet__org">, for {role.org}</span>}
                 </h3>
-                <p className="sheet__when t-small figures">{role.period}</p>
               </div>
-              <p className="sheet__role t-small">
-                {role.role} · {role.location}
+              <p className="sheet__role t-small figures">
+                {role.role} · {role.location} · {role.period}
               </p>
               <ul className="sheet__items">
                 {role.highlights.map((highlight) => (
-                  <li key={highlight.text} className="sheet__item" data-rise>
+                  <li key={highlight.text} className="sheet__item">
                     <span className="sheet__text">{highlight.text}</span>
                     {highlight.figure && <span className="sheet__figure t-lead figures">{highlight.figure}</span>}
                   </li>
@@ -48,7 +47,7 @@ export default function Experience() {
             </div>
             <ul className="sheet__items">
               {EDUCATION.map((degree) => (
-                <li key={degree.degree} className="sheet__item" data-rise>
+                <li key={degree.degree} className="sheet__item">
                   <span className="sheet__text">
                     {degree.degree}, {degree.school}
                     {degree.period && `, ${degree.period}`}

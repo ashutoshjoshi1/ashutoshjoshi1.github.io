@@ -19,12 +19,16 @@
   max-width: 34rem;
 }
 .system__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1rem;
   margin: 0 0 0.6rem;
   font-weight: 500;
 }
-.system__body {
-  margin: 0 0 0.6rem;
-}
 .system__label {
+  font-weight: 400;
+}
+.system__body {
   margin: 0;
 }

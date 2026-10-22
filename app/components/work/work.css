@@ -187,6 +187,12 @@
   .project__inner {
     min-height: 0;
     overflow: hidden;
+    visibility: hidden;
+    transition: visibility 0s linear var(--t-ui);
+  }
+  .project[data-open="true"] .project__inner {
+    visibility: visible;
+    transition: visibility 0s;
   }
   .project__inner > :first-child {
     margin-top: 0.5rem;

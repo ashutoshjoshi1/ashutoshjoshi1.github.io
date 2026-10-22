@@ -1,0 +1,24 @@
+/* the introduction: a short column beside the tuned server */
+.intro {
+  max-width: 32rem;
+  padding-top: var(--section);
+}
+.intro__title {
+  margin: 0 0 1.25rem;
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 500;
+}
+.intro__paragraph {
+  margin: 0 0 1em;
+}
+
+@media (min-width: 900px) {
+  /* stand level with the middle of the held server */
+  .intro {
+    min-height: calc(100svh - var(--bar));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 0;
+  }
+}

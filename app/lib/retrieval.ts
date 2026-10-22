@@ -209,7 +209,7 @@ const FACT_DOCS: Doc[] = [
     tag: "Frontend",
     text: "frontend react next.js nextjs typescript react native expo web ui ux design canvas animation mobile app",
     answer:
-      "Frontend: React/Next.js and React Native (RETRVE ships as an Expo app), and the full-stack instrument-health app for NASA is FastAPI plus Next.js and TypeScript. This site is a Next.js static export, hand-built with no template: a canvas strip chart for the simulated server and an SVG sun tracker.",
+      "Frontend: React/Next.js and React Native (RETRVE ships as an Expo app), and the full-stack instrument-health app for NASA is FastAPI plus Next.js and TypeScript. This site is a Next.js static export, hand-built with no template: a WebGL sky, a canvas strip chart for the simulated server and an SVG sun tracker.",
     link: "#skills",
   },
   {
@@ -241,9 +241,9 @@ const FACT_DOCS: Doc[] = [
     id: "fact-site",
     tag: "This site",
     text:
-      "site website portfolio built how this page console search tf-idf tfidf retrieval simulation simulator server batching strip chart sun goddard tracker interactive hero animation design how does this work",
+      "site website portfolio built how this page console search tf-idf tfidf retrieval simulation simulator server batching strip chart sun sky webgl shader scattering goddard tracker interactive hero animation design how does this work",
     answer:
-      "This site is a Next.js static export, set in Clash Grotesk and Gambetta. Half the screen holds still while you read: my portrait, then a toy LLM server simulated one forward pass at a time, drawn as a strip chart of its twelve request slots, which you can reconfigure and flood with traffic, then the sun over NASA Goddard right now, computed in your browser from NOAA's solar equations. The footer measures this page's own Core Web Vitals, and this search is TF-IDF and cosine retrieval over the site's text. No AI API calls; everything runs in your browser.",
+      "This site is a Next.js static export, set in Clash Grotesk and Gambetta. The first screen is the sky over NASA Goddard right now, rendered in WebGL from the physics of sunlight scattering in the air (the light a Pandora spectrometer measures); drag across it to move the sun through the day. Below, half the screen holds still while you read: a toy LLM server simulated one forward pass at a time and drawn as a strip chart of its twelve request slots, which you can reconfigure and flood with traffic, then the sun's path over Goddard today. The footer measures this page's own Core Web Vitals, and this search is TF-IDF and cosine retrieval over the site's text. No AI API calls; everything runs in your browser.",
     link: "#inference",
   },
   {

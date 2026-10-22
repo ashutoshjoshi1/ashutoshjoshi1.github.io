@@ -125,40 +125,36 @@ export default function ServerView({ policy, load, burst, active, label, statsRe
       ctx.fillStyle = COLORS.track;
       for (let s = 0; s < SLOTS; s++) ctx.fillRect(0, snap(s * lane + pad), chartW, bar);
 
-      const blocked = new Path2D();
-      const prefill = new Path2D();
-      const tokens = new Path2D();
-      const stalls = new Path2D();
-      const cached = new Path2D();
-      for (const step of history) {
-        const x0 = Math.max(0, snap(chartW - (now - step.t0) * scale));
-        const x1 = snap(chartW - (now - step.t1) * scale);
-        if (x1 <= 0) continue;
-        const w = Math.max(hair, x1 - x0);
-        for (let s = 0; s < SLOTS; s++) {
-          const y = snap(s * lane + pad);
-          const kind = step.kind[s];
-          if (kind === CELL_BLOCKED) blocked.rect(x0, y, w, bar);
-          else if (kind === CELL_STALL) stalls.rect(x0, y + Math.floor(bar / 2), w, hair * 2);
-          else if (kind === CELL_PREFILL) {
-            prefill.rect(x0, y, w, bar);
-            if (step.mark[s] & MARK_HIT) cached.rect(x0, y, Math.min(w, CACHE_MARK_PX), bar);
-          } else if (kind === CELL_DECODE) {
-            const n = step.tokens[s];
-            for (let k = 0; k < n; k++) tokens.rect(snap(x0 + ((k + 0.5) * w) / n - tickW / 2), y + (bar - tickH) / 2, tickW, tickH);
-          }
+      /* one pass per colour, each a single path: no allocations per frame */
+      const pass = (color: string, add: (x0: number, w: number, y: number, s: number, step: Step) => void) => {
+        ctx.beginPath();
+        for (const step of history) {
+          const x0 = Math.max(0, snap(chartW - (now - step.t0) * scale));
+          const x1 = snap(chartW - (now - step.t1) * scale);
+          if (x1 <= 0) continue;
+          const w = Math.max(hair, x1 - x0);
+          for (let s = 0; s < SLOTS; s++) add(x0, w, snap(s * lane + pad), s, step);
         }
-      }
-      ctx.fillStyle = COLORS.blocked;
-      ctx.fill(blocked);
-      ctx.fillStyle = COLORS.stall;
-      ctx.fill(stalls);
-      ctx.fillStyle = COLORS.token;
-      ctx.fill(tokens);
-      ctx.fillStyle = COLORS.prefill;
-      ctx.fill(prefill);
-      ctx.fillStyle = COLORS.cached;
-      ctx.fill(cached);
+        ctx.fillStyle = color;
+        ctx.fill();
+      };
+      pass(COLORS.blocked, (x0, w, y, s, step) => {
+        if (step.kind[s] === CELL_BLOCKED) ctx.rect(x0, y, w, bar);
+      });
+      pass(COLORS.stall, (x0, w, y, s, step) => {
+        if (step.kind[s] === CELL_STALL) ctx.rect(x0, y + Math.floor(bar / 2), w, hair * 2);
+      });
+      pass(COLORS.token, (x0, w, y, s, step) => {
+        if (step.kind[s] !== CELL_DECODE) return;
+        const n = step.tokens[s];
+        for (let k = 0; k < n; k++) ctx.rect(snap(x0 + ((k + 0.5) * w) / n - tickW / 2), y + (bar - tickH) / 2, tickW, tickH);
+      });
+      pass(COLORS.prefill, (x0, w, y, s, step) => {
+        if (step.kind[s] === CELL_PREFILL) ctx.rect(x0, y, w, bar);
+      });
+      pass(COLORS.cached, (x0, w, y, s, step) => {
+        if (step.kind[s] === CELL_PREFILL && step.mark[s] & MARK_HIT) ctx.rect(x0, y, Math.min(w, CACHE_MARK_PX), bar);
+      });
 
       /* the waiting requests, stacked from the bottom right of now */
       const step = QUEUE_BAR.height + QUEUE_BAR.gap;
@@ -196,7 +192,9 @@ export default function ServerView({ policy, load, burst, active, label, statsRe
     };
 
     const wake = () => {
-      if (reduced) still();
+      if (reduced) {
+        if (inView) still();
+      }
       else if (!raf && shouldRun()) raf = requestAnimationFrame(frame);
     };
     wakeRef.current = wake;
@@ -207,15 +205,24 @@ export default function ServerView({ policy, load, burst, active, label, statsRe
       draw();
     };
 
-    /* arrive with the chart already full */
-    advance(WINDOW_MS);
-    writeStats();
+    /* the first time the view is seen it arrives with the chart already
+       full; a view that is never shown (the phone's or the desk's twin)
+       never simulates at all */
+    let primed = false;
+    const prime = () => {
+      if (primed) return;
+      primed = true;
+      advance(WINDOW_MS);
+      writeStats();
+      draw();
+    };
     resize();
 
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
     const io = new IntersectionObserver(([entry]) => {
       inView = !!entry?.isIntersecting;
+      if (inView) prime();
       wake();
     });
     io.observe(canvas);
@@ -244,8 +251,10 @@ export default function ServerView({ policy, load, burst, active, label, statsRe
   }, [load]);
 
   useEffect(() => {
-    if (burst === burstRef.current) return;
+    /* only a new burst counts, never one sent before this view existed */
+    const isNew = burst > burstRef.current;
     burstRef.current = burst;
+    if (!isNew) return;
     engineRef.current?.inject(BURST_SIZE);
     wakeRef.current();
   }, [burst]);

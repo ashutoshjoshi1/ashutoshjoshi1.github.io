@@ -50,16 +50,19 @@
   background: var(--night);
   color: var(--night-ink);
 }
+/* the outgoing layer steps back quickly, the incoming one rises slowly
+   over it, like light shifting in a room */
 .figure--stage {
   position: absolute;
   inset: 0;
   opacity: 0;
   visibility: hidden;
   transition:
-    opacity var(--t-fade) var(--ease-soft),
-    visibility 0s linear var(--t-fade);
+    opacity 500ms ease,
+    visibility 0s linear 500ms;
 }
 .figure--stage[data-on="true"] {
+  z-index: 1;
   opacity: 1;
   visibility: visible;
   transition:
@@ -266,6 +269,29 @@
   }
   .figure--inline.figure--server {
     margin-inline: calc(var(--margin) * -1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figure--stage,
+  .figure--stage[data-on="true"] {
+    transition: none;
+  }
+}
+
+/* ---- motion: the server's lanes run in from the right on load -------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .server__canvas {
+    animation: lanes-in 1600ms var(--ease-in-out) 250ms both;
+  }
+}
+@keyframes lanes-in {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
 

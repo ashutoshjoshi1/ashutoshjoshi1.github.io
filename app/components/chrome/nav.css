@@ -100,6 +100,11 @@
       clip-path 420ms var(--ease-in-out),
       visibility 0s;
   }
+  /* over the sky the menu needs a ground of its own */
+  .nav[data-theme="sky"] .nav__menu {
+    background: var(--night);
+    color: var(--night-ink);
+  }
   .nav__menu-action {
     margin-top: 1.5rem;
   }

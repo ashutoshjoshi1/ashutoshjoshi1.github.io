@@ -44,10 +44,6 @@
 .sheet__org {
   font-weight: 400;
 }
-.sheet__when {
-  margin: 0;
-  white-space: nowrap;
-}
 .sheet__role {
   margin: 0.35rem 0 0;
   color: var(--ink-2);

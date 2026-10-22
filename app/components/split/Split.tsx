@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import PortraitFigure from "../hero/PortraitFigure";
 import ServerFigure from "../inference/ServerFigure";
 import SkyFigure from "../nasa/SkyFigure";
 import { ServerProvider } from "./ServerContext";
 import "./split.css";
 
-export type Layer = "portrait" | "server" | "sky";
+/* intro: the tuned server; server: the same server through the inference story */
+export type Layer = "intro" | "server" | "sky";
 
-const LAYERS: Layer[] = ["portrait", "server", "sky"];
+const LAYERS: Layer[] = ["intro", "server", "sky"];
 
 function isLayer(value: string | undefined): value is Layer {
   return LAYERS.includes(value as Layer);
@@ -18,14 +18,15 @@ function isLayer(value: string | undefined): value is Layer {
 /*
  * The split stage. On wide screens the reading column scrolls on the left
  * while the right half holds still and changes what it shows as chapters
- * pass: the portrait, the live server, the sun over Goddard. Each chapter
+ * pass: the live server as it runs in production, the same server taken
+ * apart step by step, the sun over Goddard. Each chapter
  * names its layer with data-chapter; the one crossing the middle of the
  * screen wins. On a phone the stage is not drawn and each chapter carries
  * its own figure inline.
  */
 export default function Split({ children }: { children: ReactNode }) {
   const columnRef = useRef<HTMLDivElement>(null);
-  const [layer, setLayer] = useState<Layer>("portrait");
+  const [layer, setLayer] = useState<Layer>("intro");
 
   useEffect(() => {
     const chapters = columnRef.current?.querySelectorAll<HTMLElement>("[data-chapter]");
@@ -50,8 +51,7 @@ export default function Split({ children }: { children: ReactNode }) {
           {children}
         </div>
         <div className="split__stage">
-          <PortraitFigure placement="stage" on={layer === "portrait"} />
-          <ServerFigure placement="stage" on={layer === "server"} />
+          <ServerFigure placement="stage" on={layer !== "sky"} mode={layer === "intro" ? "production" : "story"} />
           <SkyFigure placement="stage" on={layer === "sky"} />
         </div>
       </div>

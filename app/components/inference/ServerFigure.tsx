@@ -2,7 +2,8 @@
 
 import { useRef } from "react";
 import type { Policy } from "../../lib/batching";
-import type { Placement } from "../hero/PortraitFigure";
+import { INFERENCE_STEPS } from "../../lib/data";
+import type { Placement } from "../split/placement";
 import Readout from "../split/Readout";
 import { useServer } from "../split/ServerContext";
 import ServerView from "./ServerView";
@@ -31,24 +32,39 @@ export function describePolicy(policy: Policy): string {
     .join(" · ");
 }
 
+/* the introduction shows the server as it runs in production: every lever
+   on, under the heavy load of the story's last step */
+const PRODUCTION = INFERENCE_STEPS[INFERENCE_STEPS.length - 1];
+
 interface ServerFigureProps {
   placement: Placement;
   on?: boolean;
+  /* production: the tuned server beside the introduction; story: the inference
+     chapter's settings, step by step and then the visitor's levers */
+  mode: "production" | "story";
 }
 
-export default function ServerFigure({ placement, on = true }: ServerFigureProps) {
+export default function ServerFigure({ placement, on = true, mode }: ServerFigureProps) {
   const { settings } = useServer();
   const statsRef = useRef<HTMLSpanElement>(null);
+  const policy = mode === "production" ? PRODUCTION.levers : settings.policy;
+  const load = mode === "production" ? PRODUCTION.load : settings.load;
+  const hidden = placement === "stage" && !on;
   return (
-    <figure className={`figure figure--server figure--${placement}`} data-on={on} data-ui>
+    <figure
+      className={`figure figure--server figure--${placement}`}
+      data-on={on}
+      data-ui
+      aria-hidden={hidden || undefined}
+    >
       <div className="figure__body server">
         <div className="server__head">
-          <p className="server__title t-lead sans">A simulated server, live</p>
-          <p className="server__config t-small">{describePolicy(settings.policy)}</p>
+          <p className="server__title t-lead sans">A simulated LLM server, live in your browser</p>
+          <p className="server__config t-small">{describePolicy(policy)}</p>
         </div>
         <ServerView
-          policy={settings.policy}
-          load={settings.load}
+          policy={policy}
+          load={load}
           burst={settings.burst}
           active={on}
           label={LABEL}
@@ -72,7 +88,7 @@ export default function ServerFigure({ placement, on = true }: ServerFigureProps
         </ul>
       </div>
       <Readout
-        left={`12 slots · ${settings.load} requests a second`}
+        left={`12 slots · ${load} requests a second`}
         right="Warming up"
         rightRef={statsRef}
       />

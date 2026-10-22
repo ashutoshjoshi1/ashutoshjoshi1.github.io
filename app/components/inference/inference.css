@@ -85,7 +85,7 @@
 }
 
 @media (max-width: 899px) {
-  .figure--inline.figure--server {
+  .inference .figure--inline.figure--server {
     position: sticky;
     top: var(--bar);
     z-index: 2;

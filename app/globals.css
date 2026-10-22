@@ -72,6 +72,15 @@
   --focus: var(--gold);
   color-scheme: dark;
 }
+/* the sky: clear ground, white ink, for the first screen and the bar over it */
+[data-theme="sky"] {
+  --ground: transparent;
+  --surface: rgba(255, 255, 255, 0.16);
+  --text: #ffffff;
+  --text-2: rgba(255, 255, 255, 0.84);
+  --focus: #ffffff;
+  color-scheme: dark;
+}
 [data-theme] {
   background: var(--ground);
   color: var(--text);
@@ -342,9 +351,7 @@ input {
 
   /* a highlighter pass over one phrase */
   .marker {
-    background-image: linear-gradient(var(--gold), var(--gold)); /* taste-skill-ignore: a flat marker fill, not a gradient */
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-color: var(--gold);
     color: var(--gold-ink);
     padding: 0 0.12em;
     box-decoration-break: clone;
@@ -380,13 +387,13 @@ input {
   }
 
   .js .marker[data-reveal]:not(.is-in) {
-    background-size: 0% 100%;
+    background-color: transparent;
     color: inherit;
   }
   .js .marker[data-reveal].is-in {
     transition:
-      background-size 900ms var(--ease-in-out) 300ms,
-      color 300ms ease 500ms;
+      background-color 700ms ease 400ms,
+      color 400ms ease 500ms;
   }
 }
 

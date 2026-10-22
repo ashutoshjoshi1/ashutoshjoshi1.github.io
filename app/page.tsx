@@ -4,6 +4,7 @@ import Footer from "./components/chrome/Footer";
 import Reveals from "./components/motion/Reveals";
 import Split from "./components/split/Split";
 import Hero from "./components/hero/Hero";
+import Intro from "./components/intro/Intro";
 import Inference from "./components/inference/Inference";
 import Nasa from "./components/nasa/Nasa";
 import Work from "./components/work/Work";
@@ -18,10 +19,12 @@ export default function Home() {
     <SmoothScroll>
       <Nav />
       <main>
+        {/* the sky over Goddard, now */}
+        <Hero />
         {/* the reading column scrolls while the stage beside it holds:
-            the portrait, then the live server, then the sun over Goddard */}
+            the tuned server, the same server step by step, the sun over Goddard */}
         <Split>
-          <Hero />
+          <Intro />
           <Inference />
           <Nasa />
         </Split>

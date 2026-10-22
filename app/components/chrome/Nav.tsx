@@ -26,11 +26,11 @@ export function scrollToHash(hash: string): void {
 }
 
 /* A plain bar: wordmark, five links, one action. It stands on the ground
-   of the section under it, paper or night, and steps aside while the
-   visitor reads down. */
+   of the section under it (clear over the sky, then paper or night) and
+   steps aside while the visitor reads down. */
 export default function Nav() {
   const toggleRef = useRef<HTMLButtonElement>(null);
-  const [theme, setTheme] = useState<"paper" | "night">("paper");
+  const [theme, setTheme] = useState<"paper" | "night" | "sky">("sky");
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -42,7 +42,7 @@ export default function Nav() {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
           const ground = (entry.target as HTMLElement).closest<HTMLElement>("[data-theme]")?.dataset.theme;
-          setTheme(ground === "night" ? "night" : "paper");
+          setTheme(ground === "night" || ground === "sky" ? ground : "paper");
         }
       },
       { rootMargin: "0px 0px -94% 0px" },
@@ -75,6 +75,7 @@ export default function Nav() {
     const behind = [...document.querySelectorAll<HTMLElement>("main, footer")];
     behind.forEach((el) => (el.inert = menuOpen));
     if (!menuOpen) return;
+    document.querySelector<HTMLElement>("#nav-menu a")?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
       setMenuOpen(false);

@@ -1,22 +1,65 @@
-/* the first chapter: the name, what I do, the one action, a short introduction */
+/*
+ * The first screen: the sky over Goddard, rendered, with the name in it.
+ * --horizon is the share of the height the ground takes (the shader reads
+ * it too); --sun-x is where across the width the sun stands.
+ */
 .hero {
+  --horizon: 0.17;
+  --sun-x: 0.72;
+  --hero-h: max(100svh, 38rem);
   position: relative;
+  height: var(--hero-h);
+  overflow: hidden;
+  background: #284a7e;
+  color: #ffffff;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
 }
-.hero__sheet,
-.hero__intro {
+.hero:active {
+  cursor: grabbing;
+}
+.hero__sky,
+.hero__ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.hero__sky {
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+/* the ground before the sky is drawn, and where it cannot be */
+.hero__ground {
+  height: calc(var(--horizon) * 100%);
+  background: #060607;
+}
+
+.hero__content {
   position: relative;
   z-index: 1;
-  background: var(--paper);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: calc(var(--bar) + clamp(1.5rem, 7svh, 4.5rem));
 }
 .hero__name {
-  margin: 0 0 clamp(1.5rem, 3.5vh, 2.5rem);
+  margin: 0 0 clamp(1rem, 2.5svh, 1.75rem);
+  font-size: min(var(--step-display), 15.5svh);
 }
 .hero__role {
-  margin: 0 0 0.75rem;
+  margin: 0;
+  max-width: 26ch;
   font-weight: 500;
 }
+.hero__pitch {
+  margin-bottom: clamp(1.75rem, 5svh, 3rem);
+}
 .hero__lede {
-  max-width: 28ch;
+  max-width: 34ch;
   margin: 0;
 }
 .hero__actions {
@@ -24,90 +67,127 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 1rem 1.75rem;
-  margin-top: clamp(2rem, 5vh, 3rem);
+  margin-top: clamp(1.25rem, 3.5svh, 2rem);
 }
-.hero__intro {
-  max-width: 32rem;
-  display: grid;
-  gap: 1em;
+.hero__actions .link {
+  color: #ffffff;
 }
-.hero__intro p {
+
+/* the readout lies on the ground, below the horizon */
+.hero__readout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 2rem;
+  height: calc(var(--horizon) * var(--hero-h));
+  color: var(--night-ink);
+}
+.hero__readout p {
   margin: 0;
 }
-.hero__intro-first {
-  font-size: var(--step-lead);
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-  font-weight: 500;
+.hero__readout .hero__sun {
+  margin-left: auto;
 }
-
-/* the portrait: a black ground the face comes out of */
-.portrait {
-  overflow: hidden;
-  background: #050505;
+.hero__scrub {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  color: var(--night-ink-2);
 }
-.portrait__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 32%;
+.hero__scrub input {
+  width: clamp(9rem, 18vw, 16rem);
+  height: 2.75rem;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
 }
-
-@media (min-width: 900px) {
-  .hero {
-    padding-top: calc(var(--bar) + clamp(3.5rem, 13vh, 8.5rem));
+.hero__scrub input::-webkit-slider-runnable-track {
+  height: 3px;
+  background: var(--night-3);
+}
+.hero__scrub input::-moz-range-track {
+  height: 3px;
+  background: var(--night-3);
+}
+.hero__scrub input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 1rem;
+  height: 1rem;
+  margin-top: calc(-0.5rem + 1.5px);
+  background: var(--gold);
+  border: 0;
+  transition: transform var(--t-press) var(--ease-out);
+}
+.hero__scrub input::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  background: var(--gold);
+  border: 0;
+  border-radius: 0;
+}
+.hero__scrub input:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+}
+.hero__now {
+  min-height: 2.75rem;
+  padding: 0 0.9rem;
+  background: var(--night-2);
+  color: var(--night-ink);
+  cursor: pointer;
+  transition:
+    background-color var(--t-hover) ease,
+    transform var(--t-press) var(--ease-out);
+}
+.hero__now:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  .hero__now:hover {
+    background: var(--night-3);
   }
-  .hero__intro {
-    margin-top: clamp(5rem, 18vh, 10rem);
-  }
 }
 
+/* on a phone the ground rises to hold the pitch and the readout */
 @media (max-width: 899px) {
   .hero {
-    padding-top: var(--bar);
+    --horizon: 0.46;
+    --sun-x: 0.8;
   }
-  .figure--inline.figure--portrait {
-    position: sticky;
-    top: var(--bar);
-    z-index: 0;
-    height: calc(76svh - var(--bar));
-    margin-inline: calc(var(--margin) * -1);
+  .hero__role {
+    max-width: 19ch;
   }
-  /* the paper slides up over the held portrait, edge to edge */
-  .hero__sheet,
-  .hero__intro {
+  .hero__foot {
+    height: calc(var(--horizon) * var(--hero-h));
     margin-inline: calc(var(--margin) * -1);
     padding-inline: var(--margin);
+    background: rgba(6, 6, 7, 0.62);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.75rem;
+    color: var(--night-ink);
   }
-  .hero__sheet {
-    padding-top: 2.25rem;
+  .hero__pitch {
+    margin: 0;
   }
-  .hero__intro {
-    max-width: none;
-    padding-top: 4.5rem;
-    padding-bottom: 1rem;
+  .hero__lede {
+    font-size: var(--step-body);
+    line-height: 1.5;
   }
-}
-
-/* the photograph opens from the foot of its frame on load, once */
-@media (prefers-reduced-motion: no-preference) {
-  .js .portrait {
-    animation: portrait-open var(--t-open) var(--ease-in-out) 100ms both;
+  .hero__readout {
+    height: auto;
+    gap: 0.5rem 1rem;
   }
-  .js .portrait__img {
-    animation: portrait-settle 2200ms var(--ease-expo) 100ms both;
+  .hero__scrub {
+    flex: 1 1 100%;
   }
-}
-@keyframes portrait-open {
-  from {
-    clip-path: inset(100% 0 0 0);
+  .hero__scrub input {
+    flex: 1;
+    width: auto;
   }
-  to {
-    clip-path: inset(0 0 0 0);
-  }
-}
-@keyframes portrait-settle {
-  from {
-    transform: scale(1.12);
+  .hero__readout .hero__sun {
+    margin-left: 0;
   }
 }

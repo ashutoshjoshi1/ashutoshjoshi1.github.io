@@ -18,9 +18,11 @@ export default function Nasa() {
       <ul className="systems">
         {FLEET.map((system) => (
           <li key={system.title} className="system" data-rise>
-            <h3 className="system__title t-lead sans">{system.title}</h3>
+            <h3 className="system__title t-lead sans">
+              {system.title}
+              <span className="system__label t-small soft">{system.label}</span>
+            </h3>
             <p className="system__body">{system.statement}</p>
-            <p className="system__label t-small soft">{system.label}</p>
           </li>
         ))}
       </ul>

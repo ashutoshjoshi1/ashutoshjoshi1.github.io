@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 import type { Policy } from "../../lib/batching";
 import { BENCHMARK_NOTE, BENCHMARK_TITLE, INFERENCE_STEPS, SIMULATION_NOTE, TOOLCHAIN } from "../../lib/data";
 import Lines from "../motion/Lines";
@@ -23,11 +24,11 @@ export default function Inference() {
   const [active, setActive] = useState(0);
   const [custom, setCustom] = useState<Policy>({ ...FINAL.levers });
   const [customLoad, setCustomLoad] = useState(FINAL.load);
+  /* on a phone the server sits pinned over the top half, so the step being
+     read is the one in the lower part of the screen */
+  const narrow = useMediaQuery("(max-width: 899px)");
 
   useEffect(() => {
-    /* on a phone the server sits pinned over the top half, so the step being
-       read is the one in the lower part of the screen */
-    const narrow = window.matchMedia("(max-width: 899px)").matches;
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -40,7 +41,7 @@ export default function Inference() {
     );
     stepRefs.current.forEach((el) => el && io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, [narrow]);
 
   const story = INFERENCE_STEPS[active];
   const policy = story ? story.levers : custom;
@@ -59,7 +60,7 @@ export default function Inference() {
     <section id="inference" className="chapter inference" data-chapter="server" aria-labelledby="inference-title">
       <Lines id="inference-title" className="inference__title t-head" lines={["LLM inference,", "tuned to the GPU"]} />
 
-      <ServerFigure placement="inline" />
+      <ServerFigure placement="inline" mode="story" />
 
       <ol className="steps" aria-label="How the numbers moved">
         {INFERENCE_STEPS.map((step, i) => (

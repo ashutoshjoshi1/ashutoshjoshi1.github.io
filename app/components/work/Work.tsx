@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { MORE_WORK, PROJECTS } from "../../lib/data";
 import Lines from "../motion/Lines";
 import Icon from "../ui/Icon";
@@ -14,14 +15,19 @@ const WIDE_QUERY = "(min-width: 900px)";
    screen its description stands beside it and follows the row being read
    (or pointed at), on a phone it opens in place. */
 export default function Work() {
+  const listRef = useRef<HTMLOListElement>(null);
   const rowRefs = useRef<(HTMLLIElement | null)[]>([]);
+  /* while a keyboard user is inside the list, focus decides, not the scroll */
+  const focusedRef = useRef(false);
+  const wide = useMediaQuery(WIDE_QUERY);
   const [open, setOpen] = useState(-1);
 
   useEffect(() => {
-    if (!window.matchMedia(WIDE_QUERY).matches) return;
-    setOpen(0);
+    if (!wide) return;
+    setOpen((current) => (current < 0 ? 0 : current));
     const io = new IntersectionObserver(
       (entries) => {
+        if (focusedRef.current) return;
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
           const index = rowRefs.current.indexOf(entry.target as HTMLLIElement);
@@ -32,13 +38,30 @@ export default function Work() {
     );
     rowRefs.current.forEach((el) => el && io.observe(el));
     return () => io.disconnect();
+  }, [wide]);
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+    const onIn = () => (focusedRef.current = true);
+    const onOut = (e: FocusEvent) => {
+      if (!list.contains(e.relatedTarget as Node | null)) focusedRef.current = false;
+    };
+    list.addEventListener("focusin", onIn);
+    list.addEventListener("focusout", onOut);
+    return () => {
+      list.removeEventListener("focusin", onIn);
+      list.removeEventListener("focusout", onOut);
+    };
   }, []);
 
   const point = (i: number) => {
-    if (window.matchMedia(`${WIDE_QUERY} and (hover: hover)`).matches) setOpen(i);
+    if (wide && window.matchMedia("(hover: hover)").matches) setOpen(i);
+  };
+  const focus = (i: number) => {
+    if (wide) setOpen(i);
   };
   const toggle = (i: number) => {
-    const wide = window.matchMedia(WIDE_QUERY).matches;
     setOpen((current) => (current === i && !wide ? -1 : i));
   };
 
@@ -51,7 +74,7 @@ export default function Work() {
         </p>
       </header>
 
-      <ol className="work__list wrap">
+      <ol ref={listRef} className="work__list wrap">
         {PROJECTS.map((project, i) => {
           const isOpen = open === i;
           const detailsId = `work-${project.slug}`;
@@ -73,7 +96,7 @@ export default function Work() {
                   aria-expanded={isOpen}
                   aria-controls={detailsId}
                   onPointerEnter={() => point(i)}
-                  onFocus={() => point(i)}
+                  onFocus={() => focus(i)}
                   onClick={() => toggle(i)}
                 >
                   <span className="project__name t-head">{project.name}</span>
@@ -82,7 +105,7 @@ export default function Work() {
                   </span>
                 </button>
               </h3>
-              <div id={detailsId} className="project__details" role="region" aria-label={project.name} inert={!isOpen}>
+              <div id={detailsId} className="project__details" inert={!isOpen}>
                 <div className="project__inner">
                   <p className="project__description">{project.description}</p>
                   <p className="project__stack t-small soft">{project.stack.join(", ")}</p>
