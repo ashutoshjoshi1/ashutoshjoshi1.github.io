@@ -48,17 +48,21 @@ export default function NeuralLab() {
   const lrRef = useRef<number>(0.03);
   const frameRef = useRef(0);
   const reducedRef = useRef(false);
+  /* restarts the training loop after a pause, a hidden tab or scrolling away */
+  const kickRef = useRef<() => void>(() => undefined);
 
   const [dataset, setDataset] = useState<DatasetKind>("spiral");
   const [lr, setLr] = useState<number>(0.03);
   const [paused, setPaused] = useState(false);
   const [brush, setBrush] = useState<0 | 1>(0);
   const [stats, setStats] = useState<Stats>({ step: 0, loss: 0, acc: 0 });
+  const [announcement, setAnnouncement] = useState("");
   const reduced = useReducedMotion();
 
   useEffect(() => {
     lrRef.current = lr;
     pausedRef.current = paused;
+    kickRef.current();
   }, [lr, paused]);
 
   const drawAll = useCallback(() => {
@@ -127,17 +131,16 @@ export default function NeuralLab() {
     fitAll();
     const ro = new ResizeObserver(fitAll);
     if (rootRef.current) ro.observe(rootRef.current);
-    const io = new IntersectionObserver(([entry]) => {
-      inViewRef.current = entry?.isIntersecting ?? false;
-    });
-    if (rootRef.current) io.observe(rootRef.current);
-
     let alive = true;
     let raf = 0;
+    const running = () => alive && inViewRef.current && !pausedRef.current && !document.hidden;
+    /* the loop exists only while it has something to do */
     const loop = () => {
-      if (!alive) return;
+      if (!running()) {
+        raf = 0;
+        return;
+      }
       raf = requestAnimationFrame(loop);
-      if (!inViewRef.current || pausedRef.current || document.hidden) return;
       frameRef.current++;
       const t0 = performance.now();
       while (performance.now() - t0 < FRAME_BUDGET_MS) train(2);
@@ -159,19 +162,34 @@ export default function NeuralLab() {
       };
       later(chunk);
     } else {
-      raf = requestAnimationFrame(loop);
+      kickRef.current = () => {
+        if (!raf && running()) raf = requestAnimationFrame(loop);
+      };
     }
+
+    const kick = () => kickRef.current();
+    const io = new IntersectionObserver(([entry]) => {
+      inViewRef.current = entry?.isIntersecting ?? false;
+      kick();
+    });
+    if (rootRef.current) io.observe(rootRef.current);
+    document.addEventListener("visibilitychange", kick);
 
     return () => {
       alive = false;
       cancelAnimationFrame(raf);
+      kickRef.current = () => undefined;
       ro.disconnect();
       io.disconnect();
+      document.removeEventListener("visibilitychange", kick);
     };
   }, [drawAll, syncStats, train]);
 
   const addSample = (nx: number, ny: number) => {
     samplesRef.current = [...samplesRef.current, { x: nx, y: ny, label: brush }];
+    setAnnouncement(
+      `${brush === 0 ? "Green" : "Dark"} point added. The network is training on ${samplesRef.current.length} points.`,
+    );
     if (reducedRef.current) {
       train(300);
       syncStats();
@@ -210,9 +228,12 @@ export default function NeuralLab() {
         onClick={onFieldClick}
         onKeyDown={onFieldKey}
         tabIndex={0}
-        role="img"
-        aria-label="Decision field of a small neural network training live. Click, or focus and press Enter, to add a training point."
+        role="button"
+        aria-label="Add a training point. The field shows what the network has learned so far; click a spot, or press Enter to add a point near the centre."
       />
+      <p className="sr-only" aria-live="polite">
+        {announcement}
+      </p>
 
       <div className="neural__panel">
         <dl className="neural__stats">

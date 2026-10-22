@@ -92,6 +92,10 @@ body {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
+/* sections take focus when jumped to from the nav; that is not a control */
+[tabindex="-1"]:focus {
+  outline: none;
+}
 input,
 textarea {
   caret-color: var(--accent);

@@ -20,7 +20,7 @@ export const PROJECTS: Project[] = [
     domain: "AI Agent Security / Open Source",
     year: "2026",
     description:
-      "Open-source runtime security control plane for AI agents — a local gateway intercepts every tool call and enforces allow / deny / approval / freeze through a deterministic policy engine, with metadata-first audit trails that cite the exact rule behind every decision.",
+      "Open-source runtime security control plane for AI agents: a local gateway intercepts every tool call and enforces allow / deny / approval / freeze through a deterministic policy engine, with metadata-first audit trails that cite the exact rule behind every decision.",
     stack: ["Python", "PostgreSQL", "Redis", "Docker"],
     link: "https://github.com/phulax-io/phulax",
     seed: 97,
@@ -31,7 +31,7 @@ export const PROJECTS: Project[] = [
     domain: "RAG / AI Infrastructure",
     year: "2025",
     description:
-      "Enterprise RAG platform — multimodal document ingestion with OCR, pgvector semantic Q&A with citations, prompt versioning, evaluation datasets and audit trails for compliance-ready retrieval.",
+      "Enterprise RAG platform: multimodal document ingestion with OCR, pgvector semantic Q&A with citations, prompt versioning, evaluation datasets and audit trails for compliance-ready retrieval.",
     stack: ["FastAPI", "Next.js", "pgvector", "Redis", "Docker"],
     link: "https://github.com/ashutoshjoshi1/CommonGround",
     seed: 7,
@@ -42,7 +42,7 @@ export const PROJECTS: Project[] = [
     domain: "Agentic AI / Open Source",
     year: "2026",
     description:
-      "Self-learning agentic AI framework — persistent vector memory with forgetting curves, gated tool use with human-in-the-loop approval, strategies competing under UCB bandits, Brier/ECE calibration audits. 450 tests, 100% coverage.",
+      "Self-learning agentic AI framework: persistent vector memory with forgetting curves, gated tool use with human-in-the-loop approval, strategies competing under UCB bandits, Brier/ECE calibration audits. 450 tests, 100% coverage.",
     stack: ["Python", "Vector Memory", "REST", "pytest"],
     link: "https://github.com/ashutoshjoshi1/InCortex",
     seed: 23,
@@ -53,7 +53,7 @@ export const PROJECTS: Project[] = [
     domain: "Agentic AI / 3D",
     year: "2026",
     description:
-      "An AI-staffed software company as an operating system — eight specialized agents take an idea from validation to a deployed, billing SaaS through real GitHub PRs, Vercel deploys and Stripe, all rendered as a navigable 3D office with human approval gates.",
+      "An AI-staffed software company as an operating system: eight specialized agents take an idea from validation to a deployed, billing SaaS through real GitHub PRs, Vercel deploys and Stripe, all rendered as a navigable 3D office with human approval gates.",
     stack: ["Next.js", "React Three Fiber", "FastAPI", "Supabase", "Stripe"],
     link: "https://github.com/ashutoshjoshi1/Office.ai",
     seed: 59,
@@ -64,7 +64,7 @@ export const PROJECTS: Project[] = [
     domain: "Instrument Control / NASA",
     year: "2026",
     description:
-      "Unified Python interface to every device in a Pandora-class atmospheric instrument — 14 device types behind one YAML-configured facade, each with a hardware driver and a simulation twin so the full instrument runs without physical hardware.",
+      "Unified Python interface to every device in a Pandora-class atmospheric instrument: 14 device types behind one YAML-configured facade, each with a hardware driver and a simulation twin so the full instrument runs without physical hardware.",
     stack: ["Python", "pyserial", "YAML", "OpenCV"],
     link: "https://github.com/ashutoshjoshi1/SciGlob-Library",
     seed: 37,
@@ -75,7 +75,7 @@ export const PROJECTS: Project[] = [
     domain: "Systems / NASA",
     year: "2026",
     description:
-      "Ground-up C++17 rewrite of the Blick spectral processing suite (L0→L2) — 14 modular libraries, parity test harness, GPU-ready acceleration framework.",
+      "Ground-up C++17 rewrite of the Blick spectral processing suite (L0→L2): 14 modular libraries, parity test harness, GPU-ready acceleration framework.",
     stack: ["C++17", "CMake", "CUDA-ready", "CI"],
     link: "https://github.com/ashutoshjoshi1/BlickO-CPP",
     private: true,
@@ -87,7 +87,7 @@ export const PROJECTS: Project[] = [
     domain: "Distributed Systems / NASA",
     year: "2025",
     description:
-      "Fleet health monitoring for the global Pandora spectrometer network — parses raw L0 streams at the edge, scores instrument health, ships daily summaries to cloud dashboards.",
+      "Fleet health monitoring for the global Pandora spectrometer network: parses raw L0 streams at the edge, scores instrument health, ships daily summaries to cloud dashboards.",
     stack: ["Python", "GCS", "Flask", "Pydantic"],
     link: "https://github.com/ashutoshjoshi1/Pandora-Summarizer",
     seed: 13,
@@ -98,7 +98,7 @@ export const PROJECTS: Project[] = [
     domain: "AI Agents",
     year: "2025",
     description:
-      "Multi-agent sports intelligence — six specialized agents reason over stats, availability, news, venue and matchups, then synthesize NBA & IPL game predictions.",
+      "Multi-agent sports intelligence: six specialized agents reason over stats, availability, news, venue and matchups, then synthesize NBA & IPL game predictions.",
     stack: ["FastAPI", "Next.js", "PostgreSQL", "Zep", "OpenAI"],
     link: "https://github.com/ashutoshjoshi1/MoneyBall",
     private: true,
@@ -110,7 +110,7 @@ export const PROJECTS: Project[] = [
     domain: "ML Platform / Forecasting",
     year: "2026",
     description:
-      "Forecasting, model-review and governance workbench for risk-oriented portfolio teams — baseline and challenger forecasts, scenario planning, supervised risk classification with model comparison, model cards with a governance review timeline, and monitoring rules with alerting.",
+      "Forecasting, model-review and governance workbench for risk-oriented portfolio teams: baseline and challenger forecasts, scenario planning, supervised risk classification with model comparison, model cards with a governance review timeline, and monitoring rules with alerting.",
     stack: ["FastAPI", "Next.js 14", "PostgreSQL", "Redis", "Dramatiq", "Docker"],
     link: "https://github.com/ashutoshjoshi1/HarborLine",
     seed: 71,
@@ -121,7 +121,7 @@ export const PROJECTS: Project[] = [
     domain: "Hyperspectral AI / Agriculture",
     year: "2026",
     description:
-      "Drone-based hyperspectral + AI system that screens pesticide-residue risk in crop fields before harvest and maps it as a low / medium / high heatmap — a tested spectroscopy pipeline (calibration → preprocessing → QC → segmentation), PLS-DA / RF / SVM / GBM baselines with uncertainty and out-of-distribution checks, and 1D-CNN spectral–spatial fusion. Screening, not certification.",
+      "Drone-based hyperspectral + AI system that screens pesticide-residue risk in crop fields before harvest and maps it as a low / medium / high heatmap: a tested spectroscopy pipeline (calibration → preprocessing → QC → segmentation), PLS-DA / RF / SVM / GBM baselines with uncertainty and out-of-distribution checks, and 1D-CNN spectral–spatial fusion. Screening, not certification.",
     stack: ["Python", "1D-CNN", "PLS-DA / RF / SVM / GBM", "Geospatial"],
     link: "https://github.com/ashutoshjoshi1/Fasal",
     seed: 83,
@@ -132,7 +132,7 @@ export const PROJECTS: Project[] = [
     domain: "Generative AI / MLOps",
     year: "2025",
     description:
-      "AI video generation platform — audio synthesis, facial animation, refinement and encoding orchestrated through a Celery job state machine with full observability.",
+      "AI video generation platform: audio synthesis, facial animation, refinement and encoding orchestrated through a Celery job state machine with full observability.",
     stack: ["Next.js", "FastAPI", "Celery", "Redis", "Docker"],
     link: "https://github.com/ashutoshjoshi1/ReBirth",
     private: true,
@@ -144,7 +144,7 @@ export const PROJECTS: Project[] = [
     domain: "LLM Systems",
     year: "2026",
     description:
-      "LLM-driven futures trading engine with a fully deterministic core — seven-dimension context scoring, risk gate chain, immutable domain models, ~93% test coverage.",
+      "LLM-driven futures trading engine with a fully deterministic core: seven-dimension context scoring, risk gate chain, immutable domain models, ~93% test coverage.",
     stack: ["Python", "Anthropic API", "pytest"],
     link: "https://github.com/ashutoshjoshi1/Claude-TopstepX",
     private: true,
@@ -156,7 +156,7 @@ export const PROJECTS: Project[] = [
     domain: "Product / Fintech",
     year: "2025",
     description:
-      "Personal finance platform — transaction intelligence, subscription tracking, budgets and an AI copilot. Mobile app plus marketing site on a Supabase backend.",
+      "Personal finance platform: transaction intelligence, subscription tracking, budgets and an AI copilot. Mobile app plus marketing site on a Supabase backend.",
     stack: ["Expo", "React Native", "Supabase", "pgvector"],
     link: "https://github.com/ashutoshjoshi1/RETRVE",
     private: true,
@@ -168,7 +168,7 @@ export const PROJECTS: Project[] = [
     domain: "Graphics / Native",
     year: "2025",
     description:
-      "Native C++ desktop app streaming live IMU sensor data into a real-time OpenGL 3D scene — quaternion orientation, glTF models, GPS reverse-geocoding.",
+      "Native C++ desktop app streaming live IMU sensor data into a real-time OpenGL 3D scene: quaternion orientation, glTF models, GPS reverse-geocoding.",
     stack: ["C++17", "OpenGL", "Dear ImGui", "GLFW"],
     link: "https://github.com/ashutoshjoshi1/IMU-3D-model-SW",
     seed: 89,
@@ -291,7 +291,7 @@ export const MORE_WORK: { label: string; items: RepoLink[] }[] = [
 
 export const PROFILE = {
   name: "Ashutosh Joshi",
-  role: "Software Engineer — AI/ML Systems",
+  role: "Software Engineer, AI/ML Systems",
   org: "NASA via SciGlob Instruments",
 };
 
@@ -299,9 +299,8 @@ export const HERO = {
   name: ["Ashutosh", "Joshi"] as const,
   role: "AI/ML systems engineer at SciGlob, for NASA",
   lede: "I make LLM inference fast and cheap on GPUs, and run machine learning across NASA’s 300+ Pandora instruments.",
-  photo: "/images/hero-goddard.webp",
-  photoAlt: "Ashutosh Joshi standing at the main gate sign of NASA’s Goddard Space Flight Center",
-  caption: "At the main gate of NASA’s Goddard Space Flight Center, Greenbelt, Maryland.",
+  photo: "/images/hero-portrait.webp",
+  photoAlt: "Black-and-white portrait of Ashutosh Joshi against a black background",
 };
 
 export const MANIFESTO =
@@ -309,7 +308,7 @@ export const MANIFESTO =
 
 /* the previous site's mission statement, kept for the NASA section */
 export const FIELD_STATEMENT =
-  "I build AI systems that listen to the physical world — a network of atmospheric instruments on five continents feeding NASA science, pipelines that turn raw photons into data products, and LLM agents that turn data into decisions.";
+  "I build AI systems that listen to the physical world: a network of atmospheric instruments on five continents feeding NASA science, pipelines that turn raw photons into data products, and LLM agents that turn data into decisions.";
 
 /* The production LLM serving work, told as the steps of the pinned
    inference story. Each step sets the levers of the simulated server
@@ -368,8 +367,10 @@ export const INFERENCE_STEPS: InferenceStep[] = [
   },
 ];
 
+export const BENCHMARK_TITLE = "Nothing ships unmeasured.";
+
 export const BENCHMARK_NOTE =
-  "Nothing ships unmeasured. A benchmarking harness tracks TTFT, ITL, P95/P99 latency and MFU/MBU and gates every model and config change. I compared vLLM, SGLang and TensorRT-LLM head to head before recommending the production runtime, and root-cause latency regressions with Nsight Systems and PyTorch Profiler.";
+  "A benchmarking harness tracks TTFT, ITL, P95/P99 latency and MFU/MBU and gates every model and config change. I compared vLLM, SGLang and TensorRT-LLM head to head before recommending the production runtime, and root-cause latency regressions with Nsight Systems and PyTorch Profiler.";
 
 export const SIMULATION_NOTE =
   "The server is a toy, simulated one forward pass at a time in your browser: twelve batch slots, illustrative costs, random traffic. Its numbers are its own. The figures beside it are from production.";
@@ -392,39 +393,28 @@ export const IMPACT_METRICS: ImpactMetric[] = [
   { sign: "−", value: 40, label: "Idle GPU hours" },
 ];
 
-/* ML and data systems running NASA's Pandora network. `picture` picks what
-   the held frame beside the list shows while the system is selected. */
-export type FleetPicture = "video" | "sky" | "roof" | "globe" | "spectrum";
+/* ML and data systems running NASA's Pandora network. `picture` picks the
+   drawing the held frame beside the list shows while the system is selected. */
+export type FleetPicture = "trace" | "sky" | "fleet" | "spectrum";
 
 export interface FleetPictureSource {
-  /* raster or footage; the spectrum is drawn in code */
-  src?: string;
-  poster?: string;
   alt: string;
   caption: string;
 }
 
+/* all four are drawn in code, in the page's cells, and captioned as drawings */
 export const FLEET_PICTURES: Record<FleetPicture, FleetPictureSource> = {
-  video: {
-    src: "/images/world/tempo-conus-day.webm",
-    poster: "/images/world/tempo-conus-day-poster.jpg",
-    alt: "Animated map of nitrogen dioxide over the United States through one day, measured by NASA's TEMPO satellite",
-    caption: "Nitrogen dioxide over the US through one day, from NASA’s TEMPO satellite. Pandora instruments on the ground are how it is checked.",
+  trace: {
+    alt: "Drawn signal traces from three instruments over a day, with a few readings flagged",
+    caption: "Drawn: a day of readings from three instruments. The green cells are what the anomaly models flag.",
   },
   sky: {
-    src: "/images/world/pandora-goddard-roof.webp",
-    alt: "Pandora spectrometer heads on poles against a clear sky on a NASA Goddard rooftop",
-    caption: "Pandora spectrometers on a Goddard roof. The overlay marks clear-sky cells by their red–blue ratio, the classic first pass before a CNN.",
+    alt: "A drawn all-sky camera frame as a disc of cells, with cloud cells marked",
+    caption: "Drawn: an all-sky camera frame, the sun near the top. The green cells are cloud; a scan waits until the sun is clear.",
   },
-  roof: {
-    src: "/images/world/pandora-goddard-roof.webp",
-    alt: "Pandora spectrometer heads on poles against a clear sky on a NASA Goddard rooftop",
-    caption: "Pandora spectrometers being readied on a NASA Goddard roof for a field campaign.",
-  },
-  globe: {
-    src: "/images/world/tempo-north-america.webp",
-    alt: "Nitrogen dioxide over North America mapped by NASA's TEMPO satellite on a dark globe",
-    caption: "TEMPO’s view of North America. Ground spectrometers turn this kind of map from a picture into a measurement.",
+  fleet: {
+    alt: "A drawn grid of three hundred instruments, each cell shaded by its health score",
+    caption: "Drawn: three hundred instruments, each scored 0 to 100 every day. Green marks the few flagged for a look.",
   },
   spectrum: {
     alt: "A drawn solar spectrum from 300 to 530 nanometres with dark absorption lines",
@@ -441,7 +431,7 @@ export interface FleetSystem {
 
 export const FLEET: FleetSystem[] = [
   {
-    picture: "video",
+    picture: "trace",
     title: "Fleet anomaly detection",
     statement:
       "Deep-learning models watch live streams from 300+ Pandora spectrometers and flag sensor and data irregularities the moment they appear. Hours of daily manual monitoring, eliminated.",
@@ -455,28 +445,28 @@ export const FLEET: FleetSystem[] = [
     label: "Computer vision",
   },
   {
-    picture: "roof",
+    picture: "fleet",
     title: "Instrument health platform",
     statement:
       "A full-stack instrument-health app that gives operators the state of 300+ instruments on five continents.",
     label: "FastAPI · Next.js · TypeScript",
   },
   {
-    picture: "roof",
+    picture: "fleet",
     title: "Fleet health scoring",
     statement:
       "Raw L0 instrument streams parsed at the edge, health scored 0–100 per instrument, daily summaries shipped to cloud dashboards.",
     label: "Edge → cloud ML",
   },
   {
-    picture: "globe",
+    picture: "trace",
     title: "Evals, guardrails, observability",
     statement:
       "Evaluation and monitoring for production ML: a fleet-wide observability dashboard that speeds triage across five continents, and per-scan traceable logging that makes every data product auditable end to end.",
     label: "ML reliability",
   },
   {
-    picture: "globe",
+    picture: "spectrum",
     title: "Analysis-ready NASA data",
     statement:
       "Automated acquisition, cleaning and feature-engineering pipelines that turn raw spectrometer measurements into reproducible, auditable trace-gas datasets for NASA and ESA researchers.",
@@ -499,7 +489,6 @@ export interface Role {
   location: string;
   summary: string;
   highlights: string[];
-  photo?: { src: string; alt: string; position: string };
   active?: boolean;
 }
 
@@ -507,8 +496,8 @@ export const EXPERIENCE: Role[] = [
   {
     company: "SciGlob Instruments",
     org: "NASA",
-    role: "Software Engineer — AI/ML Systems",
-    period: "Nov 2024 — Present",
+    role: "Software Engineer, AI/ML Systems",
+    period: "Nov 2024 – Present",
     location: "Columbia, MD",
     summary: "LLM inference platforms and production ML for NASA's Pandora network.",
     highlights: [
@@ -519,17 +508,12 @@ export const EXPERIENCE: Role[] = [
       "Deep-learning anomaly detection and CNN cloud detection across 300+ spectrometers.",
       "Leading the C++17 rewrite of the Blick spectral processing suite.",
     ],
-    photo: {
-      src: "/images/hero-goddard.webp",
-      alt: "Ashutosh Joshi at NASA Goddard Space Flight Center",
-      position: "72% 62%",
-    },
     active: true,
   },
   {
     company: "407 Associates",
     role: "Data Analyst & Developer",
-    period: "Apr 2024 — Nov 2024",
+    period: "Apr 2024 – Nov 2024",
     location: "Laurel, MD",
     summary: "Data and ML pipelines that paid for themselves.",
     highlights: [
@@ -540,22 +524,17 @@ export const EXPERIENCE: Role[] = [
   {
     company: "UMBC",
     role: "Graduate Student Assistant",
-    period: "2022 — 2024",
+    period: "2022 – 2024",
     location: "Baltimore, MD",
     summary: "Teaching and grading alongside the M.S. in Data Science.",
     highlights: [
       "Machine learning concentration by day; taught, graded and debugged everything from off-by-one errors to existential dread the rest of the time.",
     ],
-    photo: {
-      src: "/images/umbc-graduation.webp",
-      alt: "Ashutosh Joshi in a UMBC graduation stole",
-      position: "40% 35%",
-    },
   },
   {
     company: "Tata Consultancy Services",
     role: "System Engineer",
-    period: "Jun 2020 — Aug 2022",
+    period: "Jun 2020 – Aug 2022",
     location: "Bangalore, IN",
     summary: "Enterprise-scale ETL and performance engineering.",
     highlights: [
@@ -577,7 +556,7 @@ export const EDUCATION: Degree[] = [
   {
     degree: "M.S. in Data Science (Advanced Applied AI)",
     school: "University of Maryland, Baltimore County",
-    period: "2022 — 2024",
+    period: "2022 – 2024",
     note: "GPA 3.89",
   },
   {
@@ -727,15 +706,15 @@ export const PRINCIPLES: Principle[] = [
   },
   {
     title: "Hardware doesn't lie.",
-    body: "Dashboards drift; photons don't. Every system I build starts at the sensor and works backwards — if the instrument disagrees with the chart, the chart loses.",
+    body: "Dashboards drift; photons don't. Every system I build starts at the sensor and works backwards. If the instrument disagrees with the chart, the chart loses.",
   },
   {
     title: "Determinism beats vibes.",
-    body: "LLMs get to reason. They don't get to gamble. The core stays deterministic, immutable and tested — my trading engine ships at ~93% coverage for a reason.",
+    body: "LLMs get to reason. They don't get to gamble. The core stays deterministic, immutable and tested; my trading engine ships at ~93% coverage for a reason.",
   },
   {
     title: "Close the loop.",
-    body: "An agent that acts but never measures is just noise with confidence. Pipelines end where feedback begins — every output feeds the next decision.",
+    body: "An agent that acts but never measures is just noise with confidence. Pipelines end where feedback begins: every output feeds the next decision.",
   },
   {
     title: "Ship the signal.",
@@ -744,34 +723,10 @@ export const PRINCIPLES: Principle[] = [
 ];
 
 export const CONTACT_PICTURE = {
-  src: "/images/world/tempo-northeast.webp",
-  alt: "Map of nitrogen dioxide over the US Northeast from NASA's TEMPO satellite, with Baltimore, Philadelphia and New York marked",
-  caption: "Nitrogen dioxide over the Northeast at 7:05 a.m. on 18 May 2026, from NASA’s TEMPO satellite. I’m in Baltimore, bottom left.",
+  src: "/images/umbc-graduation.webp",
+  alt: "Ashutosh Joshi smiling in a UMBC graduation stole",
+  caption: "Graduation day at UMBC, Baltimore.",
 };
-
-/* found pictures, all public domain, credited anyway */
-export const CREDITS = [
-  {
-    what: "Pandora spectrometers on a Goddard roof",
-    who: "NASA GSFC, Ginger Butcher",
-    link: "https://commons.wikimedia.org/wiki/File:24Seven-_PANDORA_13-21_EDT_(26482046721).png",
-  },
-  {
-    what: "TEMPO nitrogen dioxide over the Northeast",
-    who: "NASA Earth Observatory, Michala Garrison",
-    link: "https://commons.wikimedia.org/wiki/File:Air_Pollution%E2%80%99s_Daily_Pulse_Over_the_Northeast_(1226522_-_nyam_tempo_no2_20260518).jpg",
-  },
-  {
-    what: "TEMPO over North America",
-    who: "NASA Scientific Visualization Studio, Kel Elkins",
-    link: "https://commons.wikimedia.org/wiki/File:TEMPO_-_Nitrogen_Dioxide_Air_Pollution_Over_North_America_(SVS5142_-_tempo_no2_00150_print).jpg",
-  },
-  {
-    what: "TEMPO through one day",
-    who: "NASA Scientific Visualization Studio, Trent L. Schindler",
-    link: "https://commons.wikimedia.org/wiki/File:NASA%E2%80%99s_TEMPO_Instrument_Air_Quality_Data_Now_Publicly_Available_(SVS5303_-_TEMPO_3_28_2024_CONUS_1080p30).webm",
-  },
-];
 
 export const CONTACT = {
   email: "http.ashutosh@gmail.com",

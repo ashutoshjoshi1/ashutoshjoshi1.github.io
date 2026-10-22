@@ -51,7 +51,6 @@ export default function Nasa() {
               data-active={active === i}
               data-rise
               style={{ "--d": "60ms" } as CSSProperties}
-              onPointerEnter={() => setActive(i)}
             >
               <div className="system__head">
                 <h3 className="system__title t-lead">{system.title}</h3>

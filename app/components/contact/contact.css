@@ -1,6 +1,6 @@
 /*
- * CONTACT — one full-bleed picture, one solid card. The picture drifts a
- * few percent as it passes (the page's one scroll-linked picture move).
+ * CONTACT — one full-bleed photograph, one solid card in its calm corner.
+ * The picture drifts a few percent as it passes.
  */
 
 .contact {
@@ -17,14 +17,13 @@
   position: absolute;
   inset: 0;
   margin: 0;
-  background: #5f8fb8;
+  background: var(--surface);
 }
 .contact__picture img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* keep the baked-in date and scale bar below the fold of the crop */
-  object-position: 30% 18%;
+  object-position: 42% 35%;
 }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {

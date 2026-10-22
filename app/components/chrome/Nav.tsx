@@ -15,21 +15,28 @@ const LINKS = [
 /* past this much scroll, scrolling down tucks the bar away */
 const HIDE_AFTER = 120;
 
+/* scroll to a section and move keyboard focus with it, so the next Tab
+   continues from there rather than from the link that was pressed */
 export function scrollToHash(hash: string): void {
   const target = document.querySelector<HTMLElement>(hash);
   if (!target) return;
   const lenis = getLenis();
   if (lenis) lenis.scrollTo(target, { offset: 0 });
   else target.scrollIntoView({ behavior: "auto" });
+  if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+  target.focus({ preventScroll: true });
   history.replaceState(null, "", hash);
 }
 
-/* A plain bar: wordmark, four links, one action. Its ink follows the
-   section under it, and it steps aside while the visitor reads down. */
+/* A plain bar: wordmark, four links, one action. Once the page moves it
+   stands on the ground of the section under it (so it never sits on text),
+   takes that section's ink, and steps aside while the visitor reads down. */
 export default function Nav() {
   const navRef = useRef<HTMLElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   const [ink, setInk] = useState<"light" | "dark">("light");
   const [hidden, setHidden] = useState(false);
+  const [solid, setSolid] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -52,6 +59,7 @@ export default function Nav() {
       frame = requestAnimationFrame(() => {
         frame = 0;
         const y = window.scrollY;
+        setSolid(y > 8);
         if (Math.abs(y - lastY) < 6) return;
         setHidden(y > lastY && y > HIDE_AFTER);
         lastY = y;
@@ -65,6 +73,24 @@ export default function Nav() {
     };
   }, []);
 
+  /* the open menu owns the page: Escape closes it and hands focus back to
+     the toggle, and everything behind it is inert meanwhile */
+  useEffect(() => {
+    const behind = [...document.querySelectorAll<HTMLElement>("main, footer")];
+    behind.forEach((el) => (el.inert = menuOpen));
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setMenuOpen(false);
+      toggleRef.current?.focus();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      behind.forEach((el) => (el.inert = false));
+    };
+  }, [menuOpen]);
+
   const go = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMenuOpen(false);
@@ -77,6 +103,7 @@ export default function Nav() {
       className="nav wrap"
       data-ink-now={ink}
       data-hidden={hidden && !menuOpen}
+      data-solid={solid}
       data-menu={menuOpen}
     >
       <a className="nav__mark" href="#top" onClick={(e) => go(e, "#top")}>
@@ -93,6 +120,7 @@ export default function Nav() {
         Résumé
       </a>
       <button
+        ref={toggleRef}
         type="button"
         className="nav__toggle"
         aria-expanded={menuOpen}

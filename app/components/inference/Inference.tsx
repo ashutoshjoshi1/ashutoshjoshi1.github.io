@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Policy } from "../../lib/batching";
-import { BENCHMARK_NOTE, INFERENCE_STEPS, SIMULATION_NOTE, TOOLCHAIN } from "../../lib/data";
+import { BENCHMARK_NOTE, BENCHMARK_TITLE, INFERENCE_STEPS, SIMULATION_NOTE, TOOLCHAIN } from "../../lib/data";
 import Lines from "../motion/Lines";
 import Roll from "../motion/Roll";
 import KvField from "./KvField";
@@ -108,7 +108,10 @@ export default function Inference() {
       </div>
 
       <div className="inference__after wrap">
-        <p className="inference__note t-lead">{BENCHMARK_NOTE}</p>
+        <div className="inference__note" data-rise>
+          <h3 className="inference__note-title t-lead">{BENCHMARK_TITLE}</h3>
+          <p className="measure">{BENCHMARK_NOTE}</p>
+        </div>
         <div className="inference__aside">
           <p className="t-small muted">{SIMULATION_NOTE}</p>
           <p className="t-small">

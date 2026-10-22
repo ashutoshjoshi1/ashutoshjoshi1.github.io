@@ -8,7 +8,7 @@ const handle = (url: string) => url.replace(/\/$/, "").split("/").pop() ?? url;
    one solid card with every way to reach me. */
 export default function Contact() {
   return (
-    <section id="contact" className="contact" data-ink="dark" aria-labelledby="contact-title">
+    <section id="contact" className="contact" data-ink="light" aria-labelledby="contact-title">
       <figure className="contact__picture">
         {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
         <img src={CONTACT_PICTURE.src} alt={CONTACT_PICTURE.alt} width={1280} height={940} loading="lazy" decoding="async" />

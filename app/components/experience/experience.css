@@ -1,7 +1,6 @@
 /*
  * EXPERIENCE — roles as rows on one off-centre line: when on the left,
- * what in the middle, and a photograph closing the row where one exists.
- * The photographs open like a shutter, settling from a slight scale.
+ * what across the rest of the grid.
  */
 
 .experience__head {
@@ -51,9 +50,6 @@
 .role__what {
   grid-column: 4 / -1;
 }
-.role[data-photo="true"] .role__what {
-  grid-column: 4 / span 6;
-}
 .role__company {
   margin: 0;
   font-weight: 500;
@@ -75,41 +71,12 @@
   color: var(--accent);
 }
 
-.role__photo {
-  grid-column: 10 / -1;
-  align-self: start;
-  margin: 0;
-  aspect-ratio: 4 / 5;
-  overflow: clip;
-  background: var(--surface);
-}
-.role__photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .js .shutter:not(.is-in) {
-    clip-path: inset(0 0 100% 0);
-  }
-  .js .shutter:not(.is-in) img {
-    transform: scale(1.12);
-  }
-  .js .shutter.is-in {
-    clip-path: inset(0);
-    transition: clip-path var(--t-open) var(--ease-in-out);
-  }
-  .js .shutter.is-in img {
-    transition: transform 1500ms var(--ease-soft);
-  }
-}
-
 .experience__education {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--gutter);
   padding-top: 3rem;
+  padding-bottom: 1.5rem;
 }
 .experience__subhead {
   grid-column: 1 / span 3;
@@ -139,10 +106,6 @@
   }
   .role__what {
     margin-top: 1rem;
-  }
-  .role__photo {
-    width: min(100%, 20rem);
-    margin-top: 1.75rem;
   }
   .degrees {
     margin-top: 1.25rem;

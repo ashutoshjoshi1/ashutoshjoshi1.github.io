@@ -43,13 +43,6 @@ export function coverCrop(w: number, h: number, boxAspect: number, fx = 0.5, fy 
   return { x: 0, y: (h - ch) * fy, w, h: ch };
 }
 
-/* a crop of the given size centred on a point, kept inside the source */
-export function cropAround(w: number, h: number, cx: number, cy: number, cw: number, ch: number): Rect {
-  const x = Math.min(Math.max(cx - cw / 2, 0), Math.max(0, w - cw));
-  const y = Math.min(Math.max(cy - ch / 2, 0), Math.max(0, h - ch));
-  return { x, y, w: Math.min(cw, w), h: Math.min(ch, h) };
-}
-
 export function lerpRect(a: Rect, b: Rect, t: number): Rect {
   return {
     x: a.x + (b.x - a.x) * t,
@@ -78,8 +71,9 @@ export function drawPixelated(
     return;
   }
 
-  const cols = Math.max(1, Math.ceil(dest.w / block));
-  const rows = Math.max(1, Math.ceil(dest.h / block));
+  /* the epsilon keeps float error (50 rows reading as 50.0000001) from adding a cell */
+  const cols = Math.max(1, Math.ceil(dest.w / block - 1e-6));
+  const rows = Math.max(1, Math.ceil(dest.h / block - 1e-6));
   if (scratch.width !== cols || scratch.height !== rows) {
     scratch.width = cols;
     scratch.height = rows;

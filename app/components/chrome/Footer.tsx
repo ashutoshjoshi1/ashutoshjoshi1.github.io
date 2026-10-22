@@ -1,4 +1,4 @@
-import { CONTACT, CREDITS } from "../../lib/data";
+import { CONTACT } from "../../lib/data";
 import FitName from "./FitName";
 import WebVitals from "./WebVitals";
 import "./footer.css";
@@ -33,19 +33,6 @@ export default function Footer() {
 
       <div className="footer__small wrap">
         <WebVitals />
-        <p className="footer__credits t-small">
-          <span className="muted">Found pictures, all public domain: </span>
-          {CREDITS.map((credit, i) => (
-            <span key={credit.link}>
-              {i > 0 && "; "}
-              <a className="link" href={credit.link} target="_blank" rel="noopener noreferrer">
-                {credit.what}
-              </a>{" "}
-              by {credit.who}
-            </span>
-          ))}
-          . The project pictures and the spectrum are drawn in code.
-        </p>
         <p className="t-small muted">© {new Date().getFullYear()} Ashutosh Joshi</p>
       </div>
     </footer>

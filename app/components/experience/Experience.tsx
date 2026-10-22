@@ -14,7 +14,7 @@ export default function Experience() {
 
       <ol className="experience__roles wrap">
         {EXPERIENCE.map((role) => (
-          <li key={role.company} className="role" data-photo={Boolean(role.photo)}>
+          <li key={role.company} className="role">
             <div className="role__when" data-rise>
               <p className="role__period t-lead">{role.period}</p>
               <p className="role__place t-small">{role.location}</p>
@@ -31,20 +31,6 @@ export default function Experience() {
                 ))}
               </ul>
             </div>
-            {role.photo && (
-              <figure className="role__photo shutter" data-reveal>
-                {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
-                <img
-                  src={role.photo.src}
-                  alt={role.photo.alt}
-                  style={{ objectPosition: role.photo.position }}
-                  width={800}
-                  height={1000}
-                  loading="lazy"
-                  decoding="async"
-                />
-              </figure>
-            )}
           </li>
         ))}
       </ol>

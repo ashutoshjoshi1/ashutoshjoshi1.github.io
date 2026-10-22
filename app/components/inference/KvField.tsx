@@ -30,6 +30,11 @@ const mix = (a: Rgb, b: Rgb, t: number): Rgb => [
 ];
 const css = (c: Rgb) => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
 
+const SURFACE_CSS = css(SURFACE);
+const ACCENT_CSS = css(ACCENT);
+/* request tones are cached; ids only grow, so the cache is trimmed now and then */
+const TONE_CACHE_LIMIT = 512;
+
 /* each request gets its own stable grey, between dim and nearly ink */
 function requestTone(rid: number): Rgb {
   const h = Math.imul(rid, 2654435761) >>> 0;
@@ -80,6 +85,20 @@ export default function KvField({ policy, requestsPerSec, burst, burstSize, labe
     let inView = false;
     /* simulated time is ahead of real time by this factor; colours age in real ms */
     let realNow = 0;
+    const toneCss = new Map<number, string>();
+
+    /* the settled colour of a block's owner, without allocating per frame */
+    const settledCss = (owner: number): string => {
+      if (owner === FREE) return SURFACE_CSS;
+      if (owner === SHARED) return ACCENT_CSS;
+      let cached = toneCss.get(owner);
+      if (!cached) {
+        if (toneCss.size > TONE_CACHE_LIMIT) toneCss.clear();
+        cached = css(requestTone(owner));
+        toneCss.set(owner, cached);
+      }
+      return cached;
+    };
 
     const layout = () => {
       const { width, height, dpr } = fitCanvas(canvas);
@@ -109,14 +128,14 @@ export default function KvField({ policy, requestsPerSec, burst, burstSize, labe
       for (let i = 0; i < map.size; i++) {
         const owner = map.owner[i];
         const age = realNow - map.changedAt[i];
-        let tone: Rgb;
-        if (owner === FREE) {
-          tone = age < FADE_MS ? mix(toneOf(map.lastOwner[i]), SURFACE, age / FADE_MS) : SURFACE;
+        /* only blocks still glowing or fading need a mixed colour */
+        if (owner === FREE && age < FADE_MS) {
+          ctx.fillStyle = css(mix(toneOf(map.lastOwner[i]), SURFACE, age / FADE_MS));
+        } else if (owner !== FREE && owner !== SHARED && age < FLASH_MS) {
+          ctx.fillStyle = css(mix(INK, toneOf(owner), age / FLASH_MS));
         } else {
-          const base = toneOf(owner);
-          tone = age < FLASH_MS && owner !== SHARED ? mix(INK, base, age / FLASH_MS) : base;
+          ctx.fillStyle = settledCss(owner);
         }
-        ctx.fillStyle = css(tone);
         ctx.fillRect(offsetX + (i % cols) * cell, offsetY + Math.floor(i / cols) * cell, size, size);
       }
     };
@@ -137,12 +156,13 @@ export default function KvField({ policy, requestsPerSec, burst, burstSize, labe
       updateHud();
     };
 
+    /* the loop runs only while the field is on screen and the tab visible */
     const loop = (now: number) => {
-      raf = requestAnimationFrame(loop);
       if (!inView || document.hidden) {
-        last = now;
+        raf = 0;
         return;
       }
+      raf = requestAnimationFrame(loop);
       const dt = Math.min(64, now - (last || now));
       last = now;
       realNow += dt;
@@ -160,7 +180,11 @@ export default function KvField({ policy, requestsPerSec, burst, burstSize, labe
     realNow += FADE_MS;
     draw();
     updateHud();
-    if (!reduced) raf = requestAnimationFrame(loop);
+    const start = () => {
+      if (reduced || raf || !inView || document.hidden) return;
+      last = 0;
+      raf = requestAnimationFrame(loop);
+    };
 
     const ro = new ResizeObserver(() => {
       layout();
@@ -170,17 +194,19 @@ export default function KvField({ policy, requestsPerSec, burst, burstSize, labe
     ro.observe(canvas);
     const io = new IntersectionObserver(([entry]) => {
       inView = entry?.isIntersecting ?? false;
+      start();
     });
     io.observe(canvas);
+    document.addEventListener("visibilitychange", start);
 
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
+      document.removeEventListener("visibilitychange", start);
       engineRef.current = null;
     };
     /* the engine lives for the component's lifetime; props reach it below */
-     
   }, []);
 
   useEffect(() => {

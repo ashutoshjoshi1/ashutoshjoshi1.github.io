@@ -6,6 +6,7 @@ import {
   SKILLS,
   INFERENCE_STEPS,
   BENCHMARK_NOTE,
+  BENCHMARK_TITLE,
   FLEET,
   PRINCIPLES,
   IMPACT_STATEMENT,
@@ -46,7 +47,7 @@ const projectDocs: Doc[] = PROJECTS.map((p) => ({
   id: `project-${p.slug}`,
   tag: p.name,
   text: `${p.name} ${p.domain} ${p.description} ${p.stack.join(" ")}`,
-  answer: `${p.name} (${p.year}, ${p.domain}) — ${p.description} Built with ${p.stack.join(", ")}.${
+  answer: `${p.name} (${p.year}, ${p.domain}): ${p.description} Built with ${p.stack.join(", ")}.${
     p.private ? " The repo is private; a walkthrough is available on request." : ""
   }`,
   /* private repos would 404 for visitors: point at the index instead */
@@ -58,7 +59,7 @@ const moreWorkDocs: Doc[] = MORE_WORK.flatMap((group) =>
     id: `repo-${item.name}`,
     tag: `GitHub: ${item.name}`,
     text: `${item.name} ${item.summary} ${item.language} ${item.year} ${group.label} github repository project`,
-    answer: `${item.name} (${item.year}, ${item.language}) — ${item.summary}`,
+    answer: `${item.name} (${item.year}, ${item.language}): ${item.summary}`,
     link: item.link,
   })),
 );
@@ -93,8 +94,8 @@ const inferenceDocs: Doc[] = [
   {
     id: "inference-benchmarks",
     tag: "Inference: benchmarks",
-    text: `${BENCHMARK_NOTE} benchmark harness measured`,
-    answer: BENCHMARK_NOTE,
+    text: `${BENCHMARK_TITLE} ${BENCHMARK_NOTE} benchmark harness measured`,
+    answer: `${BENCHMARK_TITLE} ${BENCHMARK_NOTE}`,
     link: "#inference",
   },
 ];
@@ -197,15 +198,15 @@ const FACT_DOCS: Doc[] = [
     tag: "Python",
     text: "python fastapi flask pydantic celery data pipelines etl backend scripting numpy",
     answer:
-      "Python is the daily driver — Pandora fleet monitoring at the edge (Pandora Summarizer), FastAPI backends for CommonGround, MoneyBall and ReBirth, and the deterministic LLM trading core of Claude TopstepX (~93% test coverage).",
+      "Python is the daily driver: Pandora fleet monitoring at the edge (Pandora Summarizer), FastAPI backends for CommonGround, MoneyBall and ReBirth, and the deterministic LLM trading core of Claude TopstepX (~93% test coverage).",
     link: "#work",
   },
   {
     id: "fact-frontend",
     tag: "Frontend",
-    text: "frontend react next.js nextjs typescript react native expo web ui ux design gsap animation mobile app",
+    text: "frontend react next.js nextjs typescript react native expo web ui ux design canvas animation mobile app",
     answer:
-      "Frontend: React/Next.js and React Native (RETRVE ships as an Expo app), and the full-stack instrument-health app for NASA is FastAPI plus Next.js and TypeScript. This site is a Next.js static export animated with GSAP and Lenis, with no template.",
+      "Frontend: React/Next.js and React Native (RETRVE ships as an Expo app), and the full-stack instrument-health app for NASA is FastAPI plus Next.js and TypeScript. This site is a Next.js static export with a hand-written canvas engine for its pixels and no template.",
     link: "#skills",
   },
   {

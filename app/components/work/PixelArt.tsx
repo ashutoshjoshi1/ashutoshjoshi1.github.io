@@ -17,8 +17,9 @@ interface PixelArtProps {
   className?: string;
 }
 
-/* A project's drawing, shown as cells; a new drawing develops from coarse
-   merged cells down to its own grid. */
+/* A project's drawing, shown as cells; it develops from coarse merged cells
+   down to its own grid the first time it is actually on screen. Hidden
+   copies (a thumbnail in a layout that shows the frame instead) do nothing. */
 export default function PixelArt({ slug, seed, label, className = "" }: PixelArtProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -28,45 +29,54 @@ export default function PixelArt({ slug, seed, label, className = "" }: PixelArt
     const paint = PAINTERS[slug];
     if (!canvas || !ctx || !paint) return;
 
-    const cells = new Cells(ART_COLS, ART_ROWS);
-    paint(cells, mulberry32(seed));
-    const bitmap = toBitmap(cells);
     const scratch = document.createElement("canvas");
     const source = { x: 0, y: 0, w: ART_COLS, h: ART_ROWS };
+    let bitmap: HTMLCanvasElement | null = null;
     let raf = 0;
     let merge = 1;
 
     const draw = () => {
+      if (!bitmap) return;
       const { width, height, dpr } = fitCanvas(canvas);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, width, height);
       const cell = width / ART_COLS;
-      const block = cell * merge;
       drawPixelated(ctx, bitmap, source, { x: 0, y: 0, w: width, h: height }, {
-        block,
+        block: cell * merge,
         gap: Math.max(1, cell * 0.12),
         scratch,
       });
     };
 
+    const develop = () => {
+      const cells = new Cells(ART_COLS, ART_ROWS);
+      paint(cells, mulberry32(seed));
+      bitmap = toBitmap(cells);
+      if (prefersReducedMotion()) {
+        draw();
+        return;
+      }
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const t = Math.min(1, (now - t0) / DEVELOP_MS);
+        merge = Math.max(1, Math.round(Math.pow(FIRST_MERGE, Math.pow(1 - t, 3))));
+        draw();
+        if (t < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry?.isIntersecting || bitmap) return;
+      develop();
+    });
+    io.observe(canvas);
     const ro = new ResizeObserver(draw);
     ro.observe(canvas);
 
-    if (prefersReducedMotion()) {
-      draw();
-    } else {
-      const t0 = performance.now();
-      const develop = (now: number) => {
-        const t = Math.min(1, (now - t0) / DEVELOP_MS);
-        merge = Math.max(1, Math.round(Math.pow(FIRST_MERGE, 1 - (1 - Math.pow(1 - t, 3)))));
-        draw();
-        if (t < 1) raf = requestAnimationFrame(develop);
-      };
-      raf = requestAnimationFrame(develop);
-    }
-
     return () => {
       cancelAnimationFrame(raf);
+      io.disconnect();
       ro.disconnect();
     };
   }, [slug, seed]);

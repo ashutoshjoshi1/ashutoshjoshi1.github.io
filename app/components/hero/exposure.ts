@@ -1,9 +1,13 @@
-import { coverCrop, cropAround, lerpRect, type Rect } from "../../lib/pixels";
+import { lerpRect, type Rect } from "../../lib/pixels";
 
 /*
  * The hero's geometry, as pure functions of the viewport: where the window
  * sits on the first frame, which part of the photograph it shows, and how
- * both open out to the full-bleed picture as the visitor scrolls.
+ * both open out to the full screen as the visitor scrolls.
+ *
+ * The photograph is a portrait on a black ground, so the open view fits its
+ * height and lets the ground run out to the screen's edges: a crop wider than
+ * the photo overhangs it, and the overhang is drawn as that same black.
  */
 
 export interface Photo {
@@ -11,8 +15,8 @@ export interface Photo {
   height: number;
   /* the subject, in photo pixels: the window starts centred on it */
   focus: { x: number; y: number };
-  /* object-position of the full-bleed crop on a landscape screen */
-  landscapeY: number;
+  /* share of the photo's height on screen once the window is open */
+  openHeight: number;
 }
 
 export interface Inset {
@@ -49,23 +53,27 @@ export function insetAt(start: Inset, t: number): Inset {
   return { top: start.top * k, right: start.right * k, bottom: start.bottom * k, left: start.left * k };
 }
 
-/* the photo crop that fills the whole viewport once the window is open */
-export function openCrop(photo: Photo, vw: number, vh: number): Rect {
-  const aspect = vw / vh;
-  if (aspect >= photo.width / photo.height) {
-    return coverCrop(photo.width, photo.height, aspect, 0.5, photo.landscapeY);
-  }
-  /* portrait screens: keep the subject in frame horizontally */
-  const cropW = photo.height * aspect;
-  const fx = (photo.focus.x - cropW / 2) / Math.max(1, photo.width - cropW);
-  return coverCrop(photo.width, photo.height, aspect, Math.min(1, Math.max(0, fx)), 0.5);
+/* a span of `size` centred on `center` inside [0, extent]; a span wider than
+   the photo is centred on it instead, overhanging into the ground */
+function place(center: number, size: number, extent: number): number {
+  if (size >= extent) return (extent - size) / 2;
+  return Math.min(Math.max(center - size / 2, 0), extent - size);
 }
 
-/* the first frame: the same viewport-sized crop, zoomed in on the subject so
-   the small window in the middle of the screen holds him rather than the sign */
+/* the photo crop that fills the whole viewport once the window is open */
+export function openCrop(photo: Photo, vw: number, vh: number): Rect {
+  const h = photo.height * photo.openHeight;
+  const w = h * (vw / vh);
+  return { x: place(photo.focus.x, w, photo.width), y: place(photo.focus.y, h, photo.height), w, h };
+}
+
+/* the first frame: the same viewport-shaped crop, zoomed in on the face so
+   the small window in the middle of the screen holds it */
 export function closedCrop(photo: Photo, vw: number, vh: number, zoom: number): Rect {
   const open = openCrop(photo, vw, vh);
-  return cropAround(photo.width, photo.height, photo.focus.x, photo.focus.y, open.w / zoom, open.h / zoom);
+  const w = open.w / zoom;
+  const h = open.h / zoom;
+  return { x: place(photo.focus.x, w, photo.width), y: place(photo.focus.y, h, photo.height), w, h };
 }
 
 export function cropAt(photo: Photo, vw: number, vh: number, zoom: number, t: number): Rect {

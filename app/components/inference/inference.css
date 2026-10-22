@@ -179,8 +179,13 @@
 }
 .inference__note {
   grid-column: 1 / span 7;
+}
+.inference__note-title {
+  margin: 0 0 0.75rem;
+  font-weight: 500;
+}
+.inference__note p {
   margin: 0;
-  max-width: 40ch;
 }
 .inference__aside {
   grid-column: 9 / -1;

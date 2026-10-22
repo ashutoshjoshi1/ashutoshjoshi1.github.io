@@ -1,17 +1,16 @@
 "use client";
 
 import { useEffect, useRef, type CSSProperties } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CONTACT, HERO } from "../../lib/data";
 import { prefersReducedMotion, mulberry32 } from "../../lib/motion";
 import { clamp01, drawPixelated, fitCanvas } from "../../lib/pixels";
 import Icon from "../ui/Icon";
 import Lines from "../motion/Lines";
-import { blockAt, cropAt, insetAt, windowInset, STACKED_BELOW, type Inset, type Photo } from "./exposure";
+import { blockAt, cropAt, insetAt, openCrop, windowInset, STACKED_BELOW, type Inset, type Photo } from "./exposure";
 import "./hero.css";
 
-const PHOTO: Photo = { width: 1370, height: 1954, focus: { x: 1010, y: 1230 }, landscapeY: 0.69 };
+/* the black-and-white studio portrait: face centred, on a near-black ground */
+const PHOTO: Photo = { width: 1024, height: 1536, focus: { x: 512, y: 620 }, openHeight: 0.78 };
 const ZOOM = 1.3;
 /* the cells across the first window: few enough to read as a detector */
 const CELLS_ACROSS = 15;
@@ -22,6 +21,22 @@ const OPEN_PHONE = 0.7;
 
 const delay = (ms: number): CSSProperties => ({ "--d": `${ms}ms` }) as CSSProperties;
 
+/* The open view is wider than the photo on landscape screens. Rather than
+   let a flat black meet the photo's own (slightly lifted) black at a visible
+   seam, extend the photo sideways by stretching its outermost columns. */
+function extendSideways(img: HTMLImageElement, pad: number): HTMLCanvasElement {
+  const { naturalWidth: w, naturalHeight: h } = img;
+  const canvas = document.createElement("canvas");
+  canvas.width = w + pad * 2;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return canvas;
+  ctx.drawImage(img, 0, 0, 1, h, 0, 0, pad, h);
+  ctx.drawImage(img, w - 1, 0, 1, h, pad + w, 0, pad, h);
+  ctx.drawImage(img, pad, 0);
+  return canvas;
+}
+
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -29,7 +44,6 @@ export default function Hero() {
   const imgRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
-  const captionRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -40,7 +54,6 @@ export default function Hero() {
     const ctx = canvas?.getContext("2d");
     if (!section || !stage || !picture || !img || !canvas || !ctx || prefersReducedMotion()) return;
 
-    gsap.registerPlugin(ScrollTrigger);
     const scratch = document.createElement("canvas");
     const rng = mulberry32(5);
     let ready = false;
@@ -52,6 +65,9 @@ export default function Hero() {
     let start: Inset = { top: 0, right: 0, bottom: 0, left: 0 };
     let startBlock = 24;
     let frame = 0;
+    /* what the canvas reads: the photo, or the photo extended sideways */
+    let source: CanvasImageSource = img;
+    let pad = 0;
 
     const render = () => {
       frame = 0;
@@ -64,11 +80,11 @@ export default function Hero() {
         /* gone, not just transparent, once the picture has the screen */
         copyRef.current.style.visibility = fade >= 1 ? "hidden" : "visible";
       }
-      if (captionRef.current) captionRef.current.style.opacity = String(clamp01((progress - 0.92) / 0.08));
       if (!ready) return;
 
       const block = blockAt(startBlock, progress);
-      const crop = cropAt(PHOTO, vw, vh, ZOOM, progress);
+      const at = cropAt(PHOTO, vw, vh, ZOOM, progress);
+      const crop = { ...at, x: at.x + pad };
       /* only the cells inside the window, snapped to the cell grid so they hold still */
       const cell = Math.max(1, block);
       const x0 = Math.floor(inset.left / cell) * cell;
@@ -80,7 +96,7 @@ export default function Hero() {
       ctx.clearRect(0, 0, vw, vh);
       drawPixelated(
         ctx,
-        img,
+        source,
         { x: crop.x + x0 * sx, y: crop.y + y0 * sy, w: (x1 - x0) * sx, h: (y1 - y0) * sy },
         { x: x0, y: y0, w: x1 - x0, h: y1 - y0 },
         { block, gap: block >= 7 ? Math.max(1, block * 0.07) : 0, exposure, rng, scratch },
@@ -90,6 +106,19 @@ export default function Hero() {
       if (!frame) frame = requestAnimationFrame(render);
     };
 
+    /* only as much extension as this screen's open view needs */
+    const prepareSource = () => {
+      if (!ready) return;
+      const needed = Math.ceil(Math.max(0, -openCrop(PHOTO, vw, vh).x)) + 2;
+      if (needed <= 2) {
+        source = img;
+        pad = 0;
+      } else if (needed > pad) {
+        pad = needed;
+        source = extendSideways(img, pad);
+      }
+    };
+
     const measure = () => {
       const { width, height, dpr } = fitCanvas(canvas);
       vw = width;
@@ -97,8 +126,10 @@ export default function Hero() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       start = windowInset(vw, vh);
       startBlock = Math.max(10, (vw - start.left - start.right) / CELLS_ACROSS);
+      prepareSource();
       render();
     };
+
 
     /* the first light: cells integrate from dark noise to the true picture */
     const expose = () => {
@@ -113,17 +144,17 @@ export default function Hero() {
       requestAnimationFrame(tick);
     };
 
+    /* scroll-linked and linear: the scrollbar is the easing */
     const openDistance = () => window.innerHeight * (window.innerWidth < STACKED_BELOW ? OPEN_PHONE : OPEN_DESKTOP);
-    const trigger = ScrollTrigger.create({
-      trigger: section,
-      start: "top top",
-      end: () => `+=${openDistance()}`,
-      invalidateOnRefresh: true,
-      onUpdate: (self) => {
-        progress = self.progress;
-        schedule();
-      },
-    });
+    const onScroll = () => {
+      const next = clamp01(-section.getBoundingClientRect().top / openDistance());
+      /* past the opening (or before it) nothing changes: don't repaint */
+      if (next === progress) return;
+      progress = next;
+      schedule();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
 
     const ro = new ResizeObserver(measure);
     ro.observe(stage);
@@ -139,13 +170,14 @@ export default function Hero() {
         }
         ready = true;
         stage.dataset.exposed = "true";
+        prepareSource();
         expose();
       });
 
     return () => {
       alive = false;
       cancelAnimationFrame(frame);
-      trigger.kill();
+      window.removeEventListener("scroll", onScroll);
       ro.disconnect();
     };
   }, []);
@@ -185,10 +217,6 @@ export default function Hero() {
             </a>
           </div>
         </div>
-
-        <p ref={captionRef} className="hero__caption t-small">
-          {HERO.caption}
-        </p>
       </div>
     </section>
   );

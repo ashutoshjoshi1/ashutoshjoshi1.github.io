@@ -12,15 +12,27 @@
   gap: 2rem;
   height: var(--nav-h);
   color: var(--ink);
+  background-color: transparent;
   transition:
     color 300ms ease,
+    background-color 300ms ease,
     transform var(--t-ui) var(--ease-out);
+}
+.nav[data-solid="true"] {
+  background-color: var(--bg);
 }
 .nav[data-ink-now="dark"] {
   color: var(--field-ink);
 }
+.nav[data-ink-now="dark"][data-solid="true"] {
+  background-color: var(--field);
+}
 .nav[data-hidden="true"] {
   transform: translateY(-100%);
+}
+/* never tucked away while a keyboard user is inside it */
+.nav[data-hidden="true"]:focus-within {
+  transform: none;
 }
 
 .nav__mark {
@@ -113,6 +125,8 @@
 @media (prefers-reduced-motion: reduce) {
   .nav,
   .nav__menu {
-    transition: color 300ms ease;
+    transition:
+      color 300ms ease,
+      background-color 300ms ease;
   }
 }

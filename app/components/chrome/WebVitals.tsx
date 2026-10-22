@@ -30,7 +30,7 @@ function transferredKb(): number | null {
 /*
  * The site's own Core Web Vitals, measured in the visitor's browser —
  * a performance engineer's portfolio should prove it's fast, not claim it.
- * Unsupported metrics (e.g. LCP/INP in Safari) show as "—".
+ * Unsupported metrics (e.g. LCP/INP in Safari) read "not measured".
  */
 export default function WebVitals() {
   const rootRef = useRef<HTMLParagraphElement>(null);
@@ -45,7 +45,7 @@ export default function WebVitals() {
         po.observe({ type, buffered: true, ...extra } as PerformanceObserverInit);
         observers.push(po);
       } catch {
-        /* entry type listed but not observable here: leave the metric as "—" */
+        /* entry type listed but not observable here: leave the metric "not measured" */
       }
     };
 
@@ -82,7 +82,7 @@ export default function WebVitals() {
     };
   }, []);
 
-  const show = (value: number | null, format: (n: number) => string) => (value === null ? "—" : format(value));
+  const show = (value: number | null, format: (n: number) => string) => (value === null ? "not measured" : format(value));
 
   return (
     <p ref={rootRef} className="vitals t-small">

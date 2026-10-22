@@ -17,7 +17,7 @@
   margin: 0;
 }
 .work__intro {
-  grid-column: 9 / -1;
+  grid-column: 7 / span 5;
   align-self: end;
   max-width: 34ch;
   margin: 0;
@@ -214,13 +214,25 @@
 }
 
 @media (max-width: 899px) {
-  .work__head,
   .work__more-head,
   .work__group {
     display: block;
   }
-  .work__intro,
+  .work__head h2 {
+    grid-column: 1 / span 6;
+  }
+  .work__intro {
+    grid-column: 7 / -1;
+  }
   .work__more-intro {
+    margin-top: 1.25rem;
+  }
+}
+@media (max-width: 599px) {
+  .work__head {
+    display: block;
+  }
+  .work__intro {
     margin-top: 1.25rem;
   }
   .work__group-title {

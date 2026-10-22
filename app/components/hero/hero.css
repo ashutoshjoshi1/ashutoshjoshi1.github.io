@@ -1,9 +1,9 @@
 /*
  * HERO — "Window that opens to the edges". Without script, or with reduced
- * motion, it is the open photograph with the name over a scrim. With motion,
- * a 4:5 window in the middle of a held stage shows the photograph as coarse
- * detector cells; scrolling opens the window to the edges while the cells
- * resolve, then the next chapter slides over the held picture.
+ * motion, it is the portrait on its black ground with the name beside it.
+ * With motion, a 4:5 window in the middle of a held stage shows the face as
+ * coarse detector cells; scrolling opens the window to the edges while the
+ * cells resolve, then the next chapter slides over the held picture.
  */
 
 .hero {
@@ -18,26 +18,28 @@
   overflow: clip;
 }
 
+/* the portrait's own ground, so its edges never show */
 .hero__picture {
   position: absolute;
   inset: 0;
-  background: var(--surface);
+  background: #040404;
 }
-/* neutral scrim under the static headline only */
+/* neutral scrim under the static headline only: the one gradient allowed,
+   a photo scrim behind text */
 .hero__picture::after {
   content: "";
   position: absolute;
   inset: auto 0 0 0;
   height: 60%;
-  background: linear-gradient(to top, rgb(14 14 14 / 0.78), rgb(14 14 14 / 0));
+  background: linear-gradient(to top, rgb(14 14 14 / 0.78), rgb(14 14 14 / 0)); /* taste-skill-ignore */
   pointer-events: none;
 }
 
 .hero__img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 50% 69%;
+  object-fit: contain;
+  object-position: 50% 0;
 }
 
 .hero__canvas {
@@ -80,20 +82,6 @@
 .hero__lede {
   max-width: 28ch;
   margin: 0;
-}
-
-/* set on a solid label, not over the bright sign */
-.hero__caption {
-  display: none;
-  position: absolute;
-  left: var(--margin);
-  bottom: var(--margin);
-  z-index: 1;
-  max-width: 44ch;
-  margin: 0;
-  padding: 0.55rem 0.8rem;
-  background: var(--bg);
-  color: var(--ink);
 }
 
 @media (max-width: 899px) {
@@ -152,10 +140,6 @@
   }
   .js .hero__side {
     grid-column: 10 / -1;
-  }
-  .js .hero__caption {
-    display: block;
-    opacity: 0;
   }
 
   /* phones and tablets: the name above the window, the words below it */
