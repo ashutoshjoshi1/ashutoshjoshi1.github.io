@@ -1,6 +1,6 @@
 /*
- * NAV — no bar chrome: the words sit on the page, take the ink of the
- * section beneath them in 300ms, and tuck away while reading downward.
+ * NAV — a plain bar on the ground of the section beneath it, paper or
+ * night, following it in 300ms; it tucks away while reading downward.
  */
 
 .nav {
@@ -10,22 +10,13 @@
   display: flex;
   align-items: center;
   gap: 2rem;
-  height: var(--nav-h);
-  color: var(--ink);
-  background-color: transparent;
+  height: var(--bar);
+  font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
+  font-size: var(--step-small);
   transition:
     color 300ms ease,
     background-color 300ms ease,
     transform var(--t-ui) var(--ease-out);
-}
-.nav[data-solid="true"] {
-  background-color: var(--bg);
-}
-.nav[data-ink-now="dark"] {
-  color: var(--field-ink);
-}
-.nav[data-ink-now="dark"][data-solid="true"] {
-  background-color: var(--field);
 }
 .nav[data-hidden="true"] {
   transform: translateY(-100%);
@@ -36,8 +27,9 @@
 }
 
 .nav__mark {
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: var(--step-body);
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .nav__links {
@@ -48,19 +40,12 @@
 .nav__link {
   text-decoration: underline;
   text-decoration-color: transparent;
-  text-decoration-thickness: 0.07em;
-  text-underline-offset: 0.3em;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.35em;
   transition: text-decoration-color var(--t-hover) ease;
 }
-
 .nav__action {
-  min-height: 2.5rem;
-  padding: 0 1rem;
-  font-size: var(--step-small);
-}
-.nav[data-ink-now="dark"] .nav__action {
-  background: var(--field-ink);
-  color: var(--field);
+  font-weight: 500;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -87,10 +72,8 @@
     min-height: 2.75rem;
     padding: 0 0.25rem;
     color: inherit;
+    font-size: var(--step-body);
     font-weight: 500;
-  }
-  .nav[data-menu="true"] {
-    color: var(--ink);
   }
   .nav__menu {
     position: fixed;
@@ -101,20 +84,20 @@
     justify-content: flex-end;
     align-items: flex-start;
     gap: 0.4rem;
-    padding: var(--nav-h) var(--margin) calc(var(--margin) * 2);
-    background: var(--bg);
-    color: var(--ink);
-    clip-path: inset(0 0 100% 100%);
+    padding: var(--bar) var(--margin) calc(var(--margin) * 2);
+    background: var(--ground);
+    color: var(--text);
+    clip-path: inset(0 0 100% 0);
     visibility: hidden;
     transition:
-      clip-path var(--t-ui) var(--ease-out),
-      visibility 0s linear var(--t-ui);
+      clip-path 420ms var(--ease-in-out),
+      visibility 0s linear 420ms;
   }
   .nav[data-menu="true"] .nav__menu {
     clip-path: inset(0);
     visibility: visible;
     transition:
-      clip-path var(--t-ui) var(--ease-out),
+      clip-path 420ms var(--ease-in-out),
       visibility 0s;
   }
   .nav__menu-action {

@@ -37,18 +37,18 @@
   min-height: 3.75rem;
   padding: 0 1.1rem;
   background: var(--surface);
-  color: var(--ink);
+  color: var(--text);
   border: 0;
   border-radius: 0;
   outline: none;
   transition: background-color var(--t-hover) ease;
 }
 .ask__input::placeholder {
-  color: var(--muted);
+  color: var(--text-2);
 }
 .ask__input:focus-visible {
   background: var(--surface-2);
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 .ask__form .button {
@@ -73,7 +73,7 @@
 }
 .answer__question {
   margin: 0;
-  color: var(--muted);
+  color: var(--text-2);
 }
 .answer__text {
   margin: 0.5rem 0 0;
@@ -84,7 +84,7 @@
 }
 .answer__meta {
   margin: 0.35rem 0 0;
-  color: var(--muted);
+  color: var(--text-2);
 }
 
 /* an answer arrives whole: it settles in, it is never typed out */

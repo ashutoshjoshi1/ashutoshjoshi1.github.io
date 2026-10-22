@@ -1,0 +1,306 @@
+/*
+ * The split stage: a reading column on paper and a held panel of night,
+ * inset by the page margin so the frame stays equal on both sides.
+ */
+.split {
+  position: relative;
+}
+.split__column {
+  padding-inline: var(--margin);
+}
+.split__stage {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .split__column {
+    padding-left: var(--margin);
+    padding-right: clamp(2rem, 4.5vw, 5rem);
+  }
+  .split__stage {
+    display: block;
+    position: sticky;
+    top: var(--bar);
+    height: calc(100svh - var(--bar) - var(--margin));
+    margin-right: var(--margin);
+    background: var(--night);
+    overflow: hidden;
+  }
+  /* the inline figures belong to the phone layout */
+  .figure.figure--inline {
+    display: none;
+  }
+}
+
+/* ---- figures: one frame for the portrait, the server and the sky ------- */
+
+.figure {
+  --ground: var(--night);
+  --surface: var(--night-2);
+  --text: var(--night-ink);
+  --text-2: var(--night-ink-2);
+  --focus: var(--gold);
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  background: var(--night);
+  color: var(--night-ink);
+}
+.figure--stage {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--t-fade) var(--ease-soft),
+    visibility 0s linear var(--t-fade);
+}
+.figure--stage[data-on="true"] {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--t-fade) var(--ease-soft),
+    visibility 0s;
+}
+.figure__picture,
+.figure__body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+.figure__body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2.4vh, 1.75rem);
+  padding: clamp(1.5rem, 3.4vw, 3rem);
+}
+
+/* the strip along the foot of every held picture */
+.readout {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  min-height: 3.5rem;
+  padding: 0.75rem clamp(1rem, 2vw, 1.5rem);
+  background: var(--paper-2);
+  color: var(--ink);
+}
+.readout__right {
+  text-align: right;
+}
+
+/* ---- the server ---------------------------------------------------------- */
+
+.server__head {
+  display: grid;
+  gap: 0.35rem;
+}
+.server__config {
+  color: var(--night-ink-2);
+}
+.server__canvas {
+  flex: 1;
+  min-height: 12rem;
+  width: 100%;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  color: var(--night-ink-2);
+}
+.legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.legend__swatch {
+  position: relative;
+  width: 1.25rem;
+  height: 0.6rem;
+  background: var(--night-2);
+}
+.legend__swatch--prefill {
+  background: var(--night-ink);
+}
+.legend__swatch--blocked {
+  background: #353431;
+}
+.legend__swatch--cached {
+  background: var(--gold);
+  width: 0.35rem;
+}
+.legend__swatch--token {
+  display: flex;
+  align-items: stretch;
+  gap: 3px;
+  background: none;
+}
+.legend__swatch--token i {
+  width: 2px;
+  background: #c9c7c0;
+}
+.legend__swatch--stall {
+  background: none;
+}
+.legend__swatch--stall::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% - 1px);
+  height: 2px;
+  background: #6b6964;
+}
+
+/* ---- the sky ------------------------------------------------------------- */
+
+.sky__head {
+  display: grid;
+  gap: 0.35rem;
+}
+.sky__dome {
+  flex: 1.25;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.sky__dome svg {
+  width: 100%;
+  max-height: 100%;
+  min-height: 0;
+  flex: 1;
+}
+.sky__vault {
+  fill: #101010;
+}
+.sky__ground {
+  fill: #1b1b1a;
+}
+.sky__hour {
+  fill: #6b6964;
+}
+.sky__sun {
+  fill: var(--gold);
+}
+.sky__sight {
+  stroke: var(--gold);
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+}
+.sky__post,
+.sky__head-unit {
+  fill: var(--night-ink);
+}
+.figure--sky[data-up="false"] .sky__hour {
+  fill: #3e3d3a;
+}
+.sky__compass {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+.sky__spectrum {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.spectrum {
+  position: relative;
+  flex: 1;
+  min-height: 5rem;
+  padding-top: 1.6rem;
+}
+.spectrum svg {
+  width: 100%;
+  height: 100%;
+}
+.spectrum__band {
+  fill: #191918;
+}
+.spectrum__curve {
+  fill: none;
+  stroke: var(--night-ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+  stroke-linejoin: round;
+}
+.spectrum__gas {
+  position: absolute;
+  top: 0;
+  color: var(--night-ink);
+}
+.spectrum__axis {
+  position: relative;
+  height: 1.2rem;
+  margin-right: 2.5rem;
+}
+.spectrum__axis span {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.spectrum__axis span:first-child {
+  transform: none;
+}
+
+/* ---- the phone: each chapter carries its own figure --------------------- */
+
+@media (max-width: 899px) {
+  .figure--inline .figure__body {
+    padding: 1.25rem var(--margin);
+  }
+  .figure--inline.figure--sky {
+    min-height: 34rem;
+    margin-block: 2.5rem;
+    margin-inline: calc(var(--margin) * -1);
+  }
+  .figure--inline.figure--server {
+    margin-inline: calc(var(--margin) * -1);
+  }
+}
+
+/* ---- motion: the sky draws itself when it comes on ------------------------ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .figure--sky:is([data-on="true"]:not(.figure--inline), .figure--inline.is-in) .sky__hour {
+    animation: hour-in 500ms var(--ease-out) both;
+    animation-delay: calc(300ms + var(--i) * 45ms);
+  }
+  .figure--sky:is([data-on="true"]:not(.figure--inline), .figure--inline.is-in) .sky__sight {
+    animation: draw 1200ms var(--ease-in-out) 500ms both;
+  }
+  .figure--sky:is([data-on="true"]:not(.figure--inline), .figure--inline.is-in) .sky__sun {
+    animation: sun-in 900ms var(--ease-expo) 1300ms both;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .figure--sky:is([data-on="true"]:not(.figure--inline), .figure--inline.is-in) .spectrum__curve {
+    animation: draw 1600ms var(--ease-in-out) 400ms both;
+  }
+}
+@keyframes hour-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+@keyframes sun-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}

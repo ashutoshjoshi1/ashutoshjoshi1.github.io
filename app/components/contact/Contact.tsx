@@ -1,70 +1,68 @@
-import { CONTACT, CONTACT_PICTURE } from "../../lib/data";
+import type { CSSProperties } from "react";
+import { CONTACT } from "../../lib/data";
+import Lines from "../motion/Lines";
 import Icon from "../ui/Icon";
 import "./contact.css";
 
 const handle = (url: string) => url.replace(/\/$/, "").split("/").pop() ?? url;
 
-/* "Visit card on a photograph": the satellite's view of where I live, and
-   one solid card with every way to reach me. */
+interface Row {
+  label: string;
+  value: string;
+  href?: string;
+  external?: boolean;
+}
+
+const ROWS: Row[] = [
+  { label: "Email", value: CONTACT.email, href: `mailto:${CONTACT.email}` },
+  { label: "Phone", value: CONTACT.phone, href: `tel:${CONTACT.phone.replace(/\s/g, "")}` },
+  { label: "GitHub", value: handle(CONTACT.github), href: CONTACT.github, external: true },
+  { label: "LinkedIn", value: "ashutosh--joshi", href: CONTACT.linkedin, external: true },
+  { label: "One page, PDF", value: "Résumé", href: CONTACT.resume, external: true },
+  { label: "US Eastern time", value: "Baltimore, Maryland" },
+];
+
+/* Every way to reach me, one per row at heading size, then the ask. */
 export default function Contact() {
   return (
-    <section id="contact" className="contact" data-ink="light" aria-labelledby="contact-title">
-      <figure className="contact__picture">
-        {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
-        <img src={CONTACT_PICTURE.src} alt={CONTACT_PICTURE.alt} width={1280} height={940} loading="lazy" decoding="async" />
-        <figcaption className="contact__caption t-small">{CONTACT_PICTURE.caption}</figcaption>
-      </figure>
+    <section id="contact" className="contact" data-theme="night" aria-labelledby="contact-title">
+      <Lines id="contact-title" className="contact__title t-head wrap" lines={["Let’s talk"]} />
 
-      <div className="contact__card" data-rise>
-        <h2 id="contact-title" className="contact__title t-lead">
-          Work with me
-        </h2>
-        <p className="contact__lede">
-          Open to roles in LLM inference, ML platforms and GPU systems. Based in Baltimore, on US Eastern time.
+      <ul className="contact__rows">
+        {ROWS.map((row, i) => {
+          const style = { "--d": `${i * 70}ms` } as CSSProperties;
+          const body = (
+            <>
+              <span className="contact__value t-head">{row.value}</span>
+              <span className="contact__label t-small">
+                {row.label}
+                {row.href && <Icon name={row.external ? "arrow-up-right" : "arrow-right"} className="contact__arrow" />}
+              </span>
+            </>
+          );
+          return (
+            <li key={row.label} className="contact__item" data-rise style={style}>
+              {row.href ? (
+                <a
+                  className="contact__row wrap"
+                  href={row.href}
+                  {...(row.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                >
+                  {body}
+                </a>
+              ) : (
+                <p className="contact__row wrap">{body}</p>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+
+      <div className="contact__band wrap">
+        <p className="contact__ask t-lead">
+          Open to roles in LLM inference, ML platforms and GPU systems.
         </p>
-        <dl className="contact__rows">
-          <div className="contact__row">
-            <dt>Email</dt>
-            <dd>
-              <a className="link" href={`mailto:${CONTACT.email}`}>
-                {CONTACT.email}
-              </a>
-            </dd>
-          </div>
-          <div className="contact__row">
-            <dt>Phone</dt>
-            <dd>
-              <a className="link" href={`tel:${CONTACT.phone.replace(/\s/g, "")}`}>
-                {CONTACT.phone}
-              </a>
-            </dd>
-          </div>
-          <div className="contact__row">
-            <dt>GitHub</dt>
-            <dd>
-              <a className="link" href={CONTACT.github} target="_blank" rel="noopener noreferrer">
-                {handle(CONTACT.github)}
-              </a>
-            </dd>
-          </div>
-          <div className="contact__row">
-            <dt>LinkedIn</dt>
-            <dd>
-              <a className="link" href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer">
-                {handle(CONTACT.linkedin)}
-              </a>
-            </dd>
-          </div>
-          <div className="contact__row">
-            <dt>Résumé</dt>
-            <dd>
-              <a className="link" href={CONTACT.resume} target="_blank" rel="noopener">
-                PDF, one page
-              </a>
-            </dd>
-          </div>
-        </dl>
-        <a className="button contact__button" href={`mailto:${CONTACT.email}`}>
+        <a className="button button--ink" href={`mailto:${CONTACT.email}`}>
           Email Ashutosh
           <Icon name="arrow-right" className="button__arrow" />
         </a>

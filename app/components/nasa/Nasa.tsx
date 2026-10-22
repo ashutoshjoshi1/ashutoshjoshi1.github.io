@@ -1,66 +1,29 @@
-"use client";
-
-import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { FIELD_STATEMENT, FLEET } from "../../lib/data";
+import { FLEET, NASA_INTRO } from "../../lib/data";
 import Lines from "../motion/Lines";
-import NasaFrame from "./NasaFrame";
+import SkyFigure from "./SkyFigure";
 import "./nasa.css";
 
+/* The third chapter of the split: the machine learning and data systems
+   behind NASA's Pandora network, read beside the sun the instruments follow. */
 export default function Nasa() {
-  const rowRefs = useRef<(HTMLElement | null)[]>([]);
-  const [active, setActive] = useState(0);
-
-  /* the system crossing the middle of the screen owns the picture */
-  useEffect(() => {
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          const index = rowRefs.current.indexOf(entry.target as HTMLElement);
-          if (index >= 0) setActive(index);
-        }
-      },
-      { rootMargin: "-45% 0px -45% 0px" },
-    );
-    rowRefs.current.forEach((el) => el && io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
   return (
-    <section id="nasa" className="nasa section" data-ink="light" aria-labelledby="nasa-title">
-      <header className="nasa__head wrap">
-        <Lines id="nasa-title" className="nasa__title t-head" lines={["Machine learning", "for NASA"]} />
-        <p className="nasa__statement t-lead" data-rise>
-          {FIELD_STATEMENT}
-        </p>
-      </header>
+    <section id="nasa" className="chapter nasa" data-chapter="sky" aria-labelledby="nasa-title">
+      <Lines id="nasa-title" className="nasa__title t-head" lines={["Machine learning", "for NASA"]} />
+      <p className="nasa__intro t-lead" data-rise>
+        {NASA_INTRO}
+      </p>
 
-      <div className="nasa__split wrap">
-        <div className="nasa__held">
-          <NasaFrame active={FLEET[active].picture} />
-        </div>
+      <SkyFigure placement="inline" />
 
-        <ul className="nasa__list">
-          {FLEET.map((system, i) => (
-            <li
-              key={system.title}
-              ref={(el) => {
-                rowRefs.current[i] = el;
-              }}
-              className="system"
-              data-active={active === i}
-              data-rise
-              style={{ "--d": "60ms" } as CSSProperties}
-            >
-              <div className="system__head">
-                <h3 className="system__title t-lead">{system.title}</h3>
-                <p className="system__label t-small">{system.label}</p>
-              </div>
-              <p className="system__body measure">{system.statement}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ul className="systems">
+        {FLEET.map((system) => (
+          <li key={system.title} className="system" data-rise>
+            <h3 className="system__title t-lead sans">{system.title}</h3>
+            <p className="system__body">{system.statement}</p>
+            <p className="system__label t-small soft">{system.label}</p>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

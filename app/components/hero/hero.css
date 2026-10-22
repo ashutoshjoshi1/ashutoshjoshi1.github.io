@@ -1,175 +1,113 @@
-/*
- * HERO — "Window that opens to the edges". Without script, or with reduced
- * motion, it is the portrait on its black ground with the name beside it.
- * With motion, a 4:5 window in the middle of a held stage shows the face as
- * coarse detector cells; scrolling opens the window to the edges while the
- * cells resolve, then the next chapter slides over the held picture.
- */
-
+/* the first chapter: the name, what I do, the one action, a short introduction */
 .hero {
   position: relative;
-  z-index: 0;
 }
-
-.hero__stage {
+.hero__sheet,
+.hero__intro {
   position: relative;
-  height: 100svh;
-  min-height: 34rem;
-  overflow: clip;
-}
-
-/* the portrait's own ground, so its edges never show */
-.hero__picture {
-  position: absolute;
-  inset: 0;
-  background: #040404;
-}
-/* neutral scrim under the static headline only: the one gradient allowed,
-   a photo scrim behind text */
-.hero__picture::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 60%;
-  background: linear-gradient(to top, rgb(14 14 14 / 0.78), rgb(14 14 14 / 0)); /* taste-skill-ignore */
-  pointer-events: none;
-}
-
-.hero__img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: 50% 0;
-}
-
-.hero__canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-}
-
-.hero__copy {
-  position: absolute;
-  inset: auto 0 0 0;
   z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--gutter);
-  align-items: end;
-  padding-bottom: calc(var(--margin) * 2);
+  background: var(--paper);
 }
-
 .hero__name {
-  grid-column: 1 / span 6;
-}
-.hero__title {
-  margin: 0 0 0 -0.04em;
+  margin: 0 0 clamp(1.5rem, 3.5vh, 2.5rem);
 }
 .hero__role {
-  margin: 0.7rem 0 0;
+  margin: 0 0 0.75rem;
+  font-weight: 500;
 }
-
-.hero__side {
-  grid-column: 9 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.5rem;
-}
-
 .hero__lede {
   max-width: 28ch;
   margin: 0;
 }
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.75rem;
+  margin-top: clamp(2rem, 5vh, 3rem);
+}
+.hero__intro {
+  max-width: 32rem;
+  display: grid;
+  gap: 1em;
+}
+.hero__intro p {
+  margin: 0;
+}
+.hero__intro-first {
+  font-size: var(--step-lead);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+}
+
+/* the portrait: a black ground the face comes out of */
+.portrait {
+  overflow: hidden;
+  background: #050505;
+}
+.portrait__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 32%;
+}
+
+@media (min-width: 900px) {
+  .hero {
+    padding-top: calc(var(--bar) + clamp(3.5rem, 13vh, 8.5rem));
+  }
+  .hero__intro {
+    margin-top: clamp(5rem, 18vh, 10rem);
+  }
+}
 
 @media (max-width: 899px) {
-  .hero__copy {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.25rem;
+  .hero {
+    padding-top: var(--bar);
   }
-}
-@media (max-width: 599px) {
-  .hero__side .button {
-    width: 100%;
-  }
-}
-
-/* ---- the moving version ------------------------------------------------- */
-
-@media (prefers-reduced-motion: no-preference) {
-  .js .hero {
-    --win-w: min(36vw, 57.6svh);
-    --win-x: calc((100vw - var(--win-w)) / 2);
-    --win-y: calc((100svh - var(--win-w) * 1.25) / 2);
-    height: 320svh;
-  }
-  .js .hero__stage {
+  .figure--inline.figure--portrait {
     position: sticky;
-    top: 0;
+    top: var(--bar);
+    z-index: 0;
+    height: calc(76svh - var(--bar));
+    margin-inline: calc(var(--margin) * -1);
   }
-  .js .hero__picture {
-    clip-path: inset(var(--win-y) var(--win-x));
-    will-change: clip-path;
+  /* the paper slides up over the held portrait, edge to edge */
+  .hero__sheet,
+  .hero__intro {
+    margin-inline: calc(var(--margin) * -1);
+    padding-inline: var(--margin);
   }
-  .js .hero__picture::after {
-    display: none;
+  .hero__sheet {
+    padding-top: 2.25rem;
   }
-  .js .hero__img {
-    opacity: 0;
+  .hero__intro {
+    max-width: none;
+    padding-top: 4.5rem;
+    padding-bottom: 1rem;
   }
-  .js .hero__stage[data-exposed="failed"] .hero__img {
-    opacity: 1;
-  }
-  .js .hero__canvas {
-    display: block;
-  }
-  .js .hero__copy {
-    inset: 0;
-    padding-bottom: var(--win-y);
-    pointer-events: none;
-  }
-  .js .hero__copy > * {
-    pointer-events: auto;
-  }
-  .js .hero__name {
-    grid-column: 1 / span 4;
-  }
-  .js .hero__side {
-    grid-column: 10 / -1;
-  }
+}
 
-  /* phones and tablets: the name above the window, the words below it */
-  @media (max-width: 899px) {
-    .js .hero {
-      --win-top: 30svh;
-      --win-h: min(97.5vw, calc(70svh - 14rem));
-      --win-w: calc(var(--win-h) * 0.8);
-      --win-x: calc((100vw - var(--win-w)) / 2);
-      height: 280svh;
-    }
-    .js .hero__picture {
-      clip-path: inset(var(--win-top) var(--win-x) calc(100svh - var(--win-top) - var(--win-h)) var(--win-x));
-    }
-    .js .hero__copy {
-      display: block;
-      padding: 0;
-    }
-    .js .hero__name {
-      position: absolute;
-      left: var(--margin);
-      right: var(--margin);
-      top: calc(var(--nav-h) + 0.25rem);
-    }
-    .js .hero__side {
-      position: absolute;
-      left: var(--margin);
-      right: var(--margin);
-      top: calc(var(--win-top) + var(--win-h) + 1.25rem);
-      gap: 1rem;
-    }
+/* the photograph opens from the foot of its frame on load, once */
+@media (prefers-reduced-motion: no-preference) {
+  .js .portrait {
+    animation: portrait-open var(--t-open) var(--ease-in-out) 100ms both;
+  }
+  .js .portrait__img {
+    animation: portrait-settle 2200ms var(--ease-expo) 100ms both;
+  }
+}
+@keyframes portrait-open {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes portrait-settle {
+  from {
+    transform: scale(1.12);
   }
 }

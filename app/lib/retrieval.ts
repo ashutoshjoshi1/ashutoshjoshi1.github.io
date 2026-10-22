@@ -69,14 +69,17 @@ const principleDocs: Doc[] = PRINCIPLES.map((p, i) => ({
   tag: `Principle: ${p.title}`,
   text: `${p.title} ${p.body} principles how work philosophy approach values rules`,
   answer: `${p.title} ${p.body}`,
-  link: "#principles",
+  link: "#how-i-work",
 }));
+
+const lines = (r: (typeof EXPERIENCE)[number]) =>
+  r.highlights.map((h) => (h.figure ? `${h.text}: ${h.figure}.` : `${h.text}.`)).join(" ");
 
 const experienceDocs: Doc[] = EXPERIENCE.map((r, i) => ({
   id: `experience-${i}`,
   tag: `Experience: ${r.company}`,
-  text: `${r.company} ${r.org ?? ""} ${r.role} ${r.location} ${r.period} ${r.summary} ${r.highlights.join(" ")} experience work job career`,
-  answer: `${r.role} at ${r.company}${r.org ? ` (${r.org})` : ""}, ${r.location}, ${r.period}. ${r.summary} ${r.highlights.join(" ")}`,
+  text: `${r.company} ${r.org ?? ""} ${r.role} ${r.location} ${r.period} ${r.summary} ${lines(r)} experience work job career`,
+  answer: `${r.role} at ${r.company}${r.org ? ` (${r.org})` : ""}, ${r.location}, ${r.period}. ${r.summary} ${lines(r)}`,
   link: "#experience",
 }));
 
@@ -206,7 +209,7 @@ const FACT_DOCS: Doc[] = [
     tag: "Frontend",
     text: "frontend react next.js nextjs typescript react native expo web ui ux design canvas animation mobile app",
     answer:
-      "Frontend: React/Next.js and React Native (RETRVE ships as an Expo app), and the full-stack instrument-health app for NASA is FastAPI plus Next.js and TypeScript. This site is a Next.js static export with a hand-written canvas engine for its pixels and no template.",
+      "Frontend: React/Next.js and React Native (RETRVE ships as an Expo app), and the full-stack instrument-health app for NASA is FastAPI plus Next.js and TypeScript. This site is a Next.js static export, hand-built with no template: a canvas strip chart for the simulated server and an SVG sun tracker.",
     link: "#skills",
   },
   {
@@ -238,10 +241,10 @@ const FACT_DOCS: Doc[] = [
     id: "fact-site",
     tag: "This site",
     text:
-      "site website portfolio built how this page console search lab neural network playground backprop tf-idf tfidf retrieval simulation simulator kv cache pixels pixel interactive hero animation how does this work",
+      "site website portfolio built how this page console search tf-idf tfidf retrieval simulation simulator server batching strip chart sun goddard tracker interactive hero animation design how does this work",
     answer:
-      "This site is a Next.js static export built around one material, the pixel: a detector pixel counting photons, a KV-cache block holding tokens. The opening photograph develops from coarse detector cells as you scroll, the inference story runs on a live map of a simulated GPU's KV-cache memory that you can flood with traffic, and the project drawings are made of the same cells. The lab trains a 2-8-8-1 network with hand-written backprop, the footer measures this page's own Core Web Vitals, and this search is TF-IDF and cosine retrieval over the site's text. No AI API calls; everything runs in your browser.",
-    link: "#lab",
+      "This site is a Next.js static export, set in Clash Grotesk and Gambetta. Half the screen holds still while you read: my portrait, then a toy LLM server simulated one forward pass at a time, drawn as a strip chart of its twelve request slots, which you can reconfigure and flood with traffic, then the sun over NASA Goddard right now, computed in your browser from NOAA's solar equations. The footer measures this page's own Core Web Vitals, and this search is TF-IDF and cosine retrieval over the site's text. No AI API calls; everything runs in your browser.",
+    link: "#inference",
   },
   {
     id: "fact-location",

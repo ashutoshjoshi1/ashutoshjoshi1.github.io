@@ -1,54 +1,64 @@
-import { EDUCATION, EXPERIENCE } from "../../lib/data";
+import { CONTACT, EDUCATION, EXPERIENCE } from "../../lib/data";
 import Lines from "../motion/Lines";
 import "./experience.css";
 
+/* The résumé as one printed sheet on the night ground: each line says what
+   changed, and the number it changed by stands at the right. */
 export default function Experience() {
   return (
-    <section id="experience" className="experience section" data-ink="light" aria-labelledby="experience-title">
-      <header className="experience__head wrap">
-        <Lines id="experience-title" className="t-head" lines={["Experience"]} />
-        <p className="experience__intro" data-rise>
-          Six years from enterprise ETL to GPU serving, with a master’s in data science in the middle.
-        </p>
-      </header>
+    <section id="experience" className="experience section" data-theme="night" aria-labelledby="experience-title">
+      <div className="experience__grid wrap grid-12">
+        <header className="experience__head">
+          <Lines id="experience-title" className="t-head" lines={["Experience"]} />
+          <p className="experience__intro" data-rise>
+            Six years from enterprise ETL to GPU serving, with a master’s in data science in the middle.
+          </p>
+          <a className="link sans t-small" href={CONTACT.resume} target="_blank" rel="noopener" data-rise>
+            The one-page résumé, PDF
+          </a>
+        </header>
 
-      <ol className="experience__roles wrap">
-        {EXPERIENCE.map((role) => (
-          <li key={role.company} className="role">
-            <div className="role__when" data-rise>
-              <p className="role__period t-lead">{role.period}</p>
-              <p className="role__place t-small">{role.location}</p>
-            </div>
-            <div className="role__what" data-rise style={{ ["--d" as string]: "80ms" }}>
-              <h3 className="role__company t-lead">
-                {role.company}
-                {role.org && <span className="role__org">, for {role.org}</span>}
-              </h3>
-              <p className="role__title">{role.role}</p>
-              <ul className="role__highlights measure">
+        <div className="sheet" data-reveal>
+          {EXPERIENCE.map((role) => (
+            <div key={role.company} className="sheet__group">
+              <div className="sheet__group-head">
+                <h3 className="sheet__company t-lead">
+                  {role.company}
+                  {role.org && <span className="sheet__org">, for {role.org}</span>}
+                </h3>
+                <p className="sheet__when t-small figures">{role.period}</p>
+              </div>
+              <p className="sheet__role t-small">
+                {role.role} · {role.location}
+              </p>
+              <ul className="sheet__items">
                 {role.highlights.map((highlight) => (
-                  <li key={highlight}>{highlight}</li>
+                  <li key={highlight.text} className="sheet__item" data-rise>
+                    <span className="sheet__text">{highlight.text}</span>
+                    {highlight.figure && <span className="sheet__figure t-lead figures">{highlight.figure}</span>}
+                  </li>
                 ))}
               </ul>
             </div>
-          </li>
-        ))}
-      </ol>
-
-      <div className="experience__education wrap">
-        <h3 className="experience__subhead t-lead">Education</h3>
-        <ul className="degrees">
-          {EDUCATION.map((degree) => (
-            <li key={degree.degree} className="degree" data-rise>
-              <p className="degree__name">{degree.degree}</p>
-              <p className="degree__school muted">
-                {degree.school}
-                {degree.period && `, ${degree.period}`}
-                {degree.note && `, ${degree.note}`}
-              </p>
-            </li>
           ))}
-        </ul>
+
+          <div className="sheet__group">
+            <div className="sheet__group-head">
+              <h3 className="sheet__company t-lead">Education</h3>
+            </div>
+            <ul className="sheet__items">
+              {EDUCATION.map((degree) => (
+                <li key={degree.degree} className="sheet__item" data-rise>
+                  <span className="sheet__text">
+                    {degree.degree}, {degree.school}
+                    {degree.period && `, ${degree.period}`}
+                  </span>
+                  {degree.note && <span className="sheet__figure t-lead figures">{degree.note}</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
   );

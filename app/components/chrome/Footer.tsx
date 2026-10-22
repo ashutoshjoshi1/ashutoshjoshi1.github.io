@@ -1,39 +1,71 @@
-import { CONTACT } from "../../lib/data";
-import FitName from "./FitName";
+import { CONTACT, CONTACT_PICTURE } from "../../lib/data";
+import { SECTION_LINKS } from "./links";
 import WebVitals from "./WebVitals";
 import "./footer.css";
 
-/* The close: the name at the full width of the page, then the small print. */
+/* The close: graduation day on one half, the way back into the page on the other. */
 export default function Footer() {
   return (
-    <footer className="footer" data-ink="light">
-      <div className="footer__top wrap">
-        <p className="footer__line t-lead">
-          Built by hand: a Next.js static export, a canvas engine for the pixels, a toy LLM server, no trackers.
-        </p>
-        <nav className="footer__links" aria-label="Elsewhere">
-          <a className="link" href={`mailto:${CONTACT.email}`}>
-            Email
-          </a>
-          <a className="link" href={CONTACT.github} target="_blank" rel="noopener noreferrer">
-            GitHub
-          </a>
-          <a className="link" href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer">
-            LinkedIn
-          </a>
-          <a className="link" href={CONTACT.resume} target="_blank" rel="noopener">
-            Résumé
-          </a>
+    <footer className="footer" data-theme="night">
+      <figure className="footer__picture">
+        {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
+        <img
+          src={CONTACT_PICTURE.src}
+          alt={CONTACT_PICTURE.alt}
+          width={1400}
+          height={934}
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption className="footer__caption t-small">{CONTACT_PICTURE.caption}</figcaption>
+      </figure>
+
+      <div className="footer__side">
+        <p className="footer__mark sans">Ashutosh Joshi</p>
+        <nav aria-label="Sections, again">
+          <ul className="footer__menu">
+            {SECTION_LINKS.map((link) => (
+              <li key={link.href}>
+                <a className="footer__link t-lead sans" href={link.href}>
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </nav>
-      </div>
 
-      <div className="footer__name wrap" data-rise>
-        <FitName text="Ashutosh Joshi" className="footer__fit" />
-      </div>
+        <div className="footer__blocks t-small">
+          <p>
+            <a className="link" href={`mailto:${CONTACT.email}`}>
+              {CONTACT.email}
+            </a>
+            <br />
+            {CONTACT.phone}
+            <br />
+            {CONTACT.location}
+          </p>
+          <p>
+            <a className="link" href={CONTACT.github} target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
+            <br />
+            <a className="link" href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer">
+              LinkedIn
+            </a>
+            <br />
+            <a className="link" href={CONTACT.resume} target="_blank" rel="noopener">
+              Résumé, PDF
+            </a>
+          </p>
+        </div>
 
-      <div className="footer__small wrap">
-        <WebVitals />
-        <p className="t-small muted">© {new Date().getFullYear()} Ashutosh Joshi</p>
+        <div className="footer__small">
+          <WebVitals />
+          <p className="t-small soft">
+            © {new Date().getFullYear()} Ashutosh Joshi. Built by hand: a Next.js static export, a toy LLM server and a
+            sun calculator. No trackers.
+          </p>
+        </div>
       </div>
     </footer>
   );

@@ -3,59 +3,85 @@
 @tailwind utilities;
 
 /*
- * EXPOSURE — the design system. One ground, one ink, one accent, one pale
- * field. Square corners everywhere: the page's material is the pixel.
+ * SPLIT STAGE — the design system. Half of the screen holds still (the
+ * portrait, then the live server, then the sun over Goddard) while a
+ * column of paper carries the reading. Two grounds, paper and night; one
+ * ink for each; one accent, the gold of the sun and the UMBC stole.
+ * Square corners everywhere.
  */
 :root {
-  /* colour roles */
-  --bg: #1c1c1c;
-  --surface: #262626;
-  --surface-2: #303030;
-  --ink: #f1f1ef;
-  --muted: #a3a49f;
-  --accent: #8fa68e;
-  --accent-strong: #a3b8a2;
-  --accent-ink: #1c1c1c;
-  --field: #c8c5ba;
-  --field-ink: #1c1c1c;
-  --field-muted: #4a4943;
-  --field-surface: #bdbaae;
+  --paper: #eae8e3;
+  --paper-2: #e0ddd6;
+  --paper-3: #d3d0c8;
+  --ink: #121212;
+  --ink-2: #57544e;
+  --night: #060606;
+  --night-2: #141414;
+  --night-3: #222221;
+  --night-ink: #ecebe6;
+  --night-ink-2: #a19e96;
+  --gold: #f2b330;
+  --gold-2: #f8c75c;
+  --gold-ink: #121212;
+
+  /* roles: paper by default, redefined by every night section */
+  --ground: var(--paper);
+  --surface: var(--paper-2);
+  --surface-2: var(--paper-3);
+  --text: var(--ink);
+  --text-2: var(--ink-2);
+  --focus: var(--ink);
 
   /* five type sizes, far apart */
-  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
-  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
-  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
-  --step-head: clamp(2.5rem, 1.2rem + 5vw, 5.5rem);
-  --step-display: clamp(6rem, 1rem + 16vw, 17.5rem);
+  --step-small: clamp(0.8125rem, 0.78rem + 0.12vw, 0.875rem);
+  --step-body: clamp(1.0625rem, 0.98rem + 0.32vw, 1.25rem);
+  --step-lead: clamp(1.3125rem, 1.1rem + 0.75vw, 1.75rem);
+  --step-head: clamp(2.25rem, 1.2rem + 3.4vw, 4.5rem);
+  --step-display: clamp(3.75rem, 1rem + 8.6vw, 9.5rem);
 
-  /* one frame: equal tight margins, one 12-column grid */
-  --margin: clamp(1rem, 2.2vw, 2rem);
-  --gutter: clamp(0.75rem, 1.4vw, 1.5rem);
-  --section: clamp(4.5rem, 2rem + 9vw, 13rem);
-  --nav-h: 4.5rem;
+  /* one frame: equal margins, one 12-column grid */
+  --margin: clamp(1rem, 2.6vw, 2.25rem);
+  --gutter: clamp(0.75rem, 1.6vw, 1.75rem);
+  --section: clamp(5rem, 2rem + 9vw, 12rem);
+  --bar: 4rem;
+  --split: 900px;
 
   /* motion: Emil Kowalski's curves for interface, expo for long reveals */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
-  --ease-exit: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   --t-press: 140ms;
   --t-hover: 180ms;
   --t-ui: 240ms;
   --t-reveal: 800ms;
   --t-open: 1200ms;
+  --t-fade: 1400ms;
   --stagger-line: 90ms;
-  --stagger-item: 70ms;
+  --stagger-item: 60ms;
 
+  color-scheme: light;
+}
+
+[data-theme="night"] {
+  --ground: var(--night);
+  --surface: var(--night-2);
+  --surface-2: var(--night-3);
+  --text: var(--night-ink);
+  --text-2: var(--night-ink-2);
+  --focus: var(--gold);
   color-scheme: dark;
+}
+[data-theme] {
+  background: var(--ground);
+  color: var(--text);
 }
 
 /* ---- the document ------------------------------------------------------- */
 
 html {
-  background: var(--bg);
-  scrollbar-color: var(--surface-2) var(--bg);
+  background: var(--paper);
+  scrollbar-color: var(--ink-2) var(--paper);
   scrollbar-width: thin;
   -webkit-text-size-adjust: 100%;
 }
@@ -71,13 +97,12 @@ html.lenis body {
 }
 
 body {
-  background: var(--bg);
+  background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
   font-size: var(--step-body);
-  line-height: 1.5;
+  line-height: 1.55;
   font-kerning: normal;
-  font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: clip;
@@ -85,11 +110,11 @@ body {
 
 /* the parts of the browser nobody draws still carry the design */
 ::selection {
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--gold);
+  color: var(--gold-ink);
 }
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus);
   outline-offset: 3px;
 }
 /* sections take focus when jumped to from the nav; that is not a control */
@@ -98,22 +123,26 @@ body {
 }
 input,
 textarea {
-  caret-color: var(--accent);
+  caret-color: var(--gold);
 }
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg);
+  background: var(--paper);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--surface-2);
+  background: var(--ink-2);
+  border: 3px solid var(--paper);
 }
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
+  font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
   text-wrap: balance;
   hyphens: none;
 }
@@ -122,9 +151,14 @@ p {
 }
 img,
 video,
-canvas {
+canvas,
+svg {
   display: block;
   max-width: 100%;
+}
+button,
+input {
+  font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
 }
 
 @layer components {
@@ -137,38 +171,47 @@ canvas {
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: var(--gutter);
   }
-  /* neighbouring sections add their padding: half each makes one gap */
   .section {
-    padding-block: max(calc(var(--section) * 0.55), 3rem);
+    padding-block: var(--section);
   }
 
   /* ---- type ------------------------------------------------------------- */
+  .sans {
+    font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
+  }
   .t-small {
+    font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
     font-size: var(--step-small);
     line-height: 1.45;
+    letter-spacing: 0.01em;
   }
   .t-lead {
     font-size: var(--step-lead);
-    line-height: 1.3;
+    line-height: 1.25;
     letter-spacing: -0.01em;
   }
   .t-head {
+    font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
     font-size: var(--step-head);
-    font-weight: 800;
-    line-height: 0.92;
-    letter-spacing: -0.035em;
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
   }
   .t-display {
+    font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
     font-size: var(--step-display);
-    font-weight: 800;
-    line-height: 0.8;
-    letter-spacing: -0.045em;
+    font-weight: 400;
+    line-height: 0.9;
+    letter-spacing: -0.035em;
   }
-  .muted {
-    color: var(--muted);
+  .soft {
+    color: var(--text-2);
   }
   .measure {
     max-width: 62ch;
+  }
+  .figures {
+    font-variant-numeric: tabular-nums;
   }
 
   /* links answer the pointer with their underline, never their weight */
@@ -177,7 +220,7 @@ canvas {
     text-decoration: underline;
     text-decoration-color: color-mix(in oklab, currentColor 35%, transparent);
     text-decoration-thickness: 0.07em;
-    text-underline-offset: 0.2em;
+    text-underline-offset: 0.22em;
     transition: text-decoration-color var(--t-hover) ease;
   }
 
@@ -187,10 +230,11 @@ canvas {
     align-items: center;
     justify-content: center;
     gap: 0.6em;
-    min-height: 3rem;
-    padding: 0 1.4rem;
-    background: var(--accent);
-    color: var(--accent-ink);
+    min-height: 3.25rem;
+    padding: 0 1.5rem;
+    background: var(--gold);
+    color: var(--gold-ink);
+    font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
     font-size: var(--step-body);
     font-weight: 500;
     line-height: 1;
@@ -204,17 +248,22 @@ canvas {
   .button:active {
     transform: scale(0.97);
   }
+  .button--ink {
+    background: var(--ink);
+    color: var(--paper);
+  }
   .button--quiet {
     background: var(--surface);
-    color: var(--ink);
+    color: var(--text);
   }
   .button__arrow {
     transition: transform var(--t-ui) var(--ease-out);
   }
 
-  /* segmented controls (the server's levers, the lab's chips) */
+  /* segmented controls: the server's levers, the search's suggestions */
   .segments {
     display: inline-flex;
+    flex-wrap: wrap;
     background: var(--surface);
     padding: 3px;
   }
@@ -222,7 +271,7 @@ canvas {
     min-height: 2.5rem;
     padding: 0 0.9rem;
     font-size: var(--step-small);
-    color: var(--muted);
+    color: var(--text-2);
     cursor: pointer;
     transition:
       background-color var(--t-hover) ease,
@@ -230,8 +279,8 @@ canvas {
       transform var(--t-press) var(--ease-out);
   }
   .segment[aria-pressed="true"] {
-    background: var(--ink);
-    color: var(--bg);
+    background: var(--text);
+    color: var(--ground);
   }
   .segment:active {
     transform: scale(0.97);
@@ -242,7 +291,10 @@ canvas {
       text-decoration-color: currentColor;
     }
     .button:hover {
-      background: var(--accent-strong);
+      background: var(--gold-2);
+    }
+    .button--ink:hover {
+      background: #2a2a2a;
     }
     .button--quiet:hover {
       background: var(--surface-2);
@@ -251,7 +303,7 @@ canvas {
       transform: translateX(3px);
     }
     .segment:not([aria-pressed="true"]):hover {
-      color: var(--ink);
+      color: var(--text);
     }
   }
 
@@ -261,8 +313,8 @@ canvas {
   .lines .line {
     display: block;
     overflow: clip;
-    padding-bottom: 0.1em;
-    margin-bottom: -0.1em;
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
   }
   .lines .line > span {
     display: block;
@@ -274,23 +326,29 @@ canvas {
   }
   .roll__col {
     display: inline-block;
-    height: 0.8em;
+    height: 0.9em;
     overflow: clip;
   }
   .roll__strip {
     display: block;
-    transform: translateY(calc(var(--d) * -0.8em));
+    transform: translateY(calc(var(--d) * -0.9em));
   }
   .roll__strip::before {
     content: "0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9";
     display: block;
     white-space: pre;
-    line-height: 0.8em;
+    line-height: 0.9em;
   }
 
-  /* the ink fill: one statement fills from 45% ink as it rises */
-  .fill > span {
-    display: inline;
+  /* a highlighter pass over one phrase */
+  .marker {
+    background-image: linear-gradient(var(--gold), var(--gold)); /* taste-skill-ignore: a flat marker fill, not a gradient */
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    color: var(--gold-ink);
+    padding: 0 0.12em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
   }
 }
 
@@ -311,30 +369,24 @@ canvas {
     transform: translateY(110%);
   }
   .js .lines.is-in .line > span {
-    transition: transform 900ms var(--ease-expo) calc(var(--d, 0ms) + var(--i, 0) * var(--stagger-line));
+    transition: transform 1000ms var(--ease-expo) calc(var(--d, 0ms) + var(--i, 0) * var(--stagger-line));
   }
 
   .js .roll:not(.is-in) .roll__strip {
     transform: none;
   }
   .js .roll.is-in .roll__strip {
-    transition: transform 1100ms var(--ease-expo) calc(var(--i, 0) * var(--stagger-item));
+    transition: transform 1200ms var(--ease-expo) calc(var(--i, 0) * var(--stagger-item));
   }
-}
 
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .fill > span {
-      color: color-mix(in oklab, currentColor 45%, transparent);
-      animation: ink-fill linear both;
-      animation-timeline: view();
-      animation-range: cover 20% cover 45%;
-    }
+  .js .marker[data-reveal]:not(.is-in) {
+    background-size: 0% 100%;
+    color: inherit;
   }
-}
-@keyframes ink-fill {
-  to {
-    color: var(--fill, var(--ink));
+  .js .marker[data-reveal].is-in {
+    transition:
+      background-size 900ms var(--ease-in-out) 300ms,
+      color 300ms ease 500ms;
   }
 }
 

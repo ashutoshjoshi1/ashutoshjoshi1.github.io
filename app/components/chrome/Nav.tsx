@@ -3,14 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { CONTACT } from "../../lib/data";
 import { getLenis } from "../../lib/motion";
+import { SECTION_LINKS } from "./links";
 import "./nav.css";
 
-const LINKS = [
-  { href: "#inference", label: "Inference" },
-  { href: "#work", label: "Work" },
-  { href: "#experience", label: "Experience" },
-  { href: "#contact", label: "Contact" },
-];
+/* the bar keeps five; the footer lists them all */
+const LINKS = SECTION_LINKS.filter((link) => link.href !== "#how-i-work");
 
 /* past this much scroll, scrolling down tucks the bar away */
 const HIDE_AFTER = 120;
@@ -28,24 +25,24 @@ export function scrollToHash(hash: string): void {
   history.replaceState(null, "", hash);
 }
 
-/* A plain bar: wordmark, four links, one action. Once the page moves it
-   stands on the ground of the section under it (so it never sits on text),
-   takes that section's ink, and steps aside while the visitor reads down. */
+/* A plain bar: wordmark, five links, one action. It stands on the ground
+   of the section under it, paper or night, and steps aside while the
+   visitor reads down. */
 export default function Nav() {
-  const navRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
-  const [ink, setInk] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"paper" | "night">("paper");
   const [hidden, setHidden] = useState(false);
-  const [solid, setSolid] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const sections = [...document.querySelectorAll<HTMLElement>("[data-ink]")].filter((el) => el !== navRef.current);
+    const sections = [...document.querySelectorAll<HTMLElement>("main section, footer")];
     /* the band the bar sits in: the top few dozen pixels of the screen */
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting) setInk((entry.target as HTMLElement).dataset.ink === "dark" ? "dark" : "light");
+          if (!entry.isIntersecting) continue;
+          const ground = (entry.target as HTMLElement).closest<HTMLElement>("[data-theme]")?.dataset.theme;
+          setTheme(ground === "night" ? "night" : "paper");
         }
       },
       { rootMargin: "0px 0px -94% 0px" },
@@ -59,7 +56,6 @@ export default function Nav() {
       frame = requestAnimationFrame(() => {
         frame = 0;
         const y = window.scrollY;
-        setSolid(y > 8);
         if (Math.abs(y - lastY) < 6) return;
         setHidden(y > lastY && y > HIDE_AFTER);
         lastY = y;
@@ -98,14 +94,7 @@ export default function Nav() {
   };
 
   return (
-    <header
-      ref={navRef}
-      className="nav wrap"
-      data-ink-now={ink}
-      data-hidden={hidden && !menuOpen}
-      data-solid={solid}
-      data-menu={menuOpen}
-    >
+    <header className="nav wrap" data-theme={theme} data-hidden={hidden && !menuOpen} data-menu={menuOpen}>
       <a className="nav__mark" href="#top" onClick={(e) => go(e, "#top")}>
         Ashutosh Joshi
       </a>
@@ -116,7 +105,7 @@ export default function Nav() {
           </a>
         ))}
       </nav>
-      <a className="nav__action button button--quiet" href={CONTACT.resume} target="_blank" rel="noopener">
+      <a className="nav__action link" href={CONTACT.resume} target="_blank" rel="noopener">
         Résumé
       </a>
       <button

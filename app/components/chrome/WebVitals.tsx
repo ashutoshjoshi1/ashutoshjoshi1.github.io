@@ -86,7 +86,7 @@ export default function WebVitals() {
 
   return (
     <p ref={rootRef} className="vitals t-small">
-      <span className="muted">This page, measured in your browser just now: </span>
+      <span className="soft">This page, measured in your browser just now: </span>
       largest paint {show(vitals.lcp, (n) => `${(n / 1000).toFixed(2)} s`)}, layout shift{" "}
       {show(vitals.cls, (n) => n.toFixed(3))}, slowest response {show(vitals.inp, (n) => `${Math.round(n)} ms`)},{" "}
       {show(vitals.kb, (n) => `${n.toLocaleString("en-US")} KB`)} transferred.

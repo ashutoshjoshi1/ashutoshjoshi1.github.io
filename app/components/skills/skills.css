@@ -1,34 +1,35 @@
-.skills__head {
-  padding-bottom: calc(var(--section) * 0.35);
+/* the toolkit: a lead line over four columns of run-in paragraphs */
+.skills {
+  background: var(--paper-2);
+  --surface: var(--paper-3);
 }
-.skills__head h2 {
-  margin: 0;
+.skills__title {
+  margin: 0 0 1.75rem;
 }
-
-.skills__groups {
-  margin: 0;
+.skills__lead {
+  max-width: 42ch;
+  margin: 0 0 clamp(2.5rem, 7vh, 4.5rem);
 }
-.skill-group {
+.skills__columns {
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--gutter);
-  padding-block: 1.1rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2.5rem var(--gutter);
 }
-.skill-group__label {
-  grid-column: 1 / span 3;
-  padding-top: 0.45em;
-  color: var(--muted);
-}
-.skill-group__items {
-  grid-column: 4 / span 8;
+.skills__group {
   margin: 0;
 }
+.skills__label {
+  font-weight: 500;
+}
 
-@media (max-width: 899px) {
-  .skill-group {
-    display: block;
+@media (max-width: 1099px) {
+  .skills__columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .skill-group__items {
-    margin-top: 0.3rem;
+}
+@media (max-width: 599px) {
+  .skills__columns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
   }
 }

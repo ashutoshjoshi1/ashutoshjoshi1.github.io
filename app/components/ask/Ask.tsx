@@ -49,7 +49,7 @@ export default function Ask() {
   };
 
   return (
-    <section id="ask" className="ask section" data-ink="light" aria-labelledby="ask-title">
+    <section id="ask" className="ask section" aria-labelledby="ask-title">
       <div className="ask__grid wrap">
         <header className="ask__head">
           <Lines id="ask-title" className="t-head" lines={["Ask about", "my work"]} />
@@ -100,7 +100,7 @@ export default function Ask() {
                 <p className="answer__text">{answer.text}</p>
                 {answer.sources.length > 0 && (
                   <p className="answer__sources t-small">
-                    <span className="muted">From </span>
+                    <span className="soft">From </span>
                     {answer.sources.map((source, i) => (
                       <span key={source.id}>
                         {i > 0 && ", "}

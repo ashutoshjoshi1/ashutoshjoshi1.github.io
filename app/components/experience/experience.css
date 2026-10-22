@@ -1,113 +1,98 @@
-/*
- * EXPERIENCE — roles as rows on one off-centre line: when on the left,
- * what across the rest of the grid.
- */
-
+/* the résumé sheet: paper on the night ground, numbers set at the right */
+.experience__grid {
+  row-gap: 2.5rem;
+  align-items: start;
+}
 .experience__head {
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--gutter);
-  row-gap: 1.5rem;
-  padding-bottom: calc(var(--section) * 0.4);
+  gap: 1.25rem;
+  justify-items: start;
 }
 .experience__head h2 {
-  grid-column: 1 / span 7;
   margin: 0;
 }
 .experience__intro {
-  grid-column: 9 / -1;
-  align-self: end;
-  max-width: 32ch;
   margin: 0;
+  max-width: 26ch;
 }
 
-.experience__roles {
+.sheet {
+  grid-column: 1 / -1;
+  --ground: var(--paper);
+  --surface: var(--paper-2);
+  --text: var(--ink);
+  --text-2: var(--ink-2);
+  --focus: var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  padding: clamp(1.5rem, 4.5vw, 4.5rem);
+  display: grid;
+  gap: clamp(2.5rem, 6vh, 3.75rem);
+}
+.sheet__group-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+.sheet__company {
   margin: 0;
+  font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
+  font-weight: 500;
+}
+.sheet__org {
+  font-weight: 400;
+}
+.sheet__when {
+  margin: 0;
+  white-space: nowrap;
+}
+.sheet__role {
+  margin: 0.35rem 0 0;
+  color: var(--ink-2);
+}
+.sheet__items {
   list-style: none;
-}
-
-.role {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--gutter);
-  padding-block: 2.75rem;
-}
-.role + .role {
-  margin-top: 1rem;
-}
-
-.role__when {
-  grid-column: 1 / span 3;
-}
-.role__period {
-  margin: 0;
-}
-.role__place {
-  margin: 0.35rem 0 0;
-  color: var(--muted);
-}
-
-.role__what {
-  grid-column: 4 / -1;
-}
-.role__company {
-  margin: 0;
-  font-weight: 500;
-}
-.role__org {
-  color: var(--muted);
-}
-.role__title {
-  margin: 0.35rem 0 0;
-  color: var(--muted);
-}
-.role__highlights {
-  display: grid;
-  gap: 0.6rem;
-  margin: 1.4rem 0 0;
-  padding-left: 1.1em;
-}
-.role__highlights li::marker {
-  color: var(--accent);
-}
-
-.experience__education {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--gutter);
-  padding-top: 3rem;
-  padding-bottom: 1.5rem;
-}
-.experience__subhead {
-  grid-column: 1 / span 3;
-  margin: 0;
-  font-weight: 500;
-}
-.degrees {
-  grid-column: 4 / -1;
-  display: grid;
-  gap: 1.25rem;
-  margin: 0;
+  margin: 1.25rem 0 0;
   padding: 0;
-  list-style: none;
+  display: grid;
+  gap: 0.9rem;
 }
-.degree p {
-  margin: 0;
+.sheet__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: clamp(1.25rem, 4vw, 3.5rem);
+}
+.sheet__text {
+  max-width: 44ch;
+}
+.sheet__figure {
+  font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
+  font-weight: 500;
+  text-align: right;
+  white-space: nowrap;
 }
 
-@media (max-width: 899px) {
-  .experience__head,
-  .role,
-  .experience__education {
-    display: block;
+@media (min-width: 900px) {
+  .experience__head {
+    grid-column: 1 / span 4;
+    position: sticky;
+    top: calc(var(--bar) + 2rem);
   }
-  .experience__intro {
-    margin-top: 1.25rem;
+  .sheet {
+    grid-column: 6 / span 7;
   }
-  .role__what {
-    margin-top: 1rem;
+}
+
+/* the sheet prints from the top down as it arrives, once */
+@media (prefers-reduced-motion: no-preference) {
+  .js .sheet[data-reveal]:not(.is-in) {
+    clip-path: inset(0 0 100% 0);
   }
-  .degrees {
-    margin-top: 1.25rem;
+  .js .sheet[data-reveal].is-in {
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 1400ms var(--ease-in-out);
   }
 }

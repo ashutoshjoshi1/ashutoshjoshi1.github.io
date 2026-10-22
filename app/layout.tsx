@@ -3,15 +3,25 @@ import localFont from "next/font/local";
 import { PROJECTS, CONTACT, EDUCATION } from "./lib/data";
 import "./globals.css";
 
-/* Cabinet Grotesk (Indian Type Foundry, ITF Free Font License via Fontshare):
-   one family for everything — 800 for the few large words, 400/500 for text. */
+/* Clash Grotesk (Indian Type Foundry, ITF Free Font License via Fontshare)
+   sets the name, the headings and the interface at a light 400/500;
+   Gambetta (same foundry and licence) sets the reading. */
 const sansFont = localFont({
   src: [
-    { path: "../public/fonts/CabinetGrotesk-Regular.woff2", weight: "400", style: "normal" },
-    { path: "../public/fonts/CabinetGrotesk-Medium.woff2", weight: "500", style: "normal" },
-    { path: "../public/fonts/CabinetGrotesk-Extrabold.woff2", weight: "800", style: "normal" },
+    { path: "../public/fonts/ClashGrotesk-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../public/fonts/ClashGrotesk-Medium.woff2", weight: "500", style: "normal" },
   ],
   variable: "--font-sans",
+  display: "swap",
+});
+
+const serifFont = localFont({
+  src: [
+    { path: "../public/fonts/Gambetta-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../public/fonts/Gambetta-Italic.woff2", weight: "400", style: "italic" },
+    { path: "../public/fonts/Gambetta-Medium.woff2", weight: "500", style: "normal" },
+  ],
+  variable: "--font-serif",
   display: "swap",
 });
 
@@ -99,7 +109,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1c1c1c",
+  themeColor: "#eae8e3",
   initialScale: 1,
   width: "device-width",
 };
@@ -183,7 +193,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${sansFont.variable} overscroll-y-none`} suppressHydrationWarning>
+    <html lang="en" className={`${sansFont.variable} ${serifFont.variable} overscroll-y-none`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: JS_GATE }} />
       </head>
