@@ -1,0 +1,236 @@
+/*
+ * INFERENCE — the second held stage. The live KV-cache map holds on the
+ * right while the story's steps pass on the left; the step crossing the
+ * middle of the screen is in full ink and sets the server's levers.
+ * It is opaque and above the hero, so it slides over the held picture.
+ */
+
+.inference {
+  position: relative;
+  z-index: 2;
+  background: var(--bg);
+}
+/* only the held hero needs covering; the static hero is one ordinary screen */
+@media (prefers-reduced-motion: no-preference) {
+  .js .inference {
+    margin-top: -100svh;
+  }
+}
+
+.inference__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+
+.inference__title {
+  grid-column: 1 / span 6;
+  grid-row: 1;
+  margin: 0;
+  padding-top: calc(var(--nav-h) + var(--section) * 0.5);
+}
+
+.inference__stage {
+  grid-column: 7 / -1;
+  grid-row: 1 / span 2;
+  align-self: start;
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  margin-right: calc(var(--margin) * -1);
+}
+
+.inference__steps {
+  grid-column: 1 / span 6;
+  grid-row: 2;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.25rem;
+  min-height: 80svh;
+  padding-right: var(--gutter);
+  color: var(--muted);
+  transition: color var(--t-ui) ease;
+}
+.step[data-active="true"],
+.step--controls {
+  color: var(--ink);
+}
+.step:first-child {
+  justify-content: flex-start;
+  min-height: 70svh;
+  padding-top: 2.5rem;
+}
+.step--controls {
+  min-height: 100svh;
+}
+
+.step__figure {
+  margin: 0 0 0 -0.05em;
+  line-height: 0.8;
+}
+.step__title {
+  margin: 0;
+  font-weight: 500;
+}
+.step__body,
+.step__also {
+  margin: 0;
+}
+
+/* ---- the field --------------------------------------------------------- */
+
+.kv {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  margin: 0;
+  padding: calc(var(--nav-h) + 0.25rem) var(--margin) var(--margin) 0;
+}
+.kv__hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  color: var(--muted);
+}
+.kv__value {
+  color: var(--ink);
+  font-weight: 500;
+}
+.kv__canvas {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  cursor: default;
+}
+.kv__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.5rem;
+  color: var(--muted);
+}
+.kv__key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.kv__swatch {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+.kv__swatch--free {
+  background: var(--surface-2);
+}
+.kv__swatch--used {
+  background: #9c9c99;
+}
+.kv__swatch--shared {
+  background: var(--accent);
+}
+
+/* ---- the levers -------------------------------------------------------- */
+
+.levers {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  margin-top: 0.5rem;
+}
+.levers__grid {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 1.1rem 1.75rem;
+}
+.lever {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.lever__label {
+  display: block;
+  margin-bottom: 0.45rem;
+  padding: 0;
+  color: var(--muted);
+}
+.levers__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* ---- after the stage --------------------------------------------------- */
+
+.inference__after {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 2rem;
+  padding-top: calc(var(--section) * 0.5);
+  padding-bottom: var(--section);
+}
+.inference__note {
+  grid-column: 1 / span 7;
+  margin: 0;
+  max-width: 40ch;
+}
+.inference__aside {
+  grid-column: 9 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-self: end;
+}
+.inference__aside p {
+  margin: 0;
+}
+
+@media (max-width: 899px) {
+  .inference__grid,
+  .inference__after {
+    display: block;
+  }
+  .inference__title {
+    padding-top: var(--section);
+    padding-bottom: 1.5rem;
+  }
+  .inference__stage {
+    z-index: 1;
+    height: 46svh;
+    margin: 0 calc(var(--margin) * -1);
+    padding: 0 var(--margin);
+    background: var(--bg);
+  }
+  .kv {
+    padding: 0.75rem 0;
+    gap: 0.6rem;
+  }
+  .kv__legend {
+    display: none;
+  }
+  .step {
+    min-height: 62svh;
+    padding-right: 0;
+  }
+  .step:first-child {
+    padding-top: 2rem;
+  }
+  .step--controls {
+    min-height: auto;
+    padding-block: 3rem;
+  }
+  .levers__grid {
+    grid-template-columns: 1fr;
+  }
+  .inference__aside {
+    margin-top: 2rem;
+  }
+}

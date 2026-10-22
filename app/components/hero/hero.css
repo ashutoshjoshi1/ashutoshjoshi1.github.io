@@ -1,0 +1,178 @@
+/*
+ * HERO — "Window that opens to the edges". Without script, or with reduced
+ * motion, it is the open photograph with the name over a scrim. With motion,
+ * a 4:5 window in the middle of a held stage shows the photograph as coarse
+ * detector cells; scrolling opens the window to the edges while the cells
+ * resolve, then the next chapter slides over the held picture.
+ */
+
+.hero {
+  position: relative;
+  z-index: 0;
+}
+
+.hero__stage {
+  position: relative;
+  height: 100svh;
+  min-height: 34rem;
+  overflow: clip;
+}
+
+.hero__picture {
+  position: absolute;
+  inset: 0;
+  background: var(--surface);
+}
+/* neutral scrim under the static headline only */
+.hero__picture::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 60%;
+  background: linear-gradient(to top, rgb(14 14 14 / 0.78), rgb(14 14 14 / 0));
+  pointer-events: none;
+}
+
+.hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 69%;
+}
+
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+.hero__copy {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  align-items: end;
+  padding-bottom: calc(var(--margin) * 2);
+}
+
+.hero__title {
+  grid-column: 1 / span 6;
+  margin: 0 0 0 -0.04em;
+}
+
+.hero__side {
+  grid-column: 9 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.hero__lede {
+  max-width: 28ch;
+  margin: 0;
+}
+
+.hero__caption {
+  display: none;
+  position: absolute;
+  left: 0;
+  bottom: var(--margin);
+  z-index: 1;
+  max-width: 44ch;
+  margin: 0;
+  color: var(--ink);
+}
+
+@media (max-width: 699px) {
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+  .hero__side .button {
+    width: 100%;
+  }
+}
+
+/* ---- the moving version ------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .hero {
+    --win-w: min(36vw, 57.6svh);
+    --win-x: calc((100vw - var(--win-w)) / 2);
+    --win-y: calc((100svh - var(--win-w) * 1.25) / 2);
+    height: 340svh;
+  }
+  .js .hero__stage {
+    position: sticky;
+    top: 0;
+  }
+  .js .hero__picture {
+    clip-path: inset(var(--win-y) var(--win-x));
+    will-change: clip-path;
+  }
+  .js .hero__picture::after {
+    display: none;
+  }
+  .js .hero__img {
+    opacity: 0;
+  }
+  .js .hero__stage[data-exposed="failed"] .hero__img {
+    opacity: 1;
+  }
+  .js .hero__canvas {
+    display: block;
+  }
+  .js .hero__copy {
+    inset: 0;
+    padding-bottom: var(--win-y);
+    pointer-events: none;
+  }
+  .js .hero__copy > * {
+    pointer-events: auto;
+  }
+  .js .hero__title {
+    grid-column: 1 / span 4;
+  }
+  .js .hero__side {
+    grid-column: 10 / -1;
+  }
+  .js .hero__caption {
+    display: block;
+    opacity: 0;
+  }
+
+  @media (max-width: 699px) {
+    .js .hero {
+      --win-w: 78vw;
+      --win-x: 11vw;
+      --win-top: min(30svh, calc(100svh - 97.5vw - 1.5rem));
+      height: 300svh;
+    }
+    .js .hero__picture {
+      clip-path: inset(var(--win-top) var(--win-x) calc(100svh - var(--win-top) - 97.5vw) var(--win-x));
+    }
+    .js .hero__copy {
+      display: block;
+      padding: 0;
+    }
+    .js .hero__title {
+      position: absolute;
+      left: var(--margin);
+      top: calc(var(--nav-h) + 0.5rem);
+    }
+    .js .hero__side {
+      position: absolute;
+      left: var(--margin);
+      right: var(--margin);
+      top: calc(var(--win-top) + 97.5vw + 1.25rem);
+      gap: 1rem;
+    }
+  }
+}

@@ -3,24 +3,21 @@ import localFont from "next/font/local";
 import { PROJECTS, CONTACT, EDUCATION } from "./lib/data";
 import "./globals.css";
 
-/* Hanken Grotesk (OFL) stands in for scale.com's commercial Aeonik Pro —
-   same width and color at regular weight. With an Aeonik web licence,
-   swap the file here and nothing else needs to change. */
+/* Cabinet Grotesk (Indian Type Foundry, ITF Free Font License via Fontshare):
+   one family for everything — 800 for the few large words, 400/500 for text. */
 const sansFont = localFont({
-  src: "../public/fonts/HankenGrotesk-Variable.woff2",
+  src: [
+    { path: "../public/fonts/CabinetGrotesk-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../public/fonts/CabinetGrotesk-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../public/fonts/CabinetGrotesk-Extrabold.woff2", weight: "800", style: "normal" },
+  ],
   variable: "--font-sans",
-  weight: "100 900",
   display: "swap",
 });
 
-const monoFont = localFont({
-  src: [
-    { path: "../public/fonts/DMMono-Regular.woff2", weight: "400", style: "normal" },
-    { path: "../public/fonts/DMMono-Medium.woff2", weight: "500", style: "normal" },
-  ],
-  variable: "--font-mono",
-  display: "swap",
-});
+/* hidden entrance states apply only once this has run, so the page reads
+   in full without JavaScript */
+const JS_GATE = "document.documentElement.classList.add('js')";
 
 const SITE_URL = "https://ashutoshjoshi1.github.io";
 const DESCRIPTION =
@@ -102,7 +99,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: "#1c1c1c",
   initialScale: 1,
   width: "device-width",
 };
@@ -186,8 +183,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="overscroll-y-none">
-      <body className={`${sansFont.variable} ${monoFont.variable} antialiased`}>
+    <html lang="en" className={`${sansFont.variable} overscroll-y-none`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: JS_GATE }} />
+      </head>
+      <body>
         {children}
         <script
           type="application/ld+json"

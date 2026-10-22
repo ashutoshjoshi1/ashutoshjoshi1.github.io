@@ -1,5 +1,6 @@
 export interface Project {
-  index: string;
+  /* stable id: anchors, retrieval docs and the project's pixel picture */
+  slug: string;
   name: string;
   domain: string;
   year: string;
@@ -8,13 +9,13 @@ export interface Project {
   link: string;
   /* the repo is private: show the work, but don't link visitors to a 404 */
   private?: boolean;
-  /* seed that shapes this project's generative waveform signature */
+  /* seed for the small variations in the project's pixel picture */
   seed: number;
 }
 
 export const PROJECTS: Project[] = [
   {
-    index: "01",
+    slug: "phulax",
     name: "Phulax",
     domain: "AI Agent Security / Open Source",
     year: "2026",
@@ -25,7 +26,7 @@ export const PROJECTS: Project[] = [
     seed: 97,
   },
   {
-    index: "02",
+    slug: "commonground",
     name: "CommonGround",
     domain: "RAG / AI Infrastructure",
     year: "2025",
@@ -36,7 +37,7 @@ export const PROJECTS: Project[] = [
     seed: 7,
   },
   {
-    index: "03",
+    slug: "incortex",
     name: "InCortex",
     domain: "Agentic AI / Open Source",
     year: "2026",
@@ -47,7 +48,7 @@ export const PROJECTS: Project[] = [
     seed: 23,
   },
   {
-    index: "04",
+    slug: "office",
     name: "Office.ai",
     domain: "Agentic AI / 3D",
     year: "2026",
@@ -58,7 +59,7 @@ export const PROJECTS: Project[] = [
     seed: 59,
   },
   {
-    index: "05",
+    slug: "sciglob-library",
     name: "SciGlob Library",
     domain: "Instrument Control / NASA",
     year: "2026",
@@ -69,7 +70,7 @@ export const PROJECTS: Project[] = [
     seed: 37,
   },
   {
-    index: "06",
+    slug: "blicko",
     name: "BlickO-CPP",
     domain: "Systems / NASA",
     year: "2026",
@@ -81,7 +82,7 @@ export const PROJECTS: Project[] = [
     seed: 31,
   },
   {
-    index: "07",
+    slug: "pandora-summarizer",
     name: "Pandora Summarizer",
     domain: "Distributed Systems / NASA",
     year: "2025",
@@ -92,7 +93,7 @@ export const PROJECTS: Project[] = [
     seed: 13,
   },
   {
-    index: "08",
+    slug: "moneyball",
     name: "MoneyBall",
     domain: "AI Agents",
     year: "2025",
@@ -104,7 +105,7 @@ export const PROJECTS: Project[] = [
     seed: 53,
   },
   {
-    index: "09",
+    slug: "harborline",
     name: "HarborLine",
     domain: "ML Platform / Forecasting",
     year: "2026",
@@ -115,7 +116,7 @@ export const PROJECTS: Project[] = [
     seed: 71,
   },
   {
-    index: "10",
+    slug: "fasal",
     name: "FASAL",
     domain: "Hyperspectral AI / Agriculture",
     year: "2026",
@@ -126,7 +127,7 @@ export const PROJECTS: Project[] = [
     seed: 83,
   },
   {
-    index: "11",
+    slug: "rebirth",
     name: "ReBirth",
     domain: "Generative AI / MLOps",
     year: "2025",
@@ -138,7 +139,7 @@ export const PROJECTS: Project[] = [
     seed: 19,
   },
   {
-    index: "12",
+    slug: "topstepx",
     name: "Claude TopstepX",
     domain: "LLM Systems",
     year: "2026",
@@ -150,7 +151,7 @@ export const PROJECTS: Project[] = [
     seed: 41,
   },
   {
-    index: "13",
+    slug: "retrve",
     name: "RETRVE",
     domain: "Product / Fintech",
     year: "2025",
@@ -162,7 +163,7 @@ export const PROJECTS: Project[] = [
     seed: 67,
   },
   {
-    index: "14",
+    slug: "imu",
     name: "IMU-3D",
     domain: "Graphics / Native",
     year: "2025",
@@ -292,7 +293,14 @@ export const PROFILE = {
   name: "Ashutosh Joshi",
   role: "Software Engineer — AI/ML Systems",
   org: "NASA via SciGlob Instruments",
-  headline: ["I build the systems that make", "AI fast, affordable and reliable."],
+};
+
+export const HERO = {
+  name: ["Ashutosh", "Joshi"] as const,
+  lede: "Software engineer for AI/ML systems at SciGlob, on NASA’s Pandora network. I make LLM inference fast and cheap on GPUs.",
+  photo: "/images/hero-goddard.webp",
+  photoAlt: "Ashutosh Joshi standing at the main gate sign of NASA’s Goddard Space Flight Center",
+  caption: "At the main gate of NASA’s Goddard Space Flight Center, Greenbelt, Maryland.",
 };
 
 export const MANIFESTO =
@@ -302,49 +310,68 @@ export const MANIFESTO =
 export const FIELD_STATEMENT =
   "I build AI systems that listen to the physical world — a network of atmospheric instruments on five continents feeding NASA science, pipelines that turn raw photons into data products, and LLM agents that turn data into decisions.";
 
-/* Where the work has shipped — shown as a muted wordmark row. */
-export const EMPLOYERS = ["NASA GSFC", "SciGlob Instruments", "407 Associates", "UMBC", "Tata Consultancy Services"];
-
-/* The production LLM serving work, told as the chapters of the pinned
-   "stack" section. Each chapter drives one arrangement of the 3D panels. */
-export interface Chapter {
-  eyebrow: string;
+/* The production LLM serving work, told as the steps of the pinned
+   inference story. Each step sets the levers of the simulated server
+   beside it, so the field shows what the step describes. */
+export interface InferenceStep {
+  id: string;
   title: string;
+  /* the result, set at poster size: a resume figure, never a simulated one */
+  figure?: { value: string; label: string };
   body: string;
-  metric?: string;
+  /* a second result, set small under the body */
+  also?: string;
+  levers: {
+    continuous: boolean;
+    chunkedPrefill: boolean;
+    prefixCache: boolean;
+    speculative: boolean;
+    fp8: boolean;
+  };
+  /* requests per second the simulated server receives during this step */
+  load: number;
 }
 
-export const CHAPTERS: Chapter[] = [
+export const INFERENCE_STEPS: InferenceStep[] = [
   {
-    eyebrow: "LLM inference",
+    id: "naive",
     title: "Speed is a systems problem.",
-    body: "Most of what an AI product costs, and most of its latency, lives below the model: batching, memory, parallelism and scheduling. That is where I work, from the request router down to the GPU, measured end to end.",
+    body: "Most of what an AI product costs, and most of its latency, lives below the model: batching, memory, parallelism and scheduling. Beside this text, a small simulated server batches requests the naive way, whole batches and whole prompts at a time. Its memory sits mostly empty while dozens of requests wait.",
+    levers: { continuous: false, chunkedPrefill: false, prefixCache: false, speculative: false, fp8: false },
+    load: 6,
   },
   {
-    eyebrow: "Serving",
-    title: "Inference that pays for itself.",
-    body: "I architected a production LLM inference platform on vLLM that powers RAG and agentic workflows, with continuous batching, chunked prefill and prefix caching tuned per workload.",
-    metric: "+87% throughput per GPU · −20% P99 TTFT",
+    id: "batching",
+    title: "Every slot kept busy.",
+    figure: { value: "+87%", label: "throughput per GPU" },
+    body: "I architected and run a production LLM inference platform on vLLM for RAG and agentic workflows. Continuous batching refills a slot the moment a request finishes, chunked prefill stops long prompts stalling everyone else’s stream, and prefix caching keeps one shared copy of the system prompt: the green blocks.",
+    also: "−20% P99 time to first token",
+    levers: { continuous: true, chunkedPrefill: true, prefixCache: true, speculative: false, fp8: false },
+    load: 6,
   },
   {
-    eyebrow: "Orchestration",
-    title: "Kubernetes that understands GPUs.",
-    body: "Go controllers and CRDs own the model lifecycle: GPU-aware scheduling, MIG partitions for smaller models, tensor and pipeline parallelism over NCCL for large ones, cache-aware routing and SLO-driven autoscaling.",
-    metric: "−40% idle GPU hours",
-  },
-  {
-    eyebrow: "Efficiency",
+    id: "efficiency",
     title: "Cheaper tokens, same answers.",
-    body: "Quantized execution with FP8/INT8 and AWQ, plus speculative decoding, each checked against accuracy and latency targets before it reaches production.",
-    metric: "−60% serving cost",
+    figure: { value: "−60%", label: "serving cost" },
+    body: "Quantized execution with FP8/INT8 and AWQ, plus speculative decoding: a draft model proposes tokens and the target checks several in one pass. Every change was held to accuracy and latency targets before rollout.",
+    levers: { continuous: true, chunkedPrefill: true, prefixCache: true, speculative: true, fp8: true },
+    load: 6,
   },
   {
-    eyebrow: "Benchmarks",
-    title: "Nothing ships unmeasured.",
-    body: "A benchmarking harness tracks TTFT, ITL, P95/P99 and MFU/MBU, and every model or config change has to pass it. vLLM, SGLang and TensorRT-LLM were compared head to head; regressions get root-caused with Nsight and PyTorch Profiler.",
-    metric: "TTFT · ITL · P99 · MFU/MBU",
+    id: "orchestration",
+    title: "Kubernetes that understands GPUs.",
+    figure: { value: "−40%", label: "idle GPU hours" },
+    body: "Go controllers and CRDs own the model lifecycle: GPU-aware scheduling, MIG partitions for small models, tensor and pipeline parallelism over NCCL for large ones, cache-aware routing and SLO-driven autoscaling. Here the same server takes half again as much traffic with nobody waiting.",
+    levers: { continuous: true, chunkedPrefill: true, prefixCache: true, speculative: true, fp8: true },
+    load: 9,
   },
 ];
+
+export const BENCHMARK_NOTE =
+  "Nothing ships unmeasured. A benchmarking harness tracks TTFT, ITL, P95/P99 latency and MFU/MBU and gates every model and config change. I compared vLLM, SGLang and TensorRT-LLM head to head before recommending the production runtime, and root-cause latency regressions with Nsight Systems and PyTorch Profiler.";
+
+export const SIMULATION_NOTE =
+  "The server is a toy, simulated one forward pass at a time in your browser: twelve batch slots, illustrative costs, random traffic. Its numbers are its own. The figures beside it are from production.";
 
 export const TOOLCHAIN = ["vLLM", "SGLang", "TensorRT-LLM", "Triton", "Kubernetes", "NCCL", "CUDA"];
 
@@ -364,9 +391,12 @@ export const IMPACT_METRICS: ImpactMetric[] = [
   { sign: "−", value: 40, label: "Idle GPU hours" },
 ];
 
-/* ML and data systems running NASA's Pandora network. */
+/* ML and data systems running NASA's Pandora network. `picture` picks what
+   the held frame beside the list shows while the system is selected. */
+export type FleetPicture = "video" | "sky" | "roof" | "globe" | "spectrum";
+
 export interface FleetSystem {
-  icon: "pulse" | "cloud" | "gauge" | "edge" | "shield" | "database" | "chip";
+  picture: FleetPicture;
   title: string;
   statement: string;
   label: string;
@@ -374,49 +404,49 @@ export interface FleetSystem {
 
 export const FLEET: FleetSystem[] = [
   {
-    icon: "pulse",
+    picture: "video",
     title: "Fleet anomaly detection",
     statement:
       "Deep-learning models watch live streams from 300+ Pandora spectrometers and flag sensor and data irregularities the moment they appear. Hours of daily manual monitoring, eliminated.",
     label: "Pandonia Global Network",
   },
   {
-    icon: "cloud",
+    picture: "sky",
     title: "CNN cloud detection",
     statement:
       "An encoder–decoder CNN reads the sky in real time and gates sun-scan measurements on actual conditions, raising scan quality across the network.",
     label: "Computer vision",
   },
   {
-    icon: "gauge",
+    picture: "roof",
     title: "Instrument health platform",
     statement:
       "A full-stack instrument-health app that gives operators the state of 300+ instruments on five continents.",
     label: "FastAPI · Next.js · TypeScript",
   },
   {
-    icon: "edge",
+    picture: "roof",
     title: "Fleet health scoring",
     statement:
       "Raw L0 instrument streams parsed at the edge, health scored 0–100 per instrument, daily summaries shipped to cloud dashboards.",
     label: "Edge → cloud ML",
   },
   {
-    icon: "shield",
+    picture: "globe",
     title: "Evals, guardrails, observability",
     statement:
       "Evaluation and monitoring for production ML: a fleet-wide observability dashboard that speeds triage across five continents, and per-scan traceable logging that makes every data product auditable end to end.",
     label: "ML reliability",
   },
   {
-    icon: "database",
+    picture: "globe",
     title: "Analysis-ready NASA data",
     statement:
       "Automated acquisition, cleaning and feature-engineering pipelines that turn raw spectrometer measurements into reproducible, auditable trace-gas datasets for NASA and ESA researchers.",
     label: "Data engineering",
   },
   {
-    icon: "chip",
+    picture: "spectrum",
     title: "Blick in C++17",
     statement:
       "Leading the ground-up C++17 rewrite of the Blick spectral suite (L0→L2): 14 libraries, a parity harness against legacy output and a CUDA-ready GPU layer.",
@@ -432,7 +462,7 @@ export interface Role {
   location: string;
   summary: string;
   highlights: string[];
-  icon: "trend" | "bars" | "flow" | "school";
+  photo?: { src: string; alt: string; position: string };
   active?: boolean;
 }
 
@@ -452,7 +482,11 @@ export const EXPERIENCE: Role[] = [
       "Deep-learning anomaly detection and CNN cloud detection across 300+ spectrometers.",
       "Leading the C++17 rewrite of the Blick spectral processing suite.",
     ],
-    icon: "trend",
+    photo: {
+      src: "/images/hero-goddard.webp",
+      alt: "Ashutosh Joshi at NASA Goddard Space Flight Center",
+      position: "72% 62%",
+    },
     active: true,
   },
   {
@@ -465,7 +499,6 @@ export const EXPERIENCE: Role[] = [
       "Python data and ML pipelines (PySpark, scikit-learn, TensorFlow) over SQL, S3 and Snowflake: operating costs down 25%.",
       "Automated multi-source cleaning and validation; Tableau and Power BI dashboards replaced spreadsheet workflows.",
     ],
-    icon: "bars",
   },
   {
     company: "UMBC",
@@ -476,7 +509,11 @@ export const EXPERIENCE: Role[] = [
     highlights: [
       "Machine learning concentration by day; taught, graded and debugged everything from off-by-one errors to existential dread the rest of the time.",
     ],
-    icon: "school",
+    photo: {
+      src: "/images/umbc-graduation.webp",
+      alt: "Ashutosh Joshi in a UMBC graduation stole",
+      position: "40% 35%",
+    },
   },
   {
     company: "Tata Consultancy Services",
@@ -489,7 +526,6 @@ export const EXPERIENCE: Role[] = [
       "Load profiling and tuning: +25% throughput, −30% response time at 99.5%+ availability.",
       "CI/CD and monitoring automation: release time down 40%, MTTR down 25%.",
     ],
-    icon: "flow",
   },
 ];
 
@@ -629,51 +665,42 @@ export const SKILLS: { label: string; items: string[] }[] = [
 ];
 
 /* How I work: four rules from the inference work, four from the previous
-   site's flight rules. `model` picks the wireframe drawn on each card. */
+   site's flight rules. */
 export interface Principle {
-  model: "waveGrid" | "torus" | "lattice" | "octahedron" | "dish" | "icosahedron" | "helix" | "globe";
   title: string;
   body: string;
 }
 
 export const PRINCIPLES: Principle[] = [
   {
-    model: "waveGrid",
     title: "Measure, then tune.",
     body: "Every model and config change runs through the benchmark harness: TTFT, ITL, P95/P99, MFU/MBU. Intuition picks the experiment; numbers pick the winner.",
   },
   {
-    model: "torus",
     title: "The tail is the product.",
     body: "Users feel P99, not the average. Chunked prefill keeps one long prompt from stalling everyone's decode, and cache-aware routing keeps hot prefixes hot.",
   },
   {
-    model: "lattice",
     title: "Every GPU hour has an owner.",
     body: "Quantization, speculative decoding, MIG for small models and SLO-driven autoscaling. Idle silicon is a bug, not a cost of doing business.",
   },
   {
-    model: "octahedron",
     title: "Parity before speed.",
     body: "The Blick C++17 rewrite answers to a parity harness against legacy output before any optimization lands. Fast and wrong is just wrong, sooner.",
   },
   {
-    model: "dish",
     title: "Hardware doesn't lie.",
     body: "Dashboards drift; photons don't. Every system I build starts at the sensor and works backwards — if the instrument disagrees with the chart, the chart loses.",
   },
   {
-    model: "icosahedron",
     title: "Determinism beats vibes.",
     body: "LLMs get to reason. They don't get to gamble. The core stays deterministic, immutable and tested — my trading engine ships at ~93% coverage for a reason.",
   },
   {
-    model: "helix",
     title: "Close the loop.",
     body: "An agent that acts but never measures is just noise with confidence. Pipelines end where feedback begins — every output feeds the next decision.",
   },
   {
-    model: "globe",
     title: "Ship the signal.",
     body: "Data isn't a product until someone downstream can act on it. Five continents of instruments mean nothing if the science never lands.",
   },

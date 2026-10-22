@@ -59,6 +59,13 @@ export interface Step {
   tokens: Uint8Array;
   /* per-request brightness, 0–255 */
   shade: Uint8Array;
+  /* request in the slot after this pass (0 = empty); a request that
+     finished on this pass still reports here, flagged MARK_DONE */
+  rid: Uint32Array;
+  /* tokens of KV cache the request holds privately (prompt + output) */
+  kv: Uint16Array;
+  /* 1 when the request reads the shared system prompt's cached blocks */
+  sharedKv: Uint8Array;
 }
 
 export interface EngineStats {
@@ -83,6 +90,7 @@ export interface RunSummary {
 }
 
 interface Request {
+  id: number;
   arrival: number;
   prompt: number;
   output: number;
@@ -99,7 +107,7 @@ interface Sequence {
   lastTokenAt: number;
 }
 
-const SHARED_PREFIX = 512; /* a system prompt most requests reuse */
+export const SHARED_PREFIX = 512; /* a system prompt most requests reuse */
 const SHARED_SHARE = 0.7;
 const TOKEN_BUDGET = 512; /* chunked prefill: tokens per forward pass */
 const IDLE_MS = 12;
@@ -135,6 +143,7 @@ export class BatchEngine {
   private readonly queue: Request[] = [];
   private readonly running: (Sequence | null)[];
   private prefixWarm = false;
+  private requestIds = 0;
   private hits = 0;
   private sharedSeen = 0;
   private readonly ttfts: number[] = [];
@@ -194,7 +203,7 @@ export class BatchEngine {
     const prompt = shared ? SHARED_PREFIX + 48 + Math.floor(r() * 520) : 160 + Math.floor(r() * 1100);
     const output = 16 + Math.floor(Math.pow(r(), 1.7) * 240);
     const shade = 90 + Math.floor(r() * 165);
-    return { arrival, prompt, output, shared, shade };
+    return { id: ++this.requestIds, arrival, prompt, output, shared, shade };
   }
 
   private pullArrivals(): void {
@@ -254,6 +263,9 @@ export class BatchEngine {
     const mark = new Uint8Array(n);
     const tokens = new Uint8Array(n);
     const shade = new Uint8Array(n);
+    const rid = new Uint32Array(n);
+    const kv = new Uint16Array(n);
+    const sharedKv = new Uint8Array(n);
     const cost = this.policy.fp8 ? COST.fp8 : COST.fp16;
     const firsts: number[] = [];
     let decodes = 0;
@@ -358,6 +370,12 @@ export class BatchEngine {
     for (let s = 0; s < n; s++) {
       if (kind[s] === CELL_PREFILL || kind[s] === CELL_DECODE) useful++;
       const seq = this.running[s];
+      if (seq) {
+        const privatePrompt = (seq.hit ? seq.req.prompt - SHARED_PREFIX : seq.req.prompt) - seq.prefillLeft;
+        rid[s] = seq.req.id;
+        kv[s] = privatePrompt + (seq.req.output - Math.max(0, seq.outLeft));
+        sharedKv[s] = seq.hit ? 1 : 0;
+      }
       if (seq && seq.prefillLeft === 0 && seq.outLeft <= 0) {
         mark[s] |= MARK_DONE;
         this.running[s] = null;
@@ -375,7 +393,7 @@ export class BatchEngine {
     this.recent.push({ t: t1, tokens: emitted });
     while (this.recent.length > 0 && this.recent[0].t < t1 - STATS_WINDOW_MS) this.recent.shift();
 
-    return { t0, t1, kind, mark, tokens, shade };
+    return { t0, t1, kind, mark, tokens, shade, rid, kv, sharedKv };
   }
 
   private recordTtft(ms: number, at: number): void {
