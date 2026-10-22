@@ -1,0 +1,112 @@
+/*
+ * ASK — the retrieval console as a plain search: a filled field, a few
+ * starters, answers that arrive whole and newest first.
+ */
+
+.ask__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+.ask__head {
+  grid-column: 1 / span 5;
+}
+.ask__head h2 {
+  margin: 0;
+}
+.ask__intro {
+  max-width: 34ch;
+  margin: 1.75rem 0 0;
+}
+
+.ask__console {
+  grid-column: 7 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-top: 0.5rem;
+}
+
+.ask__form {
+  display: flex;
+  gap: 0.5rem;
+}
+.ask__input {
+  flex: 1;
+  min-width: 0;
+  min-height: 3.75rem;
+  padding: 0 1.1rem;
+  background: var(--surface);
+  color: var(--ink);
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  transition: background-color var(--t-hover) ease;
+}
+.ask__input::placeholder {
+  color: var(--muted);
+}
+.ask__input:focus-visible {
+  background: var(--surface-2);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.ask__form .button {
+  min-height: 3.75rem;
+}
+
+.ask__suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.ask__suggestion {
+  background: var(--surface);
+}
+
+.ask__answers {
+  display: grid;
+  gap: 2rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.answer__question {
+  margin: 0;
+  color: var(--muted);
+}
+.answer__text {
+  margin: 0.5rem 0 0;
+  white-space: pre-line;
+}
+.answer__sources {
+  margin: 0.75rem 0 0;
+}
+.answer__meta {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+}
+
+/* an answer arrives whole: it settles in, it is never typed out */
+@media (prefers-reduced-motion: no-preference) {
+  .answer {
+    transition:
+      opacity 300ms var(--ease-out),
+      transform 400ms var(--ease-out);
+  }
+  @starting-style {
+    .answer {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+}
+
+@media (max-width: 899px) {
+  .ask__grid {
+    display: block;
+  }
+  .ask__console {
+    margin-top: 2.5rem;
+  }
+}

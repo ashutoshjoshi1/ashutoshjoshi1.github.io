@@ -4,7 +4,8 @@ import {
   EXPERIENCE,
   EDUCATION,
   SKILLS,
-  CHAPTERS,
+  INFERENCE_STEPS,
+  BENCHMARK_NOTE,
   FLEET,
   PRINCIPLES,
   IMPACT_STATEMENT,
@@ -42,20 +43,20 @@ export interface AskResult {
 /* ------------------------------------------------------------- corpus */
 
 const projectDocs: Doc[] = PROJECTS.map((p) => ({
-  id: `project-${p.index}`,
-  tag: `${p.index} · ${p.name}`,
+  id: `project-${p.slug}`,
+  tag: p.name,
   text: `${p.name} ${p.domain} ${p.description} ${p.stack.join(" ")}`,
   answer: `${p.name} (${p.year}, ${p.domain}) — ${p.description} Built with ${p.stack.join(", ")}.${
     p.private ? " The repo is private; a walkthrough is available on request." : ""
   }`,
-  /* private repos would 404 for visitors — point at the card instead */
+  /* private repos would 404 for visitors: point at the index instead */
   link: p.private ? "#work" : p.link,
 }));
 
 const moreWorkDocs: Doc[] = MORE_WORK.flatMap((group) =>
   group.items.map((item) => ({
     id: `repo-${item.name}`,
-    tag: `GitHub · ${item.name}`,
+    tag: `GitHub: ${item.name}`,
     text: `${item.name} ${item.summary} ${item.language} ${item.year} ${group.label} github repository project`,
     answer: `${item.name} (${item.year}, ${item.language}) — ${item.summary}`,
     link: item.link,
@@ -64,7 +65,7 @@ const moreWorkDocs: Doc[] = MORE_WORK.flatMap((group) =>
 
 const principleDocs: Doc[] = PRINCIPLES.map((p, i) => ({
   id: `principle-${i}`,
-  tag: `Principle · ${p.title}`,
+  tag: `Principle: ${p.title}`,
   text: `${p.title} ${p.body} principles how work philosophy approach values rules`,
   answer: `${p.title} ${p.body}`,
   link: "#principles",
@@ -72,26 +73,38 @@ const principleDocs: Doc[] = PRINCIPLES.map((p, i) => ({
 
 const experienceDocs: Doc[] = EXPERIENCE.map((r, i) => ({
   id: `experience-${i}`,
-  tag: `Experience · ${r.company}`,
+  tag: `Experience: ${r.company}`,
   text: `${r.company} ${r.org ?? ""} ${r.role} ${r.location} ${r.period} ${r.summary} ${r.highlights.join(" ")} experience work job career`,
   answer: `${r.role} at ${r.company}${r.org ? ` (${r.org})` : ""}, ${r.location}, ${r.period}. ${r.summary} ${r.highlights.join(" ")}`,
   link: "#experience",
 }));
 
-const chapterDocs: Doc[] = CHAPTERS.map((c, i) => ({
-  id: `serving-${i}`,
-  tag: `Serving · ${c.eyebrow}`,
-  text: `${c.eyebrow} ${c.title} ${c.body} ${c.metric ?? ""} llm inference serving platform production`,
-  answer: `${c.title} ${c.body}${c.metric ? ` (${c.metric})` : ""}`,
-  link: "#serving",
-}));
+const inferenceDocs: Doc[] = [
+  ...INFERENCE_STEPS.map((step) => {
+    const figure = step.figure ? `${step.figure.value} ${step.figure.label}` : "";
+    return {
+      id: `inference-${step.id}`,
+      tag: `Inference: ${step.title}`,
+      text: `${step.title} ${figure} ${step.body} ${step.also ?? ""} llm inference serving platform production`,
+      answer: `${figure ? `${figure}. ` : ""}${step.body}${step.also ? ` Also ${step.also}.` : ""}`,
+      link: "#inference",
+    };
+  }),
+  {
+    id: "inference-benchmarks",
+    tag: "Inference: benchmarks",
+    text: `${BENCHMARK_NOTE} benchmark harness measured`,
+    answer: BENCHMARK_NOTE,
+    link: "#inference",
+  },
+];
 
 const fleetDocs: Doc[] = FLEET.map((f, i) => ({
   id: `fleet-${i}`,
-  tag: `NASA · ${f.title}`,
+  tag: `NASA: ${f.title}`,
   text: `${f.title} ${f.statement} ${f.label} nasa pandora instruments spectrometers`,
   answer: `${f.title}: ${f.statement}`,
-  link: "#systems",
+  link: "#nasa",
 }));
 
 const FACT_DOCS: Doc[] = [
@@ -107,7 +120,7 @@ const FACT_DOCS: Doc[] = [
     tag: "Impact",
     text: `impact results metrics numbers achievements savings throughput cost latency ttft idle gpu hours ${IMPACT_STATEMENT}`,
     answer: `${IMPACT_STATEMENT} In numbers: ${IMPACT_METRICS.map((m) => `${m.sign}${m.value}% ${m.label.toLowerCase()}`).join(", ")}.`,
-    link: "#impact",
+    link: "#inference",
   },
   {
     id: "fact-inference",
@@ -116,7 +129,7 @@ const FACT_DOCS: Doc[] = [
       "llm inference serving vllm sglang tensorrt-llm triton kv cache pagedattention continuous batching prefix caching chunked prefill quantization fp8 int8 awq gptq speculative decoding moe serving throughput latency rag agents",
     answer:
       "LLM inference is the core of the day job: a production vLLM platform for RAG and agentic workflows, tuned with continuous batching, chunked prefill and prefix caching (+87% throughput per GPU, −20% P99 TTFT), plus FP8/INT8 and AWQ quantization and speculative decoding (−60% serving cost). Also fluent in SGLang, TensorRT-LLM, Triton, PagedAttention and MoE serving.",
-    link: "#serving",
+    link: "#inference",
   },
   {
     id: "fact-runtimes",
@@ -124,7 +137,7 @@ const FACT_DOCS: Doc[] = [
     text: "vllm versus sglang versus tensorrt-llm compare comparison evaluated runtime choice which engine benchmark head to head",
     answer:
       "vLLM, SGLang and TensorRT-LLM were evaluated head to head on throughput, tail latency and quantization support, and the production runtime was recommended from workload-specific benchmarks rather than reputation.",
-    link: "#serving",
+    link: "#inference",
   },
   {
     id: "fact-gpu",
@@ -133,7 +146,7 @@ const FACT_DOCS: Doc[] = [
       "gpu gpus cuda distributed multi-gpu tensor parallelism pipeline parallelism nccl disaggregated prefill decode kv-cache offload rdma gpudirect nvlink infiniband mig",
     answer:
       "Distributed GPU serving: large models across multi-GPU nodes with tensor and pipeline parallelism over NCCL, MIG partitions for smaller models, and working knowledge of disaggregated prefill/decode, KV-cache offload, RDMA, GPUDirect and NVLink/InfiniBand. Idle GPU hours came down 40%.",
-    link: "#serving",
+    link: "#inference",
   },
   {
     id: "fact-k8s",
@@ -142,7 +155,7 @@ const FACT_DOCS: Doc[] = [
       "kubernetes k8s go golang controllers crds operators helm gpu scheduling mig multi-tenant isolation cache-aware routing autoscaling slo orchestration model lifecycle",
     answer:
       "Kubernetes for GPUs: Go controllers and CRDs for model lifecycle management, GPU-aware scheduling and autoscaling of vLLM workloads, shipped with Helm, plus MIG partitioning, multi-tenant isolation, cache-aware routing and SLO-driven autoscaling.",
-    link: "#serving",
+    link: "#inference",
   },
   {
     id: "fact-profiling",
@@ -151,7 +164,7 @@ const FACT_DOCS: Doc[] = [
       "performance profiling benchmark benchmarking harness ttft itl tpot p95 p99 tail latency mfu mbu nsight systems compute pytorch profiler root cause regression incidents",
     answer:
       "A benchmarking harness tracks TTFT, ITL, P95/P99 latency and MFU/MBU, and every model or config change has to pass it. Latency regressions across multi-tier RAG and agent pipelines get root-caused end to end with Nsight Systems/Compute and PyTorch Profiler.",
-    link: "#serving",
+    link: "#inference",
   },
   {
     id: "fact-ai",
@@ -169,7 +182,7 @@ const FACT_DOCS: Doc[] = [
       "nasa gsfc goddard pandora pandonia spectrometer atmosphere atmospheric science instruments ground network sciglob space physical world sensors esa trace gas",
     answer:
       "At SciGlob, for NASA: ML and data systems for the Pandora network of 300+ spectrometers on five continents. Deep-learning anomaly detection, an encoder–decoder CNN for real-time cloud detection, a full-stack instrument-health platform, edge-to-cloud pipelines delivering auditable trace-gas datasets to NASA and ESA researchers, and a ground-up C++17 rewrite of the Blick spectral processing suite.",
-    link: "#systems",
+    link: "#nasa",
   },
   {
     id: "fact-cpp",
@@ -209,7 +222,7 @@ const FACT_DOCS: Doc[] = [
       "data science data engineering analytics etl elt pipelines pyspark pandas numpy scikit-learn tensorflow pytorch snowflake tableau power bi dashboards anomaly detection time series computer vision cnn model training evaluation precision recall roc auc",
     answer:
       "Data science end to end: deep learning (CNNs, encoder–decoder), computer vision and time-series anomaly detection in production at NASA scale; PyTorch, TensorFlow, scikit-learn and PySpark for training and pipelines; ETL over Snowflake and PostgreSQL with Tableau and Power BI on top (−25% operating cost at 407 Associates, −30% data defects at TCS).",
-    link: "#systems",
+    link: "#nasa",
   },
   {
     id: "fact-hire",
@@ -224,9 +237,9 @@ const FACT_DOCS: Doc[] = [
     id: "fact-site",
     tag: "This site",
     text:
-      "site website portfolio built how this page console terminal lab neural network playground backprop tf-idf tfidf retrieval simulation simulator serving lab interactive hero animation how does this work",
+      "site website portfolio built how this page console search lab neural network playground backprop tf-idf tfidf retrieval simulation simulator kv cache pixels pixel interactive hero animation how does this work",
     answer:
-      "This site is a Next.js static export animated with GSAP and Lenis. The hero is a simulated LLM server you can flood with traffic, the serving story plays out on CSS 3D panels, and the serving lab lets you flip batching, chunked prefill, prefix caching, speculative decoding and FP8 weights while capacity and latency update live. The lab trains a 2-8-8-1 MLP with hand-written backprop, the footer measures this page's own Core Web Vitals, and this console is TF-IDF + cosine retrieval over the site's text. No AI API calls; everything runs in your browser.",
+      "This site is a Next.js static export built around one material, the pixel: a detector pixel counting photons, a KV-cache block holding tokens. The opening photograph develops from coarse detector cells as you scroll, the inference story runs on a live map of a simulated GPU's KV-cache memory that you can flood with traffic, and the project drawings are made of the same cells. The lab trains a 2-8-8-1 network with hand-written backprop, the footer measures this page's own Core Web Vitals, and this search is TF-IDF and cosine retrieval over the site's text. No AI API calls; everything runs in your browser.",
     link: "#lab",
   },
   {
@@ -256,7 +269,7 @@ export const CORPUS: Doc[] = [
   ...projectDocs,
   ...moreWorkDocs,
   ...experienceDocs,
-  ...chapterDocs,
+  ...inferenceDocs,
   ...fleetDocs,
   ...principleDocs,
   ...FACT_DOCS,
@@ -387,7 +400,7 @@ export function search(query: string, topK = 3): { doc: Doc; score: number }[] {
 /* ------------------------------------------------------------ intents */
 
 const HELP_TEXT =
-  "Ask anything about the work, e.g. \"LLM inference experience?\", \"vLLM vs SGLang?\", \"tell me about the NASA work\", \"why hire ashu?\". Commands: projects · stack · contact · resume · clear. Answers are retrieved from indexed docs, never generated.";
+  "Ask anything about the work, for example \"LLM inference experience?\", \"vLLM or SGLang?\", \"the NASA work\" or \"why hire Ashutosh?\". Short commands: projects, stack, contact, resume, clear. Answers are retrieved from what is written on this page, never generated.";
 
 function intentAnswer(query: string): AskResult | null {
   const q = query.trim().toLowerCase();
@@ -402,11 +415,11 @@ function intentAnswer(query: string): AskResult | null {
   if (/^(help|\?|commands?)$/.test(q)) return done(HELP_TEXT);
   /* standalone greetings only — "hi, do you know rag?" must reach retrieval */
   if (/^(hi|hey|hello|yo|sup|namaste|hola)( there)?[\s!.]*$/.test(q)) {
-    return done("Hello. You're talking to a TF-IDF index, not a chatbot — ask about projects, experience, or type `help`.");
+    return done("Hello. This is a TF-IDF index, not a chatbot. Ask about projects or experience, or type help.");
   }
   if (/^projects?$/.test(q) || /list.*(projects|work)/.test(q)) {
     return done(
-      PROJECTS.map((p) => `${p.index} ${p.name} — ${p.domain}`).join("\n"),
+      PROJECTS.map((p) => `${p.name}: ${p.domain}`).join("\n"),
       projectDocs,
     );
   }
@@ -419,7 +432,7 @@ function intentAnswer(query: string): AskResult | null {
     return done(doc?.answer ?? "", doc ? [doc] : []);
   }
   if (/^(resume|cv)$/.test(q)) {
-    return done(`Opening ${CONTACT.resume} — also linked in the footer.`, [
+    return done(`Opening ${CONTACT.resume}, which is also linked in the footer.`, [
       { id: "resume", tag: "Resume", text: "", answer: "", link: CONTACT.resume },
     ]);
   }
@@ -439,7 +452,7 @@ export function ask(query: string): AskResult {
   if (hits.length === 0) {
     return {
       answer:
-        "No strong match in the corpus, and this console refuses to make things up. Try `help`, or ask about inference, gpus, kubernetes, nasa, rag, c++ or hiring.",
+        "Nothing on this page matches that closely enough, and this search will not make things up. Try help, or ask about inference, GPUs, Kubernetes, NASA, RAG, C++ or hiring.",
       sources: [],
       score: 0,
       ms,

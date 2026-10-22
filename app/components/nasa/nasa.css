@@ -1,0 +1,141 @@
+/*
+ * NASA — "Sticky photograph, active list". The frame holds on the left
+ * while the systems pass on the right; the one at the middle of the screen
+ * is in full ink and picks the picture, which develops from cells.
+ */
+
+.nasa__head {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 2.5rem;
+  padding-bottom: calc(var(--section) * 0.6);
+}
+.nasa__title {
+  grid-column: 1 / span 9;
+  margin: 0;
+}
+.nasa__statement {
+  grid-column: 7 / -1;
+  max-width: 34ch;
+  margin: 0;
+}
+
+.nasa__split {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+
+.nasa__held {
+  grid-column: 1 / span 5;
+  align-self: start;
+  position: sticky;
+  top: calc(var(--nav-h) + 1.5rem);
+}
+
+.nasa__figure {
+  margin: 0;
+}
+.nasa__frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  max-height: calc(100svh - var(--nav-h) - 7rem);
+  overflow: clip;
+  background: var(--surface);
+}
+.nasa__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.nasa__layer[data-on="true"] {
+  opacity: 1;
+}
+.nasa__mask {
+  pointer-events: none;
+}
+.nasa__develop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.nasa__caption {
+  min-height: 4.4em;
+  max-width: 52ch;
+  margin-top: 0.9rem;
+  color: var(--muted);
+}
+
+.nasa__list {
+  grid-column: 7 / -1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.system {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.9rem;
+  min-height: 40svh;
+  padding-block: 2.5rem;
+  color: var(--muted);
+  transition: color var(--t-ui) ease;
+}
+.system[data-active="true"] {
+  color: var(--ink);
+}
+.system__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+}
+.system__title {
+  margin: 0;
+  font-weight: 500;
+}
+.system__label {
+  margin: 0;
+  color: var(--muted);
+}
+.system__body {
+  margin: 0;
+}
+
+@media (max-width: 899px) {
+  .nasa__head,
+  .nasa__split {
+    display: block;
+  }
+  .nasa__statement {
+    margin-top: 1.5rem;
+  }
+  .nasa__held {
+    top: 0;
+    z-index: 1;
+    margin-inline: calc(var(--margin) * -1);
+    padding: 0.75rem var(--margin);
+    background: var(--bg);
+  }
+  .nasa__frame {
+    aspect-ratio: 4 / 3;
+    max-height: 36svh;
+    width: 100%;
+  }
+  .nasa__caption {
+    display: none;
+  }
+  .system {
+    min-height: 52svh;
+  }
+}

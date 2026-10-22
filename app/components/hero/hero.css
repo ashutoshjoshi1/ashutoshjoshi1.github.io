@@ -77,14 +77,17 @@
   margin: 0;
 }
 
+/* set on a solid label, not over the bright sign */
 .hero__caption {
   display: none;
   position: absolute;
-  left: 0;
+  left: var(--margin);
   bottom: var(--margin);
   z-index: 1;
   max-width: 44ch;
   margin: 0;
+  padding: 0.55rem 0.8rem;
+  background: var(--bg);
   color: var(--ink);
 }
 

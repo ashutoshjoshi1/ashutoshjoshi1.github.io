@@ -11,8 +11,8 @@ import Lines from "../motion/Lines";
 import { blockAt, cropAt, insetAt, windowInset, type Inset, type Photo } from "./exposure";
 import "./hero.css";
 
-const PHOTO: Photo = { width: 1370, height: 1954, focus: { x: 1010, y: 1330 }, landscapeY: 0.69 };
-const ZOOM = 1.5;
+const PHOTO: Photo = { width: 1370, height: 1954, focus: { x: 1010, y: 1230 }, landscapeY: 0.69 };
+const ZOOM = 1.3;
 /* the cells across the first window: few enough to read as a detector */
 const CELLS_ACROSS = 15;
 const EXPOSURE_MS = 1000;
@@ -179,7 +179,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <p ref={captionRef} className="hero__caption wrap t-small">
+        <p ref={captionRef} className="hero__caption t-small">
           {HERO.caption}
         </p>
       </div>

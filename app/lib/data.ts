@@ -395,6 +395,42 @@ export const IMPACT_METRICS: ImpactMetric[] = [
    the held frame beside the list shows while the system is selected. */
 export type FleetPicture = "video" | "sky" | "roof" | "globe" | "spectrum";
 
+export interface FleetPictureSource {
+  /* raster or footage; the spectrum is drawn in code */
+  src?: string;
+  poster?: string;
+  alt: string;
+  caption: string;
+}
+
+export const FLEET_PICTURES: Record<FleetPicture, FleetPictureSource> = {
+  video: {
+    src: "/images/world/tempo-conus-day.webm",
+    poster: "/images/world/tempo-conus-day-poster.jpg",
+    alt: "Animated map of nitrogen dioxide over the United States through one day, measured by NASA's TEMPO satellite",
+    caption: "Nitrogen dioxide over the US through one day, from NASA’s TEMPO satellite. Pandora instruments on the ground are how it is checked.",
+  },
+  sky: {
+    src: "/images/world/pandora-goddard-roof.webp",
+    alt: "Pandora spectrometer heads on poles against a clear sky on a NASA Goddard rooftop",
+    caption: "Pandora spectrometers on a Goddard roof. The overlay marks clear-sky cells by their red–blue ratio, the classic first pass before a CNN.",
+  },
+  roof: {
+    src: "/images/world/pandora-goddard-roof.webp",
+    alt: "Pandora spectrometer heads on poles against a clear sky on a NASA Goddard rooftop",
+    caption: "Pandora spectrometers being readied on a NASA Goddard roof for a field campaign.",
+  },
+  globe: {
+    src: "/images/world/tempo-north-america.webp",
+    alt: "Nitrogen dioxide over North America mapped by NASA's TEMPO satellite on a dark globe",
+    caption: "TEMPO’s view of North America. Ground spectrometers turn this kind of map from a picture into a measurement.",
+  },
+  spectrum: {
+    alt: "A drawn solar spectrum from 300 to 530 nanometres with dark absorption lines",
+    caption: "Drawn: sunlight from 300 to 530 nm, the range a Pandora spectrometer reads. The dips are Fraunhofer lines; Blick turns spectra like this into trace-gas columns.",
+  },
+};
+
 export interface FleetSystem {
   picture: FleetPicture;
   title: string;
@@ -703,6 +739,36 @@ export const PRINCIPLES: Principle[] = [
   {
     title: "Ship the signal.",
     body: "Data isn't a product until someone downstream can act on it. Five continents of instruments mean nothing if the science never lands.",
+  },
+];
+
+export const CONTACT_PICTURE = {
+  src: "/images/world/tempo-northeast.webp",
+  alt: "Map of nitrogen dioxide over the US Northeast from NASA's TEMPO satellite, with Baltimore, Philadelphia and New York marked",
+  caption: "Nitrogen dioxide over the Northeast at 7:05 a.m. on 18 May 2026, from NASA’s TEMPO satellite. I’m in Baltimore, bottom left.",
+};
+
+/* found pictures, all public domain, credited anyway */
+export const CREDITS = [
+  {
+    what: "Pandora spectrometers on a Goddard roof",
+    who: "NASA GSFC, Ginger Butcher",
+    link: "https://commons.wikimedia.org/wiki/File:24Seven-_PANDORA_13-21_EDT_(26482046721).png",
+  },
+  {
+    what: "TEMPO nitrogen dioxide over the Northeast",
+    who: "NASA Earth Observatory, Michala Garrison",
+    link: "https://commons.wikimedia.org/wiki/File:Air_Pollution%E2%80%99s_Daily_Pulse_Over_the_Northeast_(1226522_-_nyam_tempo_no2_20260518).jpg",
+  },
+  {
+    what: "TEMPO over North America",
+    who: "NASA Scientific Visualization Studio, Kel Elkins",
+    link: "https://commons.wikimedia.org/wiki/File:TEMPO_-_Nitrogen_Dioxide_Air_Pollution_Over_North_America_(SVS5142_-_tempo_no2_00150_print).jpg",
+  },
+  {
+    what: "TEMPO through one day",
+    who: "NASA Scientific Visualization Studio, Trent L. Schindler",
+    link: "https://commons.wikimedia.org/wiki/File:NASA%E2%80%99s_TEMPO_Instrument_Air_Quality_Data_Now_Publicly_Available_(SVS5303_-_TEMPO_3_28_2024_CONUS_1080p30).webm",
   },
 ];
 

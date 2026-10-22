@@ -1,0 +1,210 @@
+/*
+ * WORK — an index of names. Pointing at a row (or tabbing to it) opens a
+ * frame level with it holding the project's drawing, developing from coarse
+ * cells; opening a row gives the details. On touch screens the drawing sits
+ * inside the opened row instead.
+ */
+
+.work__head {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 2rem;
+  padding-bottom: calc(var(--section) * 0.45);
+}
+.work__head h2 {
+  grid-column: 1 / span 7;
+  margin: 0;
+}
+.work__intro {
+  grid-column: 9 / -1;
+  align-self: end;
+  max-width: 34ch;
+  margin: 0;
+}
+
+.work__index {
+  position: relative;
+}
+.work__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.work__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+  width: 100%;
+  padding: 0.5rem 0;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--t-hover) ease;
+}
+.work__name {
+  font-size: var(--step-head);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+.work__meta {
+  color: var(--muted);
+}
+
+/* the details open to their real height without measuring */
+.work__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 320ms var(--ease-out);
+}
+.work__item[data-open="true"] .work__panel {
+  grid-template-rows: 1fr;
+}
+.work__panel-inner {
+  overflow: hidden;
+}
+.work__details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 0.75rem 0 2.5rem;
+}
+.work__description {
+  margin: 0;
+}
+.work__stack,
+.work__private {
+  margin: 0;
+  color: var(--muted);
+}
+.work__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+}
+.work__panel-art {
+  display: block;
+  width: min(100%, 22rem);
+  aspect-ratio: 4 / 5;
+}
+
+.work__frame {
+  display: none;
+}
+.pixel-art {
+  display: block;
+}
+.work__frame-art {
+  width: 100%;
+  height: 100%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .work__list {
+    max-width: 64%;
+  }
+  .work__list:has(.work__row:hover, .work__row:focus-visible) .work__row:not(:hover, :focus-visible) {
+    color: var(--muted);
+  }
+  .work__panel-art {
+    display: none;
+  }
+  .work__frame {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: var(--margin);
+    z-index: 1;
+    width: 27%;
+    aspect-ratio: 4 / 5;
+    background: var(--bg);
+    pointer-events: none;
+    clip-path: inset(100% 0 0 0);
+    transition:
+      clip-path 320ms var(--ease-out),
+      transform 420ms var(--ease-out);
+  }
+  .work__frame.is-open {
+    clip-path: inset(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work__frame,
+  .work__panel {
+    transition: none;
+  }
+}
+
+/* ---- the archive ------------------------------------------------------- */
+
+.work__more {
+  margin-top: calc(var(--section) * 0.7);
+}
+.work__more-title {
+  margin: 0 0 1.5rem;
+  font-weight: 500;
+}
+.work__group {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  padding-block: 1.5rem;
+}
+.work__group-title {
+  grid-column: 1 / span 3;
+  margin: 0;
+  font-weight: 400;
+  color: var(--muted);
+}
+.work__repos {
+  grid-column: 4 / -1;
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.repo {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 2fr);
+  gap: 1rem;
+  align-items: baseline;
+}
+.repo__name {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.repo__summary,
+.repo__meta {
+  margin: 0;
+}
+.repo__meta {
+  color: var(--muted);
+  text-align: right;
+}
+
+@media (max-width: 899px) {
+  .work__head,
+  .work__group {
+    display: block;
+  }
+  .work__intro {
+    margin-top: 1.25rem;
+  }
+  .work__group-title {
+    margin-bottom: 1rem;
+  }
+  .repo {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+  .repo__meta {
+    text-align: left;
+  }
+}

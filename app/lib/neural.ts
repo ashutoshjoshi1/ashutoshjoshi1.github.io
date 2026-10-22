@@ -2,7 +2,7 @@ import { mulberry32 } from "./motion";
 
 /*
  * NEURAL — a multilayer perceptron with hand-rolled backprop.
- * Zero dependencies, same spirit as wire3d.ts: the demo IS the credential.
+ * Zero dependencies: the demo IS the credential.
  * Coordinates live in [-1, 1]²; labels are 0 | 1.
  */
 

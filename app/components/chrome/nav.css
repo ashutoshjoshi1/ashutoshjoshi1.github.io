@@ -1,0 +1,111 @@
+/*
+ * NAV — no bar chrome: the words sit on the page, take the ink of the
+ * section beneath them in 300ms, and tuck away while reading downward.
+ */
+
+.nav {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  height: var(--nav-h);
+  color: var(--ink);
+  transition:
+    color 300ms ease,
+    transform var(--t-ui) var(--ease-out);
+}
+.nav[data-ink-now="dark"] {
+  color: var(--field-ink);
+}
+.nav[data-hidden="true"] {
+  transform: translateY(-100%);
+}
+
+.nav__mark {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.nav__links {
+  display: flex;
+  gap: 1.75rem;
+  margin-left: auto;
+}
+.nav__link {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 0.07em;
+  text-underline-offset: 0.3em;
+  transition: text-decoration-color var(--t-hover) ease;
+}
+
+.nav__action {
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  font-size: var(--step-small);
+}
+.nav[data-ink-now="dark"] .nav__action {
+  background: var(--field-ink);
+  color: var(--field);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav__link:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+.nav__toggle,
+.nav__menu {
+  display: none;
+}
+
+@media (max-width: 759px) {
+  .nav__links,
+  .nav__action {
+    display: none;
+  }
+  .nav__toggle {
+    display: block;
+    position: relative;
+    z-index: 2;
+    margin-left: auto;
+    min-height: 2.75rem;
+    padding: 0 0.25rem;
+    color: inherit;
+    font-weight: 500;
+  }
+  .nav[data-menu="true"] {
+    color: var(--ink);
+  }
+  .nav__menu {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 0.4rem;
+    padding: var(--nav-h) var(--margin) calc(var(--margin) * 2);
+    background: var(--bg);
+    color: var(--ink);
+    clip-path: inset(0 0 100% 100%);
+    transition: clip-path var(--t-ui) var(--ease-out);
+  }
+  .nav[data-menu="true"] .nav__menu {
+    clip-path: inset(0);
+  }
+  .nav__menu-action {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav,
+  .nav__menu {
+    transition: color 300ms ease;
+  }
+}

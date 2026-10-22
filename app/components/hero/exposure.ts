@@ -60,9 +60,10 @@ export function cropAt(photo: Photo, vw: number, vh: number, zoom: number, t: nu
   return lerpRect(closedCrop(photo, vw, vh, zoom), openCrop(photo, vw, vh), t);
 }
 
-/* cell size: coarse detector cells that shrink geometrically to one pixel,
-   fully resolved a little before the window reaches the edges */
+/* cell size: coarse detector cells that hold for the first part of the
+   opening, then shrink geometrically to one pixel, fully resolved a little
+   before the window reaches the edges */
 export function blockAt(startBlock: number, t: number, resolvedAt = 0.85): number {
   const p = Math.min(1, t / resolvedAt);
-  return Math.pow(startBlock, 1 - p);
+  return Math.pow(startBlock, 1 - Math.pow(p, 1.5));
 }

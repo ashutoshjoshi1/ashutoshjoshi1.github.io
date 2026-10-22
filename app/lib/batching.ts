@@ -2,8 +2,8 @@ import { mulberry32 } from "./motion";
 
 /*
  * BATCHING — a toy LLM server, simulated one forward pass at a time. It
- * drives the hero visual and the serving lab: each lane is a batch slot,
- * each tick a decoded token. The cost model has the right shape (decode is
+ * drives the live KV-cache map in the inference section: each slot holds
+ * one request, each pass prefills or decodes it. The cost model has the right shape (decode is
  * memory-bound and cheap per sequence, prefill is compute-bound per prompt
  * token, weights stream once per pass), but the numbers are illustrative,
  * not measurements.
@@ -79,16 +79,6 @@ export interface EngineStats {
   hitRate: number;
 }
 
-export interface RunSummary {
-  throughput: number; /* output tokens per simulated second */
-  ttftP50: number;
-  ttftP99: number;
-  itlP99: number; /* inter-token latency: the gap a user sees mid-stream */
-  utilization: number; /* share of slot-time spent prefilling or decoding */
-  hitRate: number;
-  completed: number;
-}
-
 interface Request {
   id: number;
   arrival: number;
@@ -104,7 +94,6 @@ interface Sequence {
   outLeft: number;
   hit: boolean;
   started: boolean;
-  lastTokenAt: number;
 }
 
 export const SHARED_PREFIX = 512; /* a system prompt most requests reuse */
@@ -149,14 +138,6 @@ export class BatchEngine {
   private readonly ttfts: number[] = [];
   private readonly recent: { t: number; tokens: number }[] = [];
 
-  /* whole-run accumulators for summaries (after warm-up) */
-  private measureFrom = 0;
-  private totalTokens = 0;
-  private usefulSlotMs = 0;
-  private completed = 0;
-  private readonly allTtfts: number[] = [];
-  private readonly allItls: number[] = [];
-
   constructor(slots: number, requestsPerSec: number, seed: number, policy: Policy = TUNED_POLICY) {
     this.slots = slots;
     this.policy = policy;
@@ -173,16 +154,6 @@ export class BatchEngine {
 
   setRate(requestsPerSec: number): void {
     this.meanGapMs = 1000 / requestsPerSec;
-  }
-
-  /* start the whole-run accumulators from here (skips warm-up) */
-  startMeasuring(): void {
-    this.measureFrom = this.clock;
-    this.totalTokens = 0;
-    this.usefulSlotMs = 0;
-    this.completed = 0;
-    this.allTtfts.length = 0;
-    this.allItls.length = 0;
   }
 
   /* a traffic spike: n requests arrive right now */
@@ -226,7 +197,6 @@ export class BatchEngine {
       outLeft: req.output,
       hit,
       started: false,
-      lastTokenAt: 0,
     };
   }
 
@@ -353,22 +323,11 @@ export class BatchEngine {
     const t0 = this.clock;
     const t1 = t0 + passMs;
 
-    const measuring = t0 >= this.measureFrom;
     for (let s = 0; s < n; s++) {
       const seq = this.running[s];
-      if (!seq) continue;
-      if (mark[s] & MARK_FIRST) {
-        this.recordTtft(t1 - seq.req.arrival, t1);
-        seq.lastTokenAt = t1;
-      } else if (kind[s] === CELL_DECODE) {
-        /* per-token gap since this sequence's previous emission */
-        if (measuring) this.allItls.push((t1 - seq.lastTokenAt) / tokens[s]);
-        seq.lastTokenAt = t1;
-      }
+      if (seq && mark[s] & MARK_FIRST) this.recordTtft(t1 - seq.req.arrival);
     }
-    let useful = 0;
     for (let s = 0; s < n; s++) {
-      if (kind[s] === CELL_PREFILL || kind[s] === CELL_DECODE) useful++;
       const seq = this.running[s];
       if (seq) {
         const privatePrompt = (seq.hit ? seq.req.prompt - SHARED_PREFIX : seq.req.prompt) - seq.prefillLeft;
@@ -379,27 +338,21 @@ export class BatchEngine {
       if (seq && seq.prefillLeft === 0 && seq.outLeft <= 0) {
         mark[s] |= MARK_DONE;
         this.running[s] = null;
-        if (t1 >= this.measureFrom) this.completed++;
       }
     }
 
     const emitted = decodeTokens + firsts.length;
     this.clock = t1;
     this.steps++;
-    if (measuring) {
-      this.totalTokens += emitted;
-      this.usefulSlotMs += useful * passMs;
-    }
     this.recent.push({ t: t1, tokens: emitted });
     while (this.recent.length > 0 && this.recent[0].t < t1 - STATS_WINDOW_MS) this.recent.shift();
 
     return { t0, t1, kind, mark, tokens, shade, rid, kv, sharedKv };
   }
 
-  private recordTtft(ms: number, at: number): void {
+  private recordTtft(ms: number): void {
     this.ttfts.push(ms);
     if (this.ttfts.length > TTFT_SAMPLES) this.ttfts.shift();
-    if (at >= this.measureFrom) this.allTtfts.push(ms);
   }
 
   /* rolling stats over the last few simulated seconds */
@@ -418,37 +371,4 @@ export class BatchEngine {
       hitRate: this.sharedSeen > 0 ? this.hits / this.sharedSeen : 0,
     };
   }
-
-  /* whole-run numbers since startMeasuring() */
-  summary(): RunSummary {
-    const span = Math.max(1, this.clock - this.measureFrom);
-    const sorted = [...this.allTtfts].sort((a, b) => a - b);
-    const itls = [...this.allItls].sort((a, b) => a - b);
-    return {
-      throughput: (this.totalTokens / span) * 1000,
-      ttftP50: percentile(sorted, 0.5),
-      ttftP99: percentile(sorted, 0.99),
-      itlP99: percentile(itls, 0.99),
-      utilization: this.usefulSlotMs / (span * this.slots),
-      hitRate: this.sharedSeen > 0 ? this.hits / this.sharedSeen : 0,
-      completed: this.completed,
-    };
-  }
-}
-
-/* run a policy for a fixed stretch of simulated time and summarize it —
-   deterministic, so two policies at the same seed see the same traffic */
-export function simulate(
-  policy: Policy,
-  slots: number,
-  requestsPerSec: number,
-  seed: number,
-  horizonMs = 60000,
-  warmupMs = 5000,
-): RunSummary {
-  const engine = new BatchEngine(slots, requestsPerSec, seed, policy);
-  while (engine.clock < warmupMs) engine.step();
-  engine.startMeasuring();
-  while (engine.clock < warmupMs + horizonMs) engine.step();
-  return engine.summary();
 }
